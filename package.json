@@ -49,7 +49,6 @@
     "src/**/*.js": "eslint"
   },
   "pre-commit": [
-    "lint-staged",
     "build"
   ]
 }
