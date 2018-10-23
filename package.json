@@ -9,7 +9,7 @@
     "lint-staged": "lint-staged",
     "lint:fix": "eslint --fix --ext .js src",
     "prebuild": "npm run clean",
-    "build": "cross-env babel src --out-dir lib && exit 0"
+    "build": "cross-env babel src --out-dir lib"
   },
   "repository": {
     "type": "git",
