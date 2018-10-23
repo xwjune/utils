@@ -7,6 +7,7 @@
     "clean": "rimraf lib",
     "lint": "eslint --ext .js src",
     "lint:fix": "eslint --fix --ext .js src",
+    "lint-staged": "lint-staged",
     "prebuild": "npm run lint && npm run clean",
     "build": "cross-env babel src --out-dir lib"
   },
@@ -52,6 +53,7 @@
     "src/**/*.js": "eslint"
   },
   "pre-commit": [
+    "lint-staged",
     "build"
   ]
 }
