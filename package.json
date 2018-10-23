@@ -4,14 +4,12 @@
   "description": "jun-utils",
   "main": "index.js",
   "scripts": {
-    "foo": "echo \"fooo\" && exit 0",
-    "bar": "echo \"bar\" && exit 0",
     "clean": "rimraf lib",
     "lint": "eslint --ext .js src",
     "lint-staged": "lint-staged",
     "lint:fix": "eslint --fix --ext .js src",
     "prebuild": "npm run clean",
-    "build": "cross-env babel src --out-dir lib && exit 0"
+    "build": "cross-env babel src --out-dir lib"
   },
   "repository": {
     "type": "git",
@@ -58,9 +56,6 @@
     "src/**/*.js": "eslint"
   },
   "pre-commit": [
-    "lint-staged",
-    "build",
-    "foo",
-    "bar"
+    "lint-staged"
   ]
 }
