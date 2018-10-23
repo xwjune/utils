@@ -1,4 +1,5 @@
 import moment from 'moment';
+
 /**
  * 预约时间解析
  * 根据对应的时间区间和间隔天数，推算出可选的时间范围，可用于顺丰上门取件等场景
@@ -9,13 +10,13 @@ import moment from 'moment';
  * @param {String} [attributes.key='id'] - 主键key
  * @param {String} [attributes.name='name'] - 名称key
  * @param {String} [attributes.children='children'] - 子集合key
- * @return {Object[]} times - 可预约时间【主键键值为时间戳】
+ * @return {Object[]} 可预约时间【主键键值为时间戳】
  *
  * @example
- * 9:00~13:00 T+2
+ *
+ * 9:00~13:00 T+2 当前时间：08/11 14:00
  * pickTime([9, 13], 2, { key: 'value', name: 'label' })
- * times:
- * [
+ * // => [
  *   {'label': '08月12日', 'value': '1534003200', 'children': [
  *     {'label': '09:00-10:00', 'value': '1534035600'},
  *     {'label': '10:00-11:00', 'value': '1534039200'},
@@ -29,9 +30,6 @@ import moment from 'moment';
  *     {'label': '12:00-13:00', 'value': '1534132800'},
  *   ]}
  * ]
- *
- * @author WeiJun Xiang <xiangweijun@jimistore.com>
- * @date 2017/07/23
  */
 export default function (range, interval, attributes = {}) {
   const {

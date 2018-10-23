@@ -6,13 +6,14 @@
  *    ① 数字、
  *    ② 大写字母、
  *    ③ 小写字母、
- *    ④ 符号
+ *    ④ 符号【键盘上可以打出来的符号】
  *
  * @param {String} pwd - 密码
  * @return {Number} intensity - 密码强度 1-弱|2-中|3-强
+ * @example
  *
- * @author WeiJun Xiang <xiangweijun@jimistore.com>
- * @date 2018/04/02
+ * pwdIntensity('123456');
+ * // => 1
  */
 export default function (pwd = '') {
   // 密码长度

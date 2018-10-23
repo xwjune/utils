@@ -1,9 +1,17 @@
 /**
  * 校验库
  *
- * phone【手机】、telPhone【座机】、email【邮箱】、postcode【邮编】、isNull【空判断】
- * hasChinese【中文】、hasFullChar【全角符号】、noChinese【非中文】、url、ip
- * idCard【身份证】
+ * phone - 手机
+ * telPhone - 座机
+ * email - 邮箱
+ * postcode - 邮编
+ * isNull - 空判断
+ * hasChinese - 中文
+ * hasFullChar - 全角符号
+ * noChinese - 非中文
+ * url
+ * ip
+ * idCard - 身份证
  */
 class Check {
   /**
@@ -40,20 +48,35 @@ class Check {
 
   /**
    * 空校验
-   * 格式：null/undefined/空字符串/'undefined'/'null'
+   * 空数据集合：[undefined,'undefined',null,'null','(null)','NaN','']
+   *
+   * @param {String} str - 字符串
+   * @return {Boolean} true-空，false-非空
+   * @example
+   *
+   * isNull()
+   * // => true
+   *
+   * isNull('undefined')
+   * // => true
+   *
+   * isNull('hello')
+   * // => false
    */
-  isNull(v) {
+  isNull = (str) => {
     if (
-      typeof v === 'undefined'
-            || v === 'undefined'
-            || v === null
-            || v === 'null'
-            || v === ''
+      typeof str === 'undefined'
+      || str === 'undefined'
+      || str === null
+      || str === 'null'
+      || str === '(null)'
+      || str === 'NaN'
+      || str === ''
     ) {
       return true;
     }
     return false;
-  }
+  };
 
   /**
    * 判断中【日、韩】文字符（不包括标点符号）
