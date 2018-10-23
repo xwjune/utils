@@ -1,8 +1,8 @@
+import md5 from 'md5';
+
 /**
  * 请求头
  */
-import md5 from 'md5';
-
 class Header {
   constructor() {
     this.common = {
