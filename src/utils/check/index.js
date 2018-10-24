@@ -1,8 +1,8 @@
 /**
  * 校验库
  *
- * phone - 手机
- * telPhone - 座机
+ * cellphone - 手机
+ * telPhone - 电话
  * email - 邮箱
  * postcode - 邮编
  * isNull - 空判断
@@ -12,30 +12,47 @@
  * url
  * ip
  * idCard - 身份证
+ * Card - 银行卡号
  */
 class Check {
   /**
    * 手机
-   * 格式：11位数字，首位非0
+   * 格式：11位数字，首位1
+   *
+   * @param {String} value - 手机
+   * @return {Boolean} true-是，false-否
+   * @example
+   *
+   * cellphone('13456789012');
+   * // => true
    */
-  phone(v) {
-    return /^1\d{10}$/.test(v);
+  cellphone(value) {
+    return /^1\d{10}$/.test(value);
   }
 
   /**
-   * 座机
+   * 电话
    * 格式：3-4位区号，7-8位直拨号码
+   *
+   * @param {String} value - 电话
+   * @return {Boolean} true-是，false-否
    */
-  telPhone(v) {
-    return /^(\d{3,4}-?)?\d{7,8}$/.test(v);
+  telphone(value) {
+    return /^(\d{3,4}-?)?\d{7,8}$/.test(value);
   }
 
   /**
    * 邮箱
    * 格式：登录名@主机名.域名
+   *
+   * @param {String} value - 邮箱
+   * @return {Boolean} true-是，false-否
+   *
+   * email('june@163.com');
+   * // => true
    */
-  email(v) {
-    return /^.+@.+\..+/.test(v);
+  email(value) {
+    return /^.+@.+\..+/.test(value);
   }
 
   /**
@@ -48,19 +65,19 @@ class Check {
 
   /**
    * 空校验
-   * 空数据集合：[undefined,'undefined',null,'null','(null)','NaN','']
+   * 空数据集合：undefined,'undefined',null,'null','(null)','NaN',''
    *
    * @param {String} str - 字符串
    * @return {Boolean} true-空，false-非空
    * @example
    *
-   * isNull()
+   * isNull();
    * // => true
    *
-   * isNull('undefined')
+   * isNull('undefined');
    * // => true
    *
-   * isNull('hello')
+   * isNull('xxx');
    * // => false
    */
   isNull = (str) => {

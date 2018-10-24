@@ -15,7 +15,7 @@ import moment from 'moment';
  * @example
  *
  * 9:00~13:00 T+2 当前时间：08/11 14:00
- * pickTime([9, 13], 2, { key: 'value', name: 'label' })
+ * pickTime([9, 13], 2, { key: 'value', name: 'label' });
  * // => [
  *   {'label': '08月12日', 'value': '1534003200', 'children': [
  *     {'label': '09:00-10:00', 'value': '1534035600'},

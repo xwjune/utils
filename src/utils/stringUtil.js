@@ -10,19 +10,19 @@
 class StringUtil {
   /**
    * 空校验
-   * 空数据集合：[undefined,'undefined',null,'null','(null)','NaN','']
+   * 空数据集合：undefined,'undefined',null,'null','(null)','NaN',''
    *
    * @param {String} str - 字符串
    * @return {Boolean} true-空，false-非空
    * @example
    *
-   * isNull()
+   * isNull();
    * // => true
    *
-   * isNull('undefined')
+   * isNull('undefined');
    * // => true
    *
-   * isNull('xxx')
+   * isNull('xxx');
    * // => false
    */
   isNull = (str) => {
@@ -47,16 +47,16 @@ class StringUtil {
    * @return {Boolean} true-数字，false-非数字
    * @example
    *
-   * isNumber('20')
+   * isNumber('20');
    * // => true
    *
-   * isNumber('.2')
+   * isNumber('.2');
    * // => false
    *
-   * isNumber('xxx')
+   * isNumber('xxx');
    * // => false
    *
-   * isNumber()
+   * isNumber();
    * // => false
    */
   isNumber = (str) => /^-?\d+(\.\d+)?$/.test(str);
@@ -69,13 +69,13 @@ class StringUtil {
    * @return {String} 过滤后的数据
    * @example
    *
-   * filterNull('xxx')
+   * filterNull('xxx');
    * // => xxx
    *
-   * filterNull('')
+   * filterNull();
    * // =>
    *
-   * filterNull('', '--')
+   * filterNull(null, '--');
    * // => --
    */
   filterNull(str, format = '') {
@@ -89,23 +89,22 @@ class StringUtil {
    * 分->元
    *
    * @param {String} str - 分
-   * @param {String} [format] - 格式化
+   * @param {String} [format='0.00'] - 格式化
    * @return {String} 元
    * @example
    *
-   * convertFenToYuan('2000')
+   * convertFenToYuan('2000');
    * // => 20.00
    *
-   * convertFenToYuan()
+   * convertFenToYuan();
    * // => 0.00
    *
-   * convertFenToYuan(null, '')
-   * // =>
+   * convertFenToYuan(null, '--');
+   * // => --
    */
-  convertFenToYuan(str, format) {
+  convertFenToYuan(str, format = '0.00') {
     if (!this.isNumber(str)) {
-      if (typeof format !== 'undefined') return format;
-      return '0.00';
+      return format;
     }
     return (str / 100).toFixed(2);
   }
@@ -114,29 +113,28 @@ class StringUtil {
    * 元->分
    *
    * @param {String} str - 元
-   * @param {String} [format] - 格式化
+   * @param {String} [format='0'] - 格式化
    * @return {String} 分
    * @example
    *
-   * convertYuanToFen('20')
+   * convertYuanToFen('20');
    * // => 2000
    *
-   * convertYuanToFen('0.02')
+   * convertYuanToFen('0.02');
    * // => 2
    *
-   * convertYuanToFen('0.002')
+   * convertYuanToFen('0.002');
    * // => 0
    *
-   * convertYuanToFen()
+   * convertYuanToFen();
    * // => 0
    *
-   * convertYuanToFen(null, '')
-   * // =>
+   * convertYuanToFen(null, '--');
+   * // => --
    */
-  convertYuanToFen(str, format) {
+  convertYuanToFen(str, format = '0') {
     if (!this.isNumber(str)) {
-      if (typeof format !== 'undefined') return format;
-      return '0';
+      return format;
     }
     return parseInt(str * 100, 10).toString();
   }

@@ -11,7 +11,7 @@ class Common {
    * @return uuid
    * @example
    *
-   * generateUUID()
+   * generateUUID();
    * // => cd2f4b1f-daf2-451c-a9a6-db716c1d82bb
    */
   generateUUID() {
@@ -34,7 +34,7 @@ class Common {
    * @return {String} 参数值
    * @example
    *
-   * getParameter('name', 'http://www.w3school.com?name=xxx')
+   * getParameter('name', 'http://www.w3school.com?name=xxx');
    * // => xxx
    */
   getParameter(name, url = window.location.search) {
