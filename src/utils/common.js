@@ -3,6 +3,10 @@
  *
  * generateUUID - 生成uuid
  * getParameter - 获取url中的参数
+ * loadScript - 动态加载js
+ * stopPropagation - 阻止事件冒泡
+ * preventDefault - 阻止事件默认行为
+ * addEvent - 添加事件监听
  */
 class Common {
   /**
@@ -38,9 +42,92 @@ class Common {
    * // => xxx
    */
   getParameter(name, url = window.location.search) {
-    const reg = new RegExp(`[?&]${name}=([^&]*)`, 'ig');
-    const r = reg.exec(url);
-    return r === null ? '' : decodeURIComponent(r[1]);
+    const regexp = new RegExp(`[?&]${name}=([^&]*)`, 'ig');
+    const result = regexp.exec(url);
+    return result === null ? '' : decodeURIComponent(result[1]);
+  }
+
+  /**
+   * 动态加载js
+   *
+   * @param {String} url - js链接地址
+   * @param {Function} [callback] - 回调
+   */
+  loadScript(url, callback) {
+    const script = document.createElement('script');
+    script.setAttribute('type', 'text/javascript');
+    script.setAttribute('charset', 'utf-8');
+    script.setAttribute('src', url);
+    document.getElementsByTagName('head')[0].appendChild(script);
+    if (script.readyState) {
+    // IE
+      script.onreadystatechange = () => {
+        if (/loaded|complete/.test(script.readyState)) {
+          script.onreadystatechange = null;
+          if (callback && typeof callback === 'function') {
+            callback();
+          }
+        }
+      };
+    } else {
+      script.onload = () => {
+        script.onload = null;
+        if (callback && typeof callback === 'function') {
+          callback();
+        }
+      };
+    }
+  }
+
+  /**
+   * 阻止事件冒泡
+   *
+   * @param {Object} e - event
+   */
+  stopPropagation(e) {
+    if (!e) return;
+    if (e.stopPropagation) {
+      e.stopPropagation();
+    } else {
+    // IE
+      window.event.cancelBubble = true;
+    }
+  }
+
+  /**
+   * 阻止事件默认行为
+   *
+   * @param {Object} e - event
+   */
+  preventDefault(e) {
+    if (!e) return;
+    if (e.preventDefault) {
+      e.preventDefault();
+    } else {
+    // IE
+      window.event.returnValue = false;
+    }
+  }
+
+  /**
+   * 添加事件监听
+   *
+   * @param {Element} target - DOM元素
+   * @param {String} type - 事件类型
+   * @param {Function} handler - 事件触发时执行的函数
+   * @param {Boolean} [useCapture=false] - 指定事件是否在捕获或冒泡阶段执行【true-捕获，false-冒泡】
+   */
+  addEvent(target, type, handler, useCapture = false) {
+    if (target.addEventListener) {
+    // DOM2.0
+      target.addEventListener(type, handler, useCapture);
+    } else if (target.attachEvent) {
+    // IE5+
+      target.attachEvent(`on${type}`, handler);
+    } else {
+    // DOM 0
+      target[`on${type}`] = handler;
+    }
   }
 }
 
