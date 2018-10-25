@@ -7,6 +7,7 @@
  * stopPropagation - 阻止事件冒泡
  * preventDefault - 阻止事件默认行为
  * addEvent - 添加事件监听
+ * removeEvent - 移除事件监听
  */
 class Common {
   /**
@@ -82,12 +83,12 @@ class Common {
   /**
    * 阻止事件冒泡
    *
-   * @param {Object} e - event
+   * @param {Object} evt - event
    */
-  stopPropagation(e) {
-    if (!e) return;
-    if (e.stopPropagation) {
-      e.stopPropagation();
+  stopPropagation(evt) {
+    if (!evt) return;
+    if (evt.stopPropagation) {
+      evt.stopPropagation();
     } else {
     // IE
       window.event.cancelBubble = true;
@@ -97,12 +98,12 @@ class Common {
   /**
    * 阻止事件默认行为
    *
-   * @param {Object} e - event
+   * @param {Object} evt - event
    */
-  preventDefault(e) {
-    if (!e) return;
-    if (e.preventDefault) {
-      e.preventDefault();
+  preventDefault(evt) {
+    if (!evt) return;
+    if (evt.preventDefault) {
+      evt.preventDefault();
     } else {
     // IE
       window.event.returnValue = false;
@@ -127,6 +128,27 @@ class Common {
     } else {
     // DOM 0
       target[`on${type}`] = handler;
+    }
+  }
+
+  /**
+   * 移除事件监听
+   *
+   * @param {Element} target - DOM元素
+   * @param {String} type - 事件类型
+   * @param {Function} handler - 事件触发时执行的函数
+   * @param {Boolean} [useCapture=false] - 指定事件是否在捕获或冒泡阶段执行【true-捕获，false-冒泡】
+   */
+  removeEvent(target, type, handler, useCapture = false) {
+    if (target.removeEventListener) {
+    // DOM2.0
+      target.removeEventListener(type, handler, useCapture);
+    } else if (target.detachEvent) {
+    // IE5+
+      target.detachEvent(`on${type}`, handler);
+    } else {
+    // DOM 0
+      target[`on${type}`] = null;
     }
   }
 }
