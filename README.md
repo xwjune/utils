@@ -13,29 +13,81 @@ check.cellphone('13456789012'); // true
 ```
 
 ## check
-校验库
+**校验库**
 
 ### cellphone(value)
-手机
+手机 ：`11位数字，首位1`
 
 ```js
 check.cellphone('13456789012'); // true
 ```
 
+### telphone(value)
+固定电话：`3-4位区号，7-8位直拨号码`
+
+```js
+check.cellphone('0576-85735299'); // true
+
+check.cellphone('057685735299'); // true
+```
+
+### phone(value)
+电话【手机和固定电话】
+
+```js
+check.phone('057685735299'); // true
+
+check.phone('13456789012'); // true
+```
+
+### postcode(value)
+邮编：`6位数字`
+
+```js
+check.postcode('310000'); // true
+```
+
+### isNull(value)
+空校验
+
+空数据集合：`undefined,'undefined',null,'null','(null)','NaN',''`
+
+```js
+check.isNull(); // true
+
+check.isNull('undefined'); // true
+```
+
+### isNumber(value)
+数字校验
+
+```js
+check.isNumber('20'); // true
+
+check.isNumber('.2'); // false
+```
+
+### hasChinese(value)
+中文判断
+
+```js
+check.hasChinese('小巷'); // true
+check.hasChinese('。'); // true
+```
+***
+
 ## stringUtil
-字符串处理
+**字符串处理**
 
 ### isNull(str)
 空校验
 
-空数据集合：undefined,'undefined',null,'null','(null)','NaN',''
+空数据集合：`undefined,'undefined',null,'null','(null)','NaN',''`
 
 ```js
 stringUtil.isNull(); // true
 
 stringUtil.isNull('undefined'); // true
-
-stringUtil.isNull('xxx'); // false
 ```
 
 ### isNumber(str)
@@ -45,8 +97,6 @@ stringUtil.isNull('xxx'); // false
 stringUtil.isNumber('20'); // true
 
 stringUtil.isNumber('.2'); // false
-
-stringUtil.isNumber('xx'); // false
 ```
 
 ### filterNull(str, [format=''])
@@ -85,9 +135,10 @@ stringUtil.convertYuanToFen(); // 0
 
 stringUtil.convertYuanToFen(null, '--'); // --
 ```
+***
 
 ## common
-通用方法
+**通用方法**
 
 ### generateUUID()
 生成uuid

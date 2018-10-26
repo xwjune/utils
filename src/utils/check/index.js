@@ -2,73 +2,99 @@
  * 校验库
  *
  * cellphone - 手机
- * telPhone - 电话
+ * telphone - 固定电话
+ * phone - 电话【手机和固定电话】
  * email - 邮箱
  * postcode - 邮编
  * isNull - 空判断
+ * isNumber - 数字判断
  * hasChinese - 中文
- * hasFullChar - 全角符号
- * noChinese - 非中文
- * url
- * ip
- * idCard - 身份证
- * Card - 银行卡号
  */
 class Check {
   /**
    * 手机
    * 格式：11位数字，首位1
    *
-   * @param {String} value - 手机
+   * @param {*} value - The value to check
    * @return {Boolean} true-是，false-否
    * @example
    *
    * cellphone('13456789012');
    * // => true
    */
-  cellphone(value) {
+  cellphone = (value) => {
     return /^1\d{10}$/.test(value);
-  }
+  };
 
   /**
-   * 电话
+   * 固定电话
    * 格式：3-4位区号，7-8位直拨号码
    *
-   * @param {String} value - 电话
+   * @param {*} value - The value to check
    * @return {Boolean} true-是，false-否
+   * @example
+   *
+   * telphone('0576-85735299');
+   * // => true
+   *
+   * telphone('057685735299');
+   * // => true
    */
-  telphone(value) {
+  telphone = (value) => {
     return /^(\d{3,4}-?)?\d{7,8}$/.test(value);
+  };
+
+  /**
+   * 电话【手机和固定电话】
+   *
+   * @param {*} vlaue - The value to check
+   * @return {Boolean} true-是，false-否
+   * @example
+   *
+   * phone('0576-85735299');
+   * // => true
+   *
+   * phone('13456789012');
+   * // => true
+   */
+  phone(value) {
+    return this.cellphone(value) || this.telphone(value);
   }
 
   /**
    * 邮箱
    * 格式：登录名@主机名.域名
    *
-   * @param {String} value - 邮箱
+   * @param {*} value - The value to check
    * @return {Boolean} true-是，false-否
    *
    * email('june@163.com');
    * // => true
    */
   email(value) {
-    return /^.+@.+\..+/.test(value);
+    return /^[0-9a-zA-Z_]+@.+\..+(\..+)*/.test(value);
   }
 
   /**
    * 邮编
    * 格式：6位数字
+   *
+   * @param {*} value - The value to check
+   * @return {Boolean} true-是，false-否
+   *
+   * postcode('310000');
+   * // => true
    */
-  postcode(v) {
-    return /^\d{6}$/.test(v);
+  postcode(value) {
+    return /^\d{6}$/.test(value);
   }
 
   /**
    * 空校验
    * 空数据集合：undefined,'undefined',null,'null','(null)','NaN',''
    *
-   * @param {String} str - 字符串
-   * @return {Boolean} true-空，false-非空
+   * @param {*} value - The value to check
+   * @return {Boolean} true-是，false-否
    * @example
    *
    * isNull();
@@ -76,64 +102,67 @@ class Check {
    *
    * isNull('undefined');
    * // => true
-   *
-   * isNull('xxx');
-   * // => false
    */
-  isNull = (str) => {
+  isNull(value) {
     if (
-      typeof str === 'undefined'
-      || str === 'undefined'
-      || str === null
-      || str === 'null'
-      || str === '(null)'
-      || str === 'NaN'
-      || str === ''
+      typeof value === 'undefined'
+      || value === 'undefined'
+      || value === null
+      || value === 'null'
+      || value === '(null)'
+      || value === 'NaN'
+      || value === ''
     ) {
       return true;
     }
     return false;
-  };
-
-  /**
-   * 判断中【日、韩】文字符（不包括标点符号）
-   * u4e00-u9fbf: unicode CJK(中日韩)统一表意字符，u9fa5后至u9fbf为空
-   * uF900-uFAFF: unicode CJK兼容象形文字，uFA2D后至uFAFF为空
-   *
-   */
-  hasChinese(v) {
-    return /[\u4e00-\u9fa5\uF900-\uFA2D]/.test(v);
   }
 
   /**
-   * 是否含有全角符号
+   * 数字校验
    *
+   * @param {*} value - The value to check
+   * @return {Boolean} true-数字，false-非数字
+   * @example
+   *
+   * isNumber('20');
+   * // => true
+   *
+   * isNumber('.2');
+   * // => false
    */
-  hasFullChar(v) {
-    return /[\uFF00-\uFFEF]/.test(v);
+  isNumber(value) {
+    return /^-?\d+(\.\d+)?$/.test(value);
   }
 
   /**
-   * 非中文
+   * 中文判断(常用字)
    *
-   */
-  // noChinese(v) {
-  //   return /[^\u0000-\u00FF]/.test(v);
-  // }
-
-  /**
-   * url
+   * @param {*} value - The value to check
+   * @return {Boolean} true-是，false-否
+   * @example
    *
+   * hasChinese('中文');
+   * // => true
+   *
+   * hasChinese('。');
+   * // => true
    */
-  url() {
-
-  }
-
-  /**
-   * ip
-   */
-  ip() {
-
+  hasChinese(value) {
+    const pattern = [
+      '\u2E80-\u2EFF', // CJK 部首补充
+      '\u2F00-\u2FDF', // 康熙字典部首
+      '\u2FF0-\u2FFF', // 表意文字描述符
+      '\u3000-\u303F', // CJK 符号和标点
+      '\u31C0-\u31EF', // CJK 笔画
+      '\u3300-\u33FF', // CJK 兼容
+      '\u3400-\u4DBF', // CJK 统一表意符号扩展 A
+      '\u4E00-\u9FBF', // CJK 统一表意符号
+      '\uF900-\uFAFF', // CJK 兼容象形文字
+      '\uFE30-\uFE4F', // CJK 兼容形式
+    ];
+    const regexp = new RegExp(`[${pattern.join('')}]`);
+    return regexp.test(value);
   }
 
   /**

@@ -21,9 +21,6 @@ class StringUtil {
    *
    * isNull('undefined');
    * // => true
-   *
-   * isNull('xxx');
-   * // => false
    */
   isNull = (str) => {
     if (
@@ -51,12 +48,6 @@ class StringUtil {
    * // => true
    *
    * isNumber('.2');
-   * // => false
-   *
-   * isNumber('xxx');
-   * // => false
-   *
-   * isNumber();
    * // => false
    */
   isNumber = (str) => /^-?\d+(\.\d+)?$/.test(str);
