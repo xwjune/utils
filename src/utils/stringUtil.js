@@ -69,12 +69,12 @@ class StringUtil {
    * filterNull(null, '--');
    * // => --
    */
-  filterNull(str, format = '') {
+  filterNull = (str, format = '') => {
     if (this.isNull(str)) {
       return format;
     }
     return str;
-  }
+  };
 
   /**
    * 分->元
@@ -93,12 +93,12 @@ class StringUtil {
    * convertFenToYuan(null, '--');
    * // => --
    */
-  convertFenToYuan(str, format = '0.00') {
+  convertFenToYuan = (str, format = '0.00') => {
     if (!this.isNumber(str)) {
       return format;
     }
     return (str / 100).toFixed(2);
-  }
+  };
 
   /**
    * 元->分
@@ -123,12 +123,12 @@ class StringUtil {
    * convertYuanToFen(null, '--');
    * // => --
    */
-  convertYuanToFen(str, format = '0') {
+  convertYuanToFen = (str, format = '0') => {
     if (!this.isNumber(str)) {
       return format;
     }
     return parseInt(str * 100, 10).toString();
-  }
+  };
 }
 
 export default new StringUtil();

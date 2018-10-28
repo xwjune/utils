@@ -16,14 +16,14 @@ check.cellphone('13456789012'); // true
 **校验库**
 
 ### cellphone(value)
-手机 ：`11位数字，首位1`
+手机校验 ：`11位数字，首位1`
 
 ```js
 check.cellphone('13456789012'); // true
 ```
 
 ### telphone(value)
-固定电话：`3-4位区号，7-8位直拨号码`
+固定电话校验：`3-4位区号，7-8位直拨号码`
 
 ```js
 check.cellphone('0576-85735299'); // true
@@ -32,7 +32,7 @@ check.cellphone('057685735299'); // true
 ```
 
 ### phone(value)
-电话【手机和固定电话】
+电话【手机和固定电话】校验
 
 ```js
 check.phone('057685735299'); // true
@@ -40,8 +40,17 @@ check.phone('057685735299'); // true
 check.phone('13456789012'); // true
 ```
 
+### email(value)
+邮箱校验：`登录名@主机名.域名`
+
+```js
+check.email('june@163.com'); // true
+
+check.email('te_st@sima.vip.com'); // true
+```
+
 ### postcode(value)
-邮编：`6位数字`
+邮编校验：`6位数字`
 
 ```js
 check.postcode('310000'); // true
@@ -67,13 +76,59 @@ check.isNumber('20'); // true
 check.isNumber('.2'); // false
 ```
 
+### isInteger(value)
+整数校验
+
+```js
+check.isInteger('20'); // true
+
+check.isInteger('0.2'); // false
+```
+
+### isDecimal(value)
+小数校验
+
+```js
+check.isDecimal('0.2'); // true
+
+check.isDecimal('20'); // false
+```
+
 ### hasChinese(value)
 中文判断
 
 ```js
-check.hasChinese('小巷'); // true
+check.hasChinese('中文'); // true
 check.hasChinese('。'); // true
 ```
+
+### pwdIntensity(value)
+弱密码校验：`1-弱|2-中|3-强`
+
+规则：
+
+1. 位数为6-32位，包括6位或32位
+2. 包含以下任意两种或以上组成元素：
+	- 数字
+	- 大写字母
+	- 小写字母
+	- 符号【键盘上可以打出来的符号】
+
+```js
+check.pwdIntensity('123456'); // 1
+
+check.pwdIntensity('123456abc'); // 2
+```
+
+### idCard(value)
+身份证校验：`15位【一代身份证】或18位【二代身份证】`
+
+```js
+check.idCard('330000199001017865'); // true
+
+check.idCard('33000019900101786X'); // true
+```
+
 ***
 
 ## stringUtil

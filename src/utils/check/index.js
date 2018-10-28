@@ -1,18 +1,24 @@
+import pwdIntensity from './pwdIntensity';
+
 /**
  * 校验库
  *
- * cellphone - 手机
- * telphone - 固定电话
- * phone - 电话【手机和固定电话】
- * email - 邮箱
- * postcode - 邮编
- * isNull - 空判断
- * isNumber - 数字判断
- * hasChinese - 中文
+ * cellphone - 手机校验
+ * telphone - 固定电话校验
+ * phone - 电话【手机和固定电话】校验
+ * email - 邮箱校验
+ * postcode - 邮编校验
+ * isNull - 空校验
+ * isNumber - 数字校验
+ * isInteger - 整数校验
+ * isDecimal - 小数校验
+ * hasChinese - 中文判断
+ * pwdIntensity - 弱密码校验
+ * idCard - 身份证校验
  */
 class Check {
   /**
-   * 手机
+   * 手机校验
    * 格式：11位数字，首位1
    *
    * @param {*} value - The value to check
@@ -22,12 +28,10 @@ class Check {
    * cellphone('13456789012');
    * // => true
    */
-  cellphone = (value) => {
-    return /^1\d{10}$/.test(value);
-  };
+  cellphone = (value) => /^1\d{10}$/.test(value);
 
   /**
-   * 固定电话
+   * 固定电话校验
    * 格式：3-4位区号，7-8位直拨号码
    *
    * @param {*} value - The value to check
@@ -40,12 +44,10 @@ class Check {
    * telphone('057685735299');
    * // => true
    */
-  telphone = (value) => {
-    return /^(\d{3,4}-?)?\d{7,8}$/.test(value);
-  };
+  telphone = (value) => /^(\d{3,4}-?)?\d{7,8}$/.test(value);
 
   /**
-   * 电话【手机和固定电话】
+   * 电话【手机和固定电话】校验
    *
    * @param {*} vlaue - The value to check
    * @return {Boolean} true-是，false-否
@@ -57,12 +59,10 @@ class Check {
    * phone('13456789012');
    * // => true
    */
-  phone(value) {
-    return this.cellphone(value) || this.telphone(value);
-  }
+  phone = (value) => this.cellphone(value) || this.telphone(value);
 
   /**
-   * 邮箱
+   * 邮箱校验
    * 格式：登录名@主机名.域名
    *
    * @param {*} value - The value to check
@@ -70,13 +70,14 @@ class Check {
    *
    * email('june@163.com');
    * // => true
+   *
+   * email('te_st@sima.vip.com');
+   * // => true
    */
-  email(value) {
-    return /^[0-9a-zA-Z_]+@.+\..+(\..+)*/.test(value);
-  }
+  email = (value) => /^[0-9a-zA-Z_.-]+@[0-9a-zA-Z_-]+(\.[0-9a-zA-Z_-]+)+$/.test(value);
 
   /**
-   * 邮编
+   * 邮编校验
    * 格式：6位数字
    *
    * @param {*} value - The value to check
@@ -84,10 +85,11 @@ class Check {
    *
    * postcode('310000');
    * // => true
+   *
+   * pwdIntensity('123456abc');
+   * // => 2
    */
-  postcode(value) {
-    return /^\d{6}$/.test(value);
-  }
+  postcode = (value) => /^\d{6}$/.test(value);
 
   /**
    * 空校验
@@ -103,7 +105,7 @@ class Check {
    * isNull('undefined');
    * // => true
    */
-  isNull(value) {
+  isNull = (value) => {
     if (
       typeof value === 'undefined'
       || value === 'undefined'
@@ -116,7 +118,7 @@ class Check {
       return true;
     }
     return false;
-  }
+  };
 
   /**
    * 数字校验
@@ -131,12 +133,40 @@ class Check {
    * isNumber('.2');
    * // => false
    */
-  isNumber(value) {
-    return /^-?\d+(\.\d+)?$/.test(value);
-  }
+  isNumber = (value) => /^-?\d+(\.\d+)?$/.test(value);
 
   /**
-   * 中文判断(常用字)
+   * 整数校验
+   *
+   * @param {*} value - The value to check
+   * @return {Boolean} true-数字，false-非数字
+   * @example
+   *
+   * isInteger('20');
+   * // => true
+   *
+   * isInteger('0.2');
+   * // => false
+   */
+  isInteger = (value) => /^-?\d+$/.test(value);
+
+  /**
+   * 小数校验
+   *
+   * @param {*} value - The value to check
+   * @return {Boolean} true-数字，false-非数字
+   * @example
+   *
+   * isDecimal('0.2');
+   * // => true
+   *
+   * isDecimal('20');
+   * // => false
+   */
+  isDecimal = (value) => /^-?\d+\.\d+$/.test(value);
+
+  /**
+   * 中文判断
    *
    * @param {*} value - The value to check
    * @return {Boolean} true-是，false-否
@@ -148,7 +178,7 @@ class Check {
    * hasChinese('。');
    * // => true
    */
-  hasChinese(value) {
+  hasChinese = (value) => {
     const pattern = [
       '\u2E80-\u2EFF', // CJK 部首补充
       '\u2F00-\u2FDF', // 康熙字典部首
@@ -163,35 +193,49 @@ class Check {
     ];
     const regexp = new RegExp(`[${pattern.join('')}]`);
     return regexp.test(value);
-  }
+  };
 
   /**
-   * 身份证
-   * @param {boolean} strict 是否严格校验
+   * 弱密码校验
    *
-   * 非严格校验：18位，最后一位为数字或X
+   *（1）位数为6-32位，包括6位或32位
+   *（2）包含以下任意两种或以上组成元素：
+   *    ① 数字
+   *    ② 大写字母
+   *    ③ 小写字母
+   *    ④ 符号【键盘上可以打出来的符号】
    *
-   * 严格校验：
-   * 地区码：
-   *  11:"北京",12:"天津",13:"河北",14:"山西",15:"内蒙古",
-   *  21:"辽宁",22:"吉林",23:"黑龙江",
-   *  31:"上海",32:"江苏",33:"浙江",34:"安徽",35:"福建",36:"江西",37:"山东",
-   *  41:"河南",42:"湖北",43:"湖南",44:"广东",45:"广西",46:"海南",
-   *  50:"重庆",51:"四川",52:"贵州",53:"云南",54:"西藏",
-   *  61:"陕西",62:"甘肃",63:"青海",64:"宁夏",65:"新疆",
-   *  71:"台湾",81:"香港",82:"澳门"
-   * 加权因子：[ 7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2 ]
+   * @param {String} pwd - 密码
+   * @return {Number} intensity - 密码强度 1-弱|2-中|3-强
+   * @example
    *
+   * pwdIntensity('123456');
+   * // => 1
+   *
+   * pwdIntensity('123456abc');
+   * // => 2
    */
-  // idCard(strict) {
-  //   if (strict) {
-  //     // 地区码
-  //     const district = /(1[1-5])|(2[1-3])|(3[1-7])|(4[1-6])|(5[0-4])|(6[1-5])|(71|81|82)[1-9]{4}/;
-  //   } else {
-  //     // 非严格校验
-  //     return /^\d{17}(\d|X)$/i.test(v);
-  //   }
-  // }
+  pwdIntensity = pwdIntensity;
+
+  /**
+   * 身份证校验
+   * 15位【一代身份证】或18位【二代身份证】
+   *
+   * @param {*} value - The value to check
+   * @return {Boolean} true-是，false-否
+   * @example
+   *
+   * idCard('330000199001017865');
+   * // => true
+   *
+   * idCard('33000019900101786X');
+   * // => true
+   */
+  idCard = (value) => /^\d{15}$|(^\d{17}(\d|X)$)/i.test(value);
+
+  // 日期是否正确判断
+  // 支付宝账号
+  // 银行卡号
 }
 
 export default new Check();

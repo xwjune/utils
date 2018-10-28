@@ -19,7 +19,7 @@ class Common {
    * generateUUID();
    * // => cd2f4b1f-daf2-451c-a9a6-db716c1d82bb
    */
-  generateUUID() {
+  generateUUID = () => {
     /* eslint-disable no-bitwise */
     /* eslint-disable no-mixed-operators */
     let d = new Date().getTime();
@@ -29,7 +29,7 @@ class Common {
       return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
     });
     return uuid;
-  }
+  };
 
   /**
    * 获取url中的参数
@@ -42,11 +42,11 @@ class Common {
    * getParameter('name', 'http://www.w3school.com?name=xxx');
    * // => xxx
    */
-  getParameter(name, url = window.location.search) {
+  getParameter = (name, url = window.location.search) => {
     const regexp = new RegExp(`[?&]${name}=([^&]*)`, 'ig');
     const result = regexp.exec(url);
     return result === null ? '' : decodeURIComponent(result[1]);
-  }
+  };
 
   /**
    * 动态加载js
@@ -54,7 +54,7 @@ class Common {
    * @param {String} url - js链接地址
    * @param {Function} [callback] - 回调
    */
-  loadScript(url, callback) {
+  loadScript = (url, callback) => {
     const script = document.createElement('script');
     script.setAttribute('type', 'text/javascript');
     script.setAttribute('charset', 'utf-8');
@@ -78,14 +78,14 @@ class Common {
         }
       };
     }
-  }
+  };
 
   /**
    * 阻止事件冒泡
    *
    * @param {Object} evt - event
    */
-  stopPropagation(evt) {
+  stopPropagation = (evt) => {
     if (!evt) return;
     if (evt.stopPropagation) {
       evt.stopPropagation();
@@ -93,14 +93,14 @@ class Common {
     // IE
       window.event.cancelBubble = true;
     }
-  }
+  };
 
   /**
    * 阻止事件默认行为
    *
    * @param {Object} evt - event
    */
-  preventDefault(evt) {
+  preventDefault = (evt) => {
     if (!evt) return;
     if (evt.preventDefault) {
       evt.preventDefault();
@@ -108,7 +108,7 @@ class Common {
     // IE
       window.event.returnValue = false;
     }
-  }
+  };
 
   /**
    * 添加事件监听
@@ -118,7 +118,7 @@ class Common {
    * @param {Function} handler - 事件触发时执行的函数
    * @param {Boolean} [useCapture=false] - 指定事件是否在捕获或冒泡阶段执行【true-捕获，false-冒泡】
    */
-  addEvent(target, type, handler, useCapture = false) {
+  addEvent = (target, type, handler, useCapture = false) => {
     if (target.addEventListener) {
     // DOM2.0
       target.addEventListener(type, handler, useCapture);
@@ -129,7 +129,7 @@ class Common {
     // DOM 0
       target[`on${type}`] = handler;
     }
-  }
+  };
 
   /**
    * 移除事件监听
@@ -139,7 +139,7 @@ class Common {
    * @param {Function} handler - 事件触发时执行的函数
    * @param {Boolean} [useCapture=false] - 指定事件是否在捕获或冒泡阶段执行【true-捕获，false-冒泡】
    */
-  removeEvent(target, type, handler, useCapture = false) {
+  removeEvent = (target, type, handler, useCapture = false) => {
     if (target.removeEventListener) {
     // DOM2.0
       target.removeEventListener(type, handler, useCapture);
@@ -150,7 +150,7 @@ class Common {
     // DOM 0
       target[`on${type}`] = null;
     }
-  }
+  };
 }
 
 export default new Common();

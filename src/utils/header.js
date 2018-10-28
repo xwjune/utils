@@ -2,6 +2,12 @@ import md5 from 'md5';
 
 /**
  * 请求头
+ *
+ * setPassword - 设置秘钥
+ * setCommon - 设置公共请求参数
+ * setCommons - 设置公共请求参数【批量】
+ * getCommon - 获取公共请求参数
+ * signature - 签名
  */
 class Header {
   constructor() {
@@ -10,7 +16,7 @@ class Header {
       deviceId: '', // 设备唯一标识
       userId: '', // 用户唯一标识
       OSVersion: '', // 设备系统版本号
-      timestamp: '', // 时间戳(秒)
+      timestamp: '', // 时间戳【秒】
       signature: '', // 签名
       token: '', // token【登录后设置】
     };
@@ -22,14 +28,14 @@ class Header {
     this.password = v;
   };
 
-  // 设置公共请求参数-单个
+  // 设置公共请求参数
   setCommon = (key, value = '') => {
     Object.assign(this.common, {
       [key]: value,
     });
   };
 
-  // 设置公共请求参数-多个
+  // 设置公共请求参数【批量】
   setCommons = (params) => {
     // 没有值的属性默认设为空字符串，以防签名出现key=undefined，导致签名出错
     Object.keys(params).forEach((key) => {
