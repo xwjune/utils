@@ -1,4 +1,6 @@
-> npm工具包
+> jun-utils
+
+[git地址](https://github.com/xwjune/jun-utils.git)
 
 ## 使用
 ```bash
@@ -15,42 +17,48 @@ check.cellphone('13456789012'); // true
 ## check
 **校验库**
 
+```js
+import { check } from 'jun-utils';
+```
+
 ### cellphone(value)
-手机校验 ：`11位数字，首位1`
+手机校验 `11位数字，首位1`
 
 ```js
 check.cellphone('13456789012'); // true
 ```
 
 ### telphone(value)
-固定电话校验：`3-4位区号，7-8位直拨号码`
+固定电话校验 `3-4位区号，7-8位直拨号码`
 
 ```js
-check.cellphone('0576-85735299'); // true
+check.cellphone('0571-85735888'); // true
 
-check.cellphone('057685735299'); // true
+check.cellphone('057185735888'); // true
+
+check.cellphone('85735888'); // true
 ```
 
 ### phone(value)
 电话【手机和固定电话】校验
 
 ```js
-check.phone('057685735299'); // true
+check.phone('057185735888'); // true
 
 check.phone('13456789012'); // true
 ```
 
 ### email(value)
-邮箱校验：`登录名@主机名.域名`
+邮箱校验 `登录名@主机名.域名`
 
 ```js
-check.email('june@163.com'); // true
+check.email('test@163.com'); // true
 
 check.email('te_st@sima.vip.com'); // true
 ```
 
 ### postcode(value)
-邮编校验：`6位数字`
+邮编校验 `6位数字`
 
 ```js
 check.postcode('310000'); // true
@@ -59,7 +67,7 @@ check.postcode('310000'); // true
 ### isNull(value)
 空校验
 
-空数据集合：`undefined,'undefined',null,'null','(null)','NaN',''`
+空数据集合 `undefined,'undefined',null,'null','(null)','NaN',''`
 
 ```js
 check.isNull(); // true
@@ -73,6 +81,8 @@ check.isNull('undefined'); // true
 ```js
 check.isNumber('20'); // true
 
+check.isNumber('-20'); // true
+
 check.isNumber('.2'); // false
 ```
 
@@ -81,6 +91,8 @@ check.isNumber('.2'); // false
 
 ```js
 check.isInteger('20'); // true
+
+check.isInteger('-20'); // true
 
 check.isInteger('0.2'); // false
 ```
@@ -91,6 +103,8 @@ check.isInteger('0.2'); // false
 ```js
 check.isDecimal('0.2'); // true
 
+check.isDecimal('-0.2'); // true
+
 check.isDecimal('20'); // false
 ```
 
@@ -99,11 +113,39 @@ check.isDecimal('20'); // false
 
 ```js
 check.hasChinese('中文'); // true
+
 check.hasChinese('。'); // true
 ```
 
+### idCard(value)
+身份证校验：`一代身份证【15位】或二代身份证【18位】`
+
+```js
+check.idCard('330000199001017865'); // true
+
+check.idCard('33000019900101786X'); // true
+
+check.idCard('330000900101786'); // true
+```
+
+### ip(value)
+ip地址校验
+
+```js
+check.ip('192.168.0.1'); // true
+```
+
+### alipay(value)
+支付宝账号校验 `邮箱或手机号`
+
+```js
+check.alipay('test@163.com'); // true
+
+check.alipay('13456789012'); // true
+```
+
 ### pwdIntensity(value)
-弱密码校验：`1-弱|2-中|3-强`
+弱密码校验 `1-弱|2-中|3-强`
 
 规则：
 
@@ -118,15 +160,8 @@ check.hasChinese('。'); // true
 check.pwdIntensity('123456'); // 1
 
 check.pwdIntensity('123456abc'); // 2
-```
 
-### idCard(value)
-身份证校验：`15位【一代身份证】或18位【二代身份证】`
-
-```js
-check.idCard('330000199001017865'); // true
-
-check.idCard('33000019900101786X'); // true
+check.pwdIntensity('123456abcABC'); // 3
 ```
 
 ***
@@ -134,10 +169,14 @@ check.idCard('33000019900101786X'); // true
 ## stringUtil
 **字符串处理**
 
+```js
+import { stringUtil } from 'jun-utils';
+```
+
 ### isNull(str)
 空校验
 
-空数据集合：`undefined,'undefined',null,'null','(null)','NaN',''`
+空数据集合 `undefined,'undefined',null,'null','(null)','NaN',''`
 
 ```js
 stringUtil.isNull(); // true
@@ -150,6 +189,8 @@ stringUtil.isNull('undefined'); // true
 
 ```js
 stringUtil.isNumber('20'); // true
+
+stringUtil.isNumber('-20'); // true
 
 stringUtil.isNumber('.2'); // false
 ```
@@ -192,8 +233,91 @@ stringUtil.convertYuanToFen(null, '--'); // --
 ```
 ***
 
+## appUtil
+**app交互**
+
+```js
+import { appUtil } from 'jun-utils';
+```
+
+### isIos()
+IOS环境判断
+
+```js
+appUtil.isIos();
+```
+
+### isAndroid()
+Android环境判断
+
+```js
+appUtil.isAndroid();
+```
+
+### isPc()
+PC环境判断
+
+```js
+appUtil.isPc();
+```
+
+### isWeChat()
+微信客户端判断
+
+```js
+appUtil.isWeChat();
+```
+
+### isAliPay()
+支付宝客户端判断
+
+```js
+appUtil.isAliPay();
+```
+
+### isTaobao()
+淘宝客户端判断
+
+```js
+appUtil.isTaobao();
+```
+
+### alipayJSBridgeReady([callback])
+监听alipay容器初始化
+
+```js
+appUtil.alipayJSBridgeReady();
+```
+
+### alipayTitle(title, [subtitle])
+支付宝设置标题
+
+```js
+appUtil.alipayTitle('标题', '副标题');
+```
+
+### alipayPopWindow()
+支付宝关闭当前页面
+
+```js
+appUtil.alipayPopWindow();
+```
+
+### alipayExitApp()
+支付宝退出当前应用
+
+```js
+appUtil.alipayExitApp();
+```
+
+***
+
 ## common
 **通用方法**
+
+```js
+import { common } from 'jun-utils';
+```
 
 ### generateUUID()
 生成uuid
@@ -208,3 +332,69 @@ common.generateUUID(); // cd2f4b1f-daf2-451c-a9a6-db716c1d82bb
 ```js
 common.getParameter('name', 'http://www.w3school.com?name=xxx'); // xxx
 ```
+
+### loadScript(url, [callback])
+动态加载js
+
+```js
+common.loadScript('https://xxx.js', () => {
+  console.log('loaded');
+});
+```
+
+### stopPropagation(evt)
+阻止事件冒泡
+
+```js
+common.stopPropagation(event);
+```
+
+### preventDefault(evt);
+阻止事件默认行为
+
+```js
+common.preventDefault(event);
+```
+
+### addEvent(target, type, handler, [useCapture=false]);
+添加事件监听
+
+```js
+const handler = () => {
+  console.log('onload');
+};
+common.addEvent(window, 'load', handler);
+```
+
+### removeEvent(target, type, handler, [useCapture=false]);
+移除事件监听
+
+```js
+const handler = () => {
+  console.log('onload');
+};
+common.removeEvent(window, 'load', handler);
+```
+
+## crypt
+**加密解密【用于暴露在url中的重要参数】**
+
+```js
+import { crypt } from 'jun-utils';
+```
+
+### encode(value)
+加密
+
+```js
+crypt.encode('123456'); // CJ8pD3Ks
+```
+
+### decode(value)
+解密
+
+```js
+crypt.decode('CJ8pD3Ks'); // 123456
+```
+
+***

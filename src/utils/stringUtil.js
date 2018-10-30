@@ -47,6 +47,9 @@ class StringUtil {
    * isNumber('20');
    * // => true
    *
+   * isNumber('-20');
+   * // => true
+   *
    * isNumber('.2');
    * // => false
    */

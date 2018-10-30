@@ -53,6 +53,11 @@ class Common {
    *
    * @param {String} url - js链接地址
    * @param {Function} [callback] - 回调
+   * @example
+   *
+   * loadScript('https://xxx.js', () => {
+   *  console.log('loaded');
+   * });
    */
   loadScript = (url, callback) => {
     const script = document.createElement('script');
@@ -84,6 +89,9 @@ class Common {
    * 阻止事件冒泡
    *
    * @param {Object} evt - event
+   * @example
+   *
+   * stopPropagation(event);
    */
   stopPropagation = (evt) => {
     if (!evt) return;
@@ -99,6 +107,9 @@ class Common {
    * 阻止事件默认行为
    *
    * @param {Object} evt - event
+   * @example
+   *
+   * preventDefault(event);
    */
   preventDefault = (evt) => {
     if (!evt) return;
@@ -117,6 +128,12 @@ class Common {
    * @param {String} type - 事件类型
    * @param {Function} handler - 事件触发时执行的函数
    * @param {Boolean} [useCapture=false] - 指定事件是否在捕获或冒泡阶段执行【true-捕获，false-冒泡】
+   * @example
+   *
+   * const handler = () => {
+   *   console.log('onload');
+   * };
+   * addEvent(window, 'load', handler);
    */
   addEvent = (target, type, handler, useCapture = false) => {
     if (target.addEventListener) {
@@ -138,6 +155,12 @@ class Common {
    * @param {String} type - 事件类型
    * @param {Function} handler - 事件触发时执行的函数
    * @param {Boolean} [useCapture=false] - 指定事件是否在捕获或冒泡阶段执行【true-捕获，false-冒泡】
+   * @example
+   *
+   * const handler = () => {
+   *   console.log('onload');
+   * };
+   * removeEvent(window, 'load', handler);
    */
   removeEvent = (target, type, handler, useCapture = false) => {
     if (target.removeEventListener) {

@@ -64,6 +64,10 @@ class Ctypt {
    *
    * @param {String} value - 需要加密的数据
    * @return {String} 已加密的数据
+   * @example
+   *
+   * encode('123456');
+   * // => CJ8pD3Ks
    */
   encode = (value) => {
     let output = '';
@@ -105,6 +109,10 @@ class Ctypt {
    *
    * @param {String} value - 需要解密的数据
    * @return {String} 已解密的数据
+   * @example
+   *
+   * decode('CJ8pD3Ks');
+   * // => 123456
    */
   decode = (value) => {
     let output = '';

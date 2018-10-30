@@ -17,6 +17,9 @@
  *
  * pwdIntensity('123456abc');
  * // => 2
+ *
+ * pwdIntensity('123456abcABC');
+ * // => 3
  */
 export default function (pwd = '') {
   // 密码长度
