@@ -233,6 +233,92 @@ stringUtil.convertYuanToFen(null, '--'); // --
 ```
 ***
 
+## treeUtil
+**树结构数据操作**
+
+```js
+import { treeUtil } from 'jun-utils';
+```
+
+### dataConvert(source, attributes)
+数据转换
+
+```js
+const source = [
+  { id: '330000', value: '浙江省', parentId: '100000' },
+  { id: '330100', value: '杭州市', parentId: '330000' },
+  { id: '330200', value: '宁波市', parentId: '330000' },
+  { id: '320000', value: '江苏省', parentId: '100000' },
+  { id: '320100', value: '南京市', parentId: '320000' },
+  { id: '320200', value: '无锡市', parentId: '320000' },
+];
+const attributes = { rootId: '100000', pId: 'parentId', name: 'value' };
+treeUtil.dataConvert(source, attributes);
+// => [{
+  id: '330000',
+  name: '浙江省', 
+  children: [
+    { id: '330100', name: '杭州市' },
+    { id: '330200', name: '宁波市' },
+  ]
+}, { 
+  id: '320000',
+  name: '江苏省',
+  children: [
+    { id: '320100', name: '南京市' },
+    { id: '320200', name: '无锡市' },
+  ]
+}];
+
+```
+
+### dataPick(treeData, values, [attributes])
+数据提取
+
+```js
+const treeData = [{
+  id: '330000',
+  name: '浙江省', 
+  children: [
+    { id: '330100', name: '杭州市' },
+    { id: '330200', name: '宁波市' },
+  ]
+}, { 
+  id: '320000',
+  name: '江苏省',
+  children: [
+    { id: '320100', name: '南京市' },
+    { id: '320200', name: '无锡市' },
+  ]
+}];
+treeUtil.dataPick(treeData, ['330000', '330100']); // ['浙江省', '杭州市']
+```
+
+### dataMatch(treeData, value, [attributes])
+判断数据是否存在
+
+```js
+const treeData = [{
+  id: '330000',
+  name: '浙江省', 
+  children: [
+    { id: '330100', name: '杭州市' },
+    { id: '330200', name: '宁波市' },
+  ]
+}, { 
+  id: '320000',
+  name: '江苏省',
+  children: [
+    { id: '320100', name: '南京市' },
+    { id: '320200', name: '无锡市' },
+  ]
+}];
+treeUtil.dataMatch(treeData, '杭州市', { key: 'name' }); // true
+
+```
+
+***
+
 ## appUtil
 **app交互**
 
@@ -254,11 +340,11 @@ Android环境判断
 appUtil.isAndroid();
 ```
 
-### isPc()
-PC环境判断
+### isMobile()
+移动端【手机、平板设备】环境判断
 
 ```js
-appUtil.isPc();
+appUtil.isMobile();
 ```
 
 ### isWeChat()
@@ -395,6 +481,52 @@ crypt.encode('123456'); // CJ8pD3Ks
 
 ```js
 crypt.decode('CJ8pD3Ks'); // 123456
+```
+
+***
+
+## pickTime
+**预约时间解析**
+
+
+根据对应的时间区间和间隔天数，推算出可选的时间范围，可用于快递上门取件等场景
+
+```js
+import { pickTime } from 'jun-utils';
+```
+
+### pickTime(range, interval, [attributes])
+
+```js
+// 9:00~13:00 T+2 当前时间：08/11 10:10
+pickTime([9, 13], 2, { key: 'value', name: 'label' });
+// =>
+[{
+  label: '08月11日',
+  value: '1533916800',
+  children: [
+    { label: '11:00-12:00', value: '1533956400' },
+    { label: '12:00-13:00', value: '1533960000' },
+  ],
+}, {
+  label: '08月12日',
+  value: '1534003200',
+  children: [
+    { label: '09:00-10:00', value: '1534035600' },
+    { label: '10:00-11:00', value: '1534039200' },
+    { label: '11:00-12:00', value: '1534042800' },
+    { label: '12:00-13:00', value: '1534046400' },
+  ],
+}, {
+  label: '08月13日',
+  value: '1534089600',
+  children: [
+    { label: '09:00-10:00', value: '1534122000' },
+    { label: '10:00-11:00', value: '1534125600' },
+    { label: '11:00-12:00', value: '1534129200' },
+    { label: '12:00-13:00', value: '1534132800' },
+  ],
+}];
 ```
 
 ***

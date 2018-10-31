@@ -53,7 +53,7 @@ class App {
    *
    * @return {Boolean} true-是，false-否
    */
-  isTaobao= () => /AliApp\(TB/i.test(navigator.userAgent);
+  isTaobao = () => /AliApp\(TB/i.test(navigator.userAgent);
 
   /**
    * 监听alipay容器初始化

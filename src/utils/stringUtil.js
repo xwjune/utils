@@ -100,7 +100,7 @@ class StringUtil {
     if (!this.isNumber(str)) {
       return format;
     }
-    return (str / 100).toFixed(2);
+    return (parseInt(str, 10) / 100).toFixed(2);
   };
 
   /**

@@ -2,7 +2,7 @@ import moment from 'moment';
 
 /**
  * 预约时间解析
- * 根据对应的时间区间和间隔天数，推算出可选的时间范围，可用于顺丰上门取件等场景
+ * 根据对应的时间区间和间隔天数，推算出可选的时间范围，可用于快递上门取件等场景
  *
  * @param {Array} range 时间区间
  * @param {Number} interval 间隔天数
@@ -11,25 +11,36 @@ import moment from 'moment';
  * @param {String} [attributes.name='name'] - 名称key
  * @param {String} [attributes.children='children'] - 子集合key
  * @return {Object[]} 可预约时间【主键键值为时间戳】
- *
  * @example
  *
- * 9:00~13:00 T+2 当前时间：08/11 14:00
+ * 9:00~13:00 T+2 当前时间：08/11 10:10
  * pickTime([9, 13], 2, { key: 'value', name: 'label' });
- * // => [
- *   {'label': '08月12日', 'value': '1534003200', 'children': [
- *     {'label': '09:00-10:00', 'value': '1534035600'},
- *     {'label': '10:00-11:00', 'value': '1534039200'},
- *     {'label': '11:00-12:00', 'value': '1534042800'},
- *     {'label': '12:00-13:00', 'value': '1534046400'},
- *   ]},
- *   {'label': '08月13日', 'value': '1534089600', 'children': [
- *     {'label': '09:00-10:00', 'value': '1534122000'},
- *     {'label': '10:00-11:00', 'value': '1534125600'},
- *     {'label': '11:00-12:00', 'value': '1534129200'},
- *     {'label': '12:00-13:00', 'value': '1534132800'},
- *   ]}
- * ]
+ * // => [{
+ *   label: '08月11日',
+ *   value: '1533916800',
+ *   children: [
+ *     { label: '11:00-12:00', value: '1533956400' },
+ *     { label: '12:00-13:00', value: '1533960000' },
+ *   ],
+ * }, {
+ *   label: '08月12日',
+ *   value: '1534003200',
+ *   children: [
+ *     { label: '09:00-10:00', value: '1534035600' },
+ *     { label: '10:00-11:00', value: '1534039200' },
+ *     { label: '11:00-12:00', value: '1534042800' },
+ *     { label: '12:00-13:00', value: '1534046400' },
+ *   ],
+ * }, {
+ *   label: '08月13日',
+ *   value: '1534089600',
+ *   children: [
+ *     { label: '09:00-10:00', value: '1534122000' },
+ *     { label: '10:00-11:00', value: '1534125600' },
+ *     { label: '11:00-12:00', value: '1534129200' },
+ *     { label: '12:00-13:00', value: '1534132800' },
+ *   ],
+ * }];
  */
 export default function (range, interval, attributes = {}) {
   const {
@@ -75,7 +86,7 @@ export default function (range, interval, attributes = {}) {
     const d = moment().add(i, 'd');
     times.push({
       [name]: d.format('MM月DD日'),
-      [key]: d.startOf('day').format('X'), // 时间戳-秒
+      [key]: d.startOf('day').format('X'), // 时间戳【秒】
     });
   }
   times.forEach((day, index) => {
@@ -83,7 +94,7 @@ export default function (range, interval, attributes = {}) {
     Object.assign(day, {
       [children]: timeTemp.map(el => ({
         [name]: el,
-        [key]: setValue(day[key], el), // 时间戳-秒
+        [key]: setValue(day[key], el), // 时间戳【秒】
       })),
     });
   });

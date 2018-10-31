@@ -6,6 +6,7 @@
  * 数据转换
  * 将具有层级关系的数组转化为树结构数组
  *
+ * @param {Object[]} source - 源数据【有层级关系】
  * @param {Object} attributes - 配置参数
  * @param {String} attributes.pId - 源数据父主键key
  * @param {String} [attributes.rootId] - 源数据根节点主键值，将父主键值与之相等的数据视为顶层树节点【缺省此参数，将没有父主键的数据视为顶层树节点】
@@ -15,12 +16,9 @@
  * @param {String} [attributes.tName='name'] - 树节点名称key
  * @param {String} [attributes.children='children'] - 子集合key
  * @param {Array} [attributes.otherKeys=[]] - 其他key【将转化为树节点属性】
- * @param {Object[]} source - 源数据【有层级关系】
  * @return {Object[]} 树结构数据
- *
  * @example
  *
- * const attributes = {rootId: '100000', pId: 'parentId', name: 'value'};
  * const source = [
  *   { id: '330000', value: '浙江省', parentId: '100000' },
  *   { id: '330100', value: '杭州市', parentId: '330000' },
@@ -29,20 +27,26 @@
  *   { id: '320100', value: '南京市', parentId: '320000' },
  *   { id: '320200', value: '无锡市', parentId: '320000' },
  * ];
+ * const attributes = { rootId: '100000', pId: 'parentId', name: 'value' };
  *
- * treeConvert(attributes, source);
- * // => [
- *   { id: '330000', name: '浙江省', children: [
+ * dataConvert(source, attributes);
+ * // => [{
+ *   id: '330000',
+ *   name: '浙江省',
+ *   children: [
  *     { id: '330100', name: '杭州市' },
  *     { id: '330200', name: '宁波市' },
- *   ]},
- *   { id: '320000', name: '江苏省', children: [
+ *   ]
+ * }, {
+ *   id: '320000',
+ *   name: '江苏省',
+ *   children: [
  *     { id: '320100', name: '南京市' },
  *     { id: '320200', name: '无锡市' },
- *   ]},
- * ]
+ *   ]
+ * }]
  */
-export default function (attributes = {}, source = []) {
+function dataConvert(source = [], attributes = {}) {
   const {
     rootId, // 源数据根节点主键值
     pId, // 源数据父主键key
@@ -101,7 +105,9 @@ export default function (attributes = {}, source = []) {
             j -= 1;
           }
         }
-        if (node[i][children]) pickChild(node[i][children]);
+        if (node[i][children]) {
+          pickChild(node[i][children]);
+        }
       }
     }
   };
@@ -112,34 +118,38 @@ export default function (attributes = {}, source = []) {
 }
 
 /**
-* 数据提取
-* 根据某一属性的值提取出另一属性的值
-*
-* @param {Object[]} treeData - 源数据
-* @param {Array} values - 原始值
-* @param {Object} [attributes] - 配置参数
-* @param {String} [attributes.origin='id'] - 原始key
-* @param {String} [attributes.key='name'] - 提取key
-* @param {String} [attributes.children='children'] - 子集合key
-* @return {Array} 提取的数据
-*
-* @example
-*
-* const treeData = [
-*   { id: '330000', name: '浙江省', children: [
-*     { id: '330100', name: '杭州市' },
-*     { id: '330200', name: '宁波市' },
-*   ]},
-*   { id: '320000', name: '江苏省', children: [
-*     { id: '320100', name: '南京市' },
-*     { id: '320200', name: '无锡市' },
-*   ]},
-* ];
-*
-* treePick(treeData, ['330000', '330100']);
-* // => ['浙江省', '杭州市'];
-*/
-export function treePick(treeData = [], values = [], attributes = {}) {
+ * 数据提取
+ * 根据某一属性的值提取出另一属性的值
+ *
+ * @param {Object[]} treeData - 源数据
+ * @param {Array} values - 原始值
+ * @param {Object} [attributes] - 配置参数
+ * @param {String} [attributes.origin='id'] - 原始key
+ * @param {String} [attributes.key='name'] - 提取key
+ * @param {String} [attributes.children='children'] - 子集合key
+ * @return {Array} 提取的数据
+ * @example
+ *
+ * const treeData = [{
+ *   id: '330000',
+ *   name: '浙江省',
+ *   children: [
+ *     { id: '330100', name: '杭州市' },
+ *     { id: '330200', name: '宁波市' },
+ *   ],
+ * }, {
+ *   id: '320000',
+ *   name: '江苏省',
+ *   children: [
+ *     { id: '320100', name: '南京市' },
+ *     { id: '320200', name: '无锡市' },
+ *   ],
+ * }];
+ *
+ * dataPick(treeData, ['330000', '330100']);
+ * // => ['浙江省', '杭州市']
+ */
+function dataPick(treeData = [], values = [], attributes = {}) {
   const {
     origin = 'id', // 原始key
     key = 'name', // 提取key
@@ -165,28 +175,36 @@ export function treePick(treeData = [], values = [], attributes = {}) {
 }
 
 /**
-* 判断某项数据是否存在
-*
-* @param {Object[]} treeData - 源数据
-* @param {String} value - 属性值
-* @param {Object} [attributes] - 配置参数
-* @param {String} [attributes.key='id'] - key
-* @param {String} [attributes.children='children'] - 子集合key
-* @return {Boolean} 是否存在
-*
-* @example
-*
-* const treeData = [
-*   { id: '330000', name: '浙江省', children: [
-*     { id: '330100', name: '杭州市' },
-*     { id: '330200', name: '宁波市' },
-*   ]},
-* ];
-*
-* treeDataMatch(treeData, '杭州市', { key: 'name' });
-* // => true
-*/
-export function treeDataMatch(treeData = [], value, attributes = {}) {
+ * 判断数据是否存在
+ *
+ * @param {Object[]} treeData - 源数据
+ * @param {String} value - 属性值
+ * @param {Object} [attributes] - 配置参数
+ * @param {String} [attributes.key='id'] - key
+ * @param {String} [attributes.children='children'] - 子集合key
+ * @return {Boolean} 是-存在，false-不存在
+ * @example
+ *
+ * const treeData = [{
+ *   id: '330000',
+ *   name: '浙江省',
+ *   children: [
+ *     { id: '330100', name: '杭州市' },
+ *     { id: '330200', name: '宁波市' },
+ *   ],
+ * }, {
+ *   id: '320000',
+ *   name: '江苏省',
+ *   children: [
+ *     { id: '320100', name: '南京市' },
+ *     { id: '320200', name: '无锡市' },
+ *   ],
+ * }];
+ *
+ * dataMatch(treeData, '杭州市', { key: 'name' });
+ * // => true
+ */
+function dataMatch(treeData = [], value, attributes = {}) {
   const {
     key = 'id', // key
     children = 'children', // 子集合key
@@ -205,3 +223,9 @@ export function treeDataMatch(treeData = [], value, attributes = {}) {
 
   return find(treeData);
 }
+
+export default {
+  dataConvert,
+  dataPick,
+  dataMatch,
+};

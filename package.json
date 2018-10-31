@@ -1,6 +1,6 @@
 {
   "name": "jun-utils",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "description": "jun-utils",
   "main": "index.js",
   "scripts": {
@@ -18,7 +18,8 @@
   },
   "keywords": [
     "npm",
-    "utils"
+    "utils",
+    "jun"
   ],
   "author": "xwjune@163.com",
   "license": "ISC",
