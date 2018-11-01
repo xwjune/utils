@@ -81,6 +81,7 @@ class StringUtil {
 
   /**
    * 分->元
+   * 为防止浮点数及大数运算精度丢失，故采用字符串形式解析
    *
    * @param {String} str - 分
    * @param {String} [format='0.00'] - 格式化
@@ -88,6 +89,9 @@ class StringUtil {
    * @example
    *
    * convertFenToYuan('2000');
+   * // => 20.00
+   *
+   * convertFenToYuan('2000.45'); // 非正确格式，舍去小数部分
    * // => 20.00
    *
    * convertFenToYuan();
@@ -100,11 +104,25 @@ class StringUtil {
     if (!this.isNumber(str)) {
       return format;
     }
-    return (parseInt(str, 10) / 100).toFixed(2);
+    str = str.toString();
+    if (str.indexOf('.') > -1) {
+    // 非正确格式，舍去小数部分
+      str = str.replace(/\.\d+$/, '');
+    }
+    const len = str.length;
+    switch (len) {
+    case 1:
+      return `0.0${str}`;
+    case 2:
+      return `0.${str}`;
+    default:
+      return `${str.substr(0, len - 2)}.${str.substr(len - 2)}`;
+    }
   };
 
   /**
    * 元->分
+   * 为防止浮点数及大数运算精度丢失，故采用字符串形式解析
    *
    * @param {String} str - 元
    * @param {String} [format='0'] - 格式化
@@ -130,8 +148,37 @@ class StringUtil {
     if (!this.isNumber(str)) {
       return format;
     }
-    return parseInt(str * 100, 10).toString();
+    let result = '0';
+    str = str.toString();
+    if (str.indexOf('.') > -1) {
+      const strArr = str.split('.');
+      const len = strArr[1].length;
+      switch (len) {
+      case 1:
+        // 特殊情况：0.1 => 010
+        result = `${strArr[0]}${strArr[1]}0`;
+        break;
+      case 2:
+        // 特殊情况：
+        // 0.01 => 001
+        // 0.10 => 010
+        result = str.replace('.', '');
+        break;
+      default:
+        // 只保留两位小数
+        result = `${strArr[0]}${strArr[1].substr(0, 2)}`;
+      }
+      // 特殊数据案例：['-0', '0', '0.0', '0.1', '0.00', '0.01', '0.10', '0.008']
+      // 特殊处理：000 => 0；001 => 1；010 => 10
+      result = result.replace(/^(-?)(00?)/, '$1');
+    } else {
+      result = /-?0/.test(str) ? str : `${str}00`;
+    }
+    return result;
   };
+
+  // todo
+  // 数字金额转化为中文金额
 }
 
 export default new StringUtil();

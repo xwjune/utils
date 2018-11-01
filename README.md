@@ -212,6 +212,8 @@ stringUtil.filterNull(null, '--'); // --
 ```js
 stringUtil.convertFenToYuan('2000'); // 20.00
 
+stringUtil.convertFenToYuan('2000.45'); // 20.00
+
 stringUtil.convertFenToYuan(); // 0.00
 
 stringUtil.convertFenToYuan(null, '--'); // --
@@ -254,7 +256,8 @@ const source = [
 ];
 const attributes = { rootId: '100000', pId: 'parentId', name: 'value' };
 treeUtil.dataConvert(source, attributes);
-// => [{
+// => 
+[{
   id: '330000',
   name: '浙江省', 
   children: [
@@ -269,7 +272,6 @@ treeUtil.dataConvert(source, attributes);
     { id: '320200', name: '无锡市' },
   ]
 }];
-
 ```
 
 ### dataPick(treeData, values, [attributes])
@@ -314,7 +316,6 @@ const treeData = [{
   ]
 }];
 treeUtil.dataMatch(treeData, '杭州市', { key: 'name' }); // true
-
 ```
 
 ***
@@ -498,7 +499,7 @@ import { pickTime } from 'jun-utils';
 ### pickTime(range, interval, [attributes])
 
 ```js
-// 9:00~13:00 T+2 当前时间：08/11 10:10
+// 9:00~13:00 T+2 当前时间：2018-08-11 10:10
 pickTime([9, 13], 2, { key: 'value', name: 'label' });
 // =>
 [{
