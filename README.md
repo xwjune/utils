@@ -32,11 +32,11 @@ check.cellphone('13456789012'); // true
 固定电话校验 `3-4位区号，7-8位直拨号码`
 
 ```js
-check.cellphone('0571-85735888'); // true
+check.telphone('0571-85735888'); // true
 
-check.cellphone('057185735888'); // true
+check.telphone('057185735888'); // true
 
-check.cellphone('85735888'); // true
+check.telphone('85735888'); // true
 ```
 
 ### phone(value)
