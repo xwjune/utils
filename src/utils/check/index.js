@@ -12,6 +12,7 @@ import pwdIntensity from './pwdIntensity';
  * isNumber - 数字校验
  * isInteger - 整数校验
  * isDecimal - 小数校验
+ * money - 金额【元】判断
  * hasChinese - 中文判断
  * idCard - 身份证校验
  * ip - ip地址校验
@@ -155,8 +156,11 @@ class Check {
    *
    * isInteger('0.2');
    * // => false
+   *
+   * isInteger('020');
+   * // => false
    */
-  isInteger = (value) => /^-?\d+$/.test(value);
+  isInteger = (value) => /^-?(\d|[1-9]\d+)$/.test(value);
 
   /**
    * 小数校验
@@ -173,8 +177,33 @@ class Check {
    *
    * isDecimal('20');
    * // => false
+   *
+   * isDecimal('00.2');
+   * // => false
    */
-  isDecimal = (value) => /^-?\d+\.\d+$/.test(value);
+  isDecimal = (value) => /^-?(\d|[1-9]\d+)\.\d+$/.test(value);
+
+  /**
+   * 金额【元】判断
+   * 规则：数字，最多两位小数
+   *
+   * @param {*} value - The value to check
+   * @return {Boolean} true-是，false-否
+   * @example
+   *
+   * money('-20');
+   * // => true
+   *
+   * money('20.00');
+   * // => true
+   *
+   * money('20.002');
+   * // => false
+   *
+   * money('002');
+   * // => false
+   */
+  money = (value) => /^-?(\d|[1-9]\d+)(\.\d{1,2})?$/.test(value);
 
   /**
    * 中文判断

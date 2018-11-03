@@ -95,6 +95,8 @@ check.isInteger('20'); // true
 check.isInteger('-20'); // true
 
 check.isInteger('0.2'); // false
+
+check.isInteger('020'); // false
 ```
 
 ### isDecimal(value)
@@ -106,6 +108,21 @@ check.isDecimal('0.2'); // true
 check.isDecimal('-0.2'); // true
 
 check.isDecimal('20'); // false
+
+check.isDecimal('00.2'); // false
+```
+
+### money(value)
+金额【元】判断
+
+```js
+check.money('-20'); // true
+
+check.money('-20.00'); // true
+
+check.money('20.002'); // false
+
+check.money('002'); // false
 ```
 
 ### hasChinese(value)
@@ -182,17 +199,6 @@ import { stringUtil } from 'jun-utils';
 stringUtil.isNull(); // true
 
 stringUtil.isNull('undefined'); // true
-```
-
-### isNumber(str)
-数字校验
-
-```js
-stringUtil.isNumber('20'); // true
-
-stringUtil.isNumber('-20'); // true
-
-stringUtil.isNumber('.2'); // false
 ```
 
 ### filterNull(str, [format=''])

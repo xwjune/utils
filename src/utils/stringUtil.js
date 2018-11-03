@@ -2,7 +2,6 @@
  * 字符串操作
  *
  * isNull - 空校验
- * isNumber - 数字校验
  * filterNull - 空数据过滤
  * convertFenToYuan - 分转化成元
  * convertYuanToFen - 元转化为分
@@ -36,24 +35,6 @@ class StringUtil {
     }
     return false;
   };
-
-  /**
-   * 数字校验
-   *
-   * @param {String} str - 字符串
-   * @return {Boolean} true-数字，false-非数字
-   * @example
-   *
-   * isNumber('20');
-   * // => true
-   *
-   * isNumber('-20');
-   * // => true
-   *
-   * isNumber('.2');
-   * // => false
-   */
-  isNumber = (str) => /^-?\d+(\.\d+)?$/.test(str);
 
   /**
    * 空数据过滤
@@ -101,23 +82,31 @@ class StringUtil {
    * // => --
    */
   convertFenToYuan = (str, format = '0.00') => {
-    if (!this.isNumber(str)) {
+    if (!/^-?(\d|[1-9]\d+)(\.\d+)?$/.test(str)) {
       return format;
     }
     str = str.toString();
+    let result = '';
+    if (str[0] === '-') {
+      result = '-';
+      str = str.substr(1);
+    }
     if (str.indexOf('.') > -1) {
-    // 非正确格式，舍去小数部分
-      str = str.replace(/\.\d+$/, '');
+      str = str.replace(/\.\d+$/, ''); // Trim decimal at the ending.
     }
     const len = str.length;
     switch (len) {
     case 1:
-      return `0.0${str}`;
+      result += `0.0${str}`;
+      break;
     case 2:
-      return `0.${str}`;
+      result += `0.${str}`;
+      break;
     default:
-      return `${str.substr(0, len - 2)}.${str.substr(len - 2)}`;
+      result += `${str.substr(0, len - 2)}.${str.substr(len - 2)}`;
     }
+
+    return result;
   };
 
   /**
@@ -145,35 +134,34 @@ class StringUtil {
    * // => --
    */
   convertYuanToFen = (str, format = '0') => {
-    if (!this.isNumber(str)) {
+    if (!/^-?(\d|[1-9]\d+)(\.\d+)?$/.test(str)) {
       return format;
     }
-    let result = '0';
     str = str.toString();
+    let result = '0';
     if (str.indexOf('.') > -1) {
       const strArr = str.split('.');
       const len = strArr[1].length;
       switch (len) {
       case 1:
-        // 特殊情况：0.1 => 010
+        // 特殊数据：0.0 => 000; 0.1 => 010
         result = `${strArr[0]}${strArr[1]}0`;
         break;
       case 2:
-        // 特殊情况：
-        // 0.01 => 001
-        // 0.10 => 010
+        // 特殊数据：0.00 => 000; 0.01 => 001; 0.10 => 010
         result = str.replace('.', '');
         break;
       default:
         // 只保留两位小数
+        // 特殊数据：0.000 => 000; 0.001 => 000; 0.010 => 001; 0.101 => 010
         result = `${strArr[0]}${strArr[1].substr(0, 2)}`;
       }
-      // 特殊数据案例：['-0', '0', '0.0', '0.1', '0.00', '0.01', '0.10', '0.008']
-      // 特殊处理：000 => 0；001 => 1；010 => 10
-      result = result.replace(/^(-?)(00?)/, '$1');
     } else {
-      result = /-?0/.test(str) ? str : `${str}00`;
+      result = `${str}00`;
     }
+    // 特殊数据处理：000 => 0; 001 => 1; 010 => 10
+    result = result.replace(/^(-?)(0{1,2})/, '$1'); // Trim zeros at the beginning.
+
     return result;
   };
 
