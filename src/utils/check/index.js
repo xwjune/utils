@@ -339,7 +339,6 @@ class Check {
   // todo
   // 日期是否正确判断
   // 银行卡号
-  // 金额校验，最多保留两位小数，最小单位为分
 }
 
 export default new Check();

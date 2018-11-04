@@ -171,7 +171,7 @@ class StringUtil {
   /**
    * 数字金额转换为大写人民币汉字
    *
-   * @param {String} money - 数字金额
+   * @param {String} str - 数字金额
    * @param {String} [format='零元整'] - 格式化
    * @returns {String} 中文金额
    * @example
@@ -195,6 +195,9 @@ class StringUtil {
    * // => 壹元壹角
    */
   convertCurrency = convertCurrency;
+
+  // todo
+  // 汉字转拼音
 }
 
 export default new StringUtil();
