@@ -1,3 +1,5 @@
+import convertCurrency from './convertCurrency';
+
 /**
  * 字符串操作
  *
@@ -5,6 +7,7 @@
  * filterNull - 空数据过滤
  * convertFenToYuan - 分转化成元
  * convertYuanToFen - 元转化为分
+ * convertCurrency - 数字金额转换为大写人民币汉字
  */
 class StringUtil {
   /**
@@ -165,8 +168,33 @@ class StringUtil {
     return result;
   };
 
-  // todo
-  // 数字金额转化为中文金额
+  /**
+   * 数字金额转换为大写人民币汉字
+   *
+   * @param {String} money - 数字金额
+   * @param {String} [format='零元整'] - 格式化
+   * @returns {String} 中文金额
+   * @example
+   *
+   * convertCurrency('0');
+   * // => 零元整
+   *
+   * convertCurrency('');
+   * // => 零元整
+   *
+   * convertCurrency('100000000');
+   * // => 壹亿元整
+   *
+   * convertCurrency('100000001');
+   * // => 壹亿零壹元整
+   *
+   * convertCurrency('1.01');
+   * // => 壹元零壹分
+   *
+   * convertCurrency('1.10');
+   * // => 壹元壹角
+   */
+  convertCurrency = convertCurrency;
 }
 
 export default new StringUtil();

@@ -239,6 +239,24 @@ stringUtil.convertYuanToFen(); // 0
 
 stringUtil.convertYuanToFen(null, '--'); // --
 ```
+
+### convertCurrency(str, [format='零元整'])
+数字金额转换为大写人民币汉字
+
+```js
+stringUtil.convertCurrency('0'); // 零元整
+
+stringUtil.convertCurrency(''); // 零元整
+
+stringUtil.convertCurrency('100000000'); // 壹亿元整
+
+stringUtil.convertCurrency('100000001'); // 壹亿零壹元整
+
+stringUtil.convertCurrency('1.01'); // 壹元零壹分
+
+stringUtil.convertCurrency('1.10'); // 壹元壹角
+```
+
 ***
 
 ## treeUtil

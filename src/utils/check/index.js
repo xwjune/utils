@@ -24,8 +24,8 @@ class Check {
    * 手机校验
    * 规则：11位数字，首位1
    *
-   * @param {*} value - The value to check
-   * @return {Boolean} true-是，false-否
+   * @param {*} value - The value to check.
+   * @return {Boolean} Return `true` if validated, else `false`.
    * @example
    *
    * cellphone('13456789012');
@@ -37,8 +37,8 @@ class Check {
    * 固定电话校验
    * 规则：3-4位区号，7-8位直拨号码
    *
-   * @param {*} value - The value to check
-   * @return {Boolean} true-是，false-否
+   * @param {*} value - The value to check.
+   * @return {Boolean} Return `true` if validated, else `false`.
    * @example
    *
    * telphone('0571-85735888');
@@ -55,8 +55,8 @@ class Check {
   /**
    * 电话【手机和固定电话】校验
    *
-   * @param {*} vlaue - The value to check
-   * @return {Boolean} true-是，false-否
+   * @param {*} vlaue - The value to check.
+   * @return {Boolean} Return `true` if validated, else `false`.
    * @example
    *
    * phone('057185735888');
@@ -71,8 +71,8 @@ class Check {
    * 邮箱校验
    * 规则：登录名@主机名.域名
    *
-   * @param {*} value - The value to check
-   * @return {Boolean} true-是，false-否
+   * @param {*} value - The value to check.
+   * @return {Boolean} Return `true` if validated, else `false`.
    *
    * email('test@163.com');
    * // => true
@@ -86,8 +86,8 @@ class Check {
    * 邮编校验
    * 规则：6位数字
    *
-   * @param {*} value - The value to check
-   * @return {Boolean} true-是，false-否
+   * @param {*} value - The value to check.
+   * @return {Boolean} Return `true` if validated, else `false`.
    *
    * postcode('310000');
    * // => true
@@ -98,8 +98,8 @@ class Check {
    * 空校验
    * 空数据集合：undefined,'undefined',null,'null','(null)','NaN',''
    *
-   * @param {*} value - The value to check
-   * @return {Boolean} true-是，false-否
+   * @param {*} value - The value to check.
+   * @return {Boolean} Return `true` if validated, else `false`.
    * @example
    *
    * isNull();
@@ -126,8 +126,8 @@ class Check {
   /**
    * 数字校验
    *
-   * @param {*} value - The value to check
-   * @return {Boolean} true-数字，false-非数字
+   * @param {*} value - The value to check.
+   * @return {Boolean} Return `true` if validated, else `false`.
    * @example
    *
    * isNumber('20');
@@ -144,8 +144,8 @@ class Check {
   /**
    * 整数校验
    *
-   * @param {*} value - The value to check
-   * @return {Boolean} true-数字，false-非数字
+   * @param {*} value - The value to check.
+   * @return {Boolean} Return `true` if validated, else `false`.
    * @example
    *
    * isInteger('20');
@@ -165,8 +165,8 @@ class Check {
   /**
    * 小数校验
    *
-   * @param {*} value - The value to check
-   * @return {Boolean} true-数字，false-非数字
+   * @param {*} value - The value to check.
+   * @return {Boolean} Return `true` if validated, else `false`.
    * @example
    *
    * isDecimal('0.2');
@@ -187,8 +187,8 @@ class Check {
    * 金额【元】判断
    * 规则：数字，最多两位小数
    *
-   * @param {*} value - The value to check
-   * @return {Boolean} true-是，false-否
+   * @param {*} value - The value to check.
+   * @return {Boolean} Return `true` if validated, else `false`.
    * @example
    *
    * money('-20');
@@ -208,8 +208,8 @@ class Check {
   /**
    * 中文判断
    *
-   * @param {*} value - The value to check
-   * @return {Boolean} true-是，false-否
+   * @param {*} value - The value to check.
+   * @return {Boolean} Return `true` if validated, else `false`.
    * @example
    *
    * hasChinese('中文');
@@ -247,8 +247,8 @@ class Check {
    * 出生月份 0[1-9]|1[0-2]
    * 出生日期 0[1-9]|[1-2]\d|3[0-1]
    *
-   * @param {*} value - The value to check
-   * @return {Boolean} true-是，false-否
+   * @param {*} value - The value to check.
+   * @return {Boolean} Return `true` if validated, else `false`.
    * @example
    *
    * idCard('330000199001017865');
@@ -282,8 +282,8 @@ class Check {
    * 那么0-199用正则表达式就可以写成：1\d{2}|[1-9]?\d
    * 这样0-255的正则表达式就可以写成：25[0-5]|2[0-4]\d|(1\d{2}|[1-9]?\d)
    *
-   * @param {*} value - The value to check
-   * @return {Boolean} true-是，false-否
+   * @param {*} value - The value to check.
+   * @return {Boolean} Return `true` if validated, else `false`.
    * @example
    *
    * ip('192.168.0.1');
@@ -299,8 +299,8 @@ class Check {
    * 支付宝账号校验
    * 规则：邮箱或手机号
    *
-   * @param {*} value - The value to check
-   * @return {Boolean} true-是，false-否
+   * @param {*} value - The value to check.
+   * @return {Boolean} Return `true` if validated, else `false`.
    * @example
    *
    * alipay('test@163.com');
@@ -321,7 +321,7 @@ class Check {
    *    ③ 小写字母
    *    ④ 符号【键盘上可以打出来的符号】
    *
-   * @param {String} pwd - 密码
+   * @param {String} value - 密码
    * @return {Number} intensity - 密码强度 1-弱|2-中|3-强
    * @example
    *
