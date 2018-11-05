@@ -147,22 +147,22 @@ class StringUtil {
       const len = strArr[1].length;
       switch (len) {
       case 1:
-        // 特殊数据：0.0 => 000; 0.1 => 010
+        // 特殊数据：0.0 => 000、 0.1 => 010
         result = `${strArr[0]}${strArr[1]}0`;
         break;
       case 2:
-        // 特殊数据：0.00 => 000; 0.01 => 001; 0.10 => 010
+        // 特殊数据：0.00 => 000、 0.01 => 001、 0.10 => 010
         result = str.replace('.', '');
         break;
       default:
         // 只保留两位小数
-        // 特殊数据：0.000 => 000; 0.001 => 000; 0.010 => 001; 0.101 => 010
+        // 特殊数据：0.000 => 000、 0.001 => 000、 0.010 => 001、 0.101 => 010
         result = `${strArr[0]}${strArr[1].substr(0, 2)}`;
       }
     } else {
       result = `${str}00`;
     }
-    // 特殊数据处理：000 => 0; 001 => 1; 010 => 10
+    // 特殊数据处理：000 => 0、 001 => 1、 010 => 10
     result = result.replace(/^(-?)(0{1,2})/, '$1'); // Trim zeros at the beginning.
 
     return result;
@@ -170,6 +170,7 @@ class StringUtil {
 
   /**
    * 数字金额转换为大写人民币汉字
+   * 最大处理数字：999999999999.99
    *
    * @param {String} str - 数字金额
    * @param {String} [format='零元整'] - 格式化
@@ -181,6 +182,9 @@ class StringUtil {
    *
    * convertCurrency('');
    * // => 零元整
+   *
+   * convertCurrency('', '--');
+   * // => --
    *
    * convertCurrency('100000000');
    * // => 壹亿元整

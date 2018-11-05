@@ -1,5 +1,6 @@
 /**
  * 数字金额转换为大写人民币汉字
+ * 最大处理数字：999999999999.99
  *
  * 中文大写金额数字到“元”为止的，在“元”之后、应写“整”(或“正”)字；在“角”之后，可以不写“整”(或“正”)字；大写金额数字有“分”的，“分”后面不写“整”(或“正”)字。
  * 阿拉伯数字小写金额数字中有“0”时，中文大写应按照汉语语言规律、金额数字构成和防止涂改的要求进行书写。举例如下：
@@ -20,6 +21,9 @@
  *
  * convertCurrency('');
  * // => 零元整
+ *
+ * convertCurrency('', '--');
+ * // => --
  *
  * convertCurrency('100000000');
  * // => 壹亿元整
@@ -96,7 +100,7 @@ function convertCurrency(money, format = '零元整') {
       const d = decimal.substr(i, 1);
       const ds = decimal.substr(-1); // 小数末尾数值
       if (d === '0') {
-        // 特殊数据处理：x.0【不显示小数】、x.00【不显示小数】、x.10【不显示分位】
+        // 特殊数据处理：x.0【不显示小数】、 x.00【不显示小数】、 x.10【不显示分位】
         if (ds !== '0') {
           chineseStr += digits[Number(d)];
         }
@@ -107,10 +111,14 @@ function convertCurrency(money, format = '零元整') {
   }
 
   if (chineseStr === '' || chineseStr === cnMinus) {
-  // 0、-0、0.0、0.00
+  // 0、 -0、 0.0、 0.00
     chineseStr += digits[0] + cnDollar + cnInteger;
-  } else if (decimal === '' || decimal === '0' || decimal === '00') {
-  // 整数、x.0、x.00
+  } else if (
+    decimal === ''
+    || decimal === '0'
+    || decimal === '00'
+  ) {
+  // 整数、 x.0、 x.00
     chineseStr += cnInteger;
   }
 

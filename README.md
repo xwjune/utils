@@ -241,7 +241,9 @@ stringUtil.convertYuanToFen(null, '--'); // --
 ```
 
 ### convertCurrency(str, [format='零元整'])
-数字金额转换为大写人民币汉字
+数字金额转换为大写人民币汉字 
+
+最大处理数字 `999999999999.99`
 
 ```js
 stringUtil.convertCurrency('0'); // 零元整
