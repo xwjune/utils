@@ -489,6 +489,8 @@ const handler = () => {
 common.removeEvent(window, 'load', handler);
 ```
 
+***
+
 ## crypt
 **加密解密【用于暴露在url中的重要参数】**
 
@@ -514,7 +516,6 @@ crypt.decode('CJ8pD3Ks'); // 123456
 
 ## pickTime
 **预约时间解析**
-
 
 根据对应的时间区间和间隔天数，推算出可选的时间范围，可用于快递上门取件等场景
 
