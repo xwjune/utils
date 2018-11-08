@@ -13,6 +13,16 @@ import { check } from 'jun-utils';
 // 手机号码校验
 check.cellphone('13456789012'); // true
 ```
+索引：
+
+* [check](#check)
+* [stringUtil](#stringUtil)
+* [floatUtil](#floatUtil)
+* [treeUtil](#treeUtil)
+* [appUtil](#appUtil)
+* [common](#common)
+* [crypt](#crypt)
+* [pickTime](#pickTime)
 
 ## check
 **校验库**
@@ -257,6 +267,51 @@ stringUtil.convertCurrency('100000001'); // 壹亿零壹元整
 stringUtil.convertCurrency('1.01'); // 壹元零壹分
 
 stringUtil.convertCurrency('1.10'); // 壹元壹角
+```
+
+***
+
+## floatUtil
+**浮点数运算**
+
+```js
+import { floatUtil } from 'jun-utils';
+```
+
+### add(arg1, arg2)
+加法
+
+```js
+floatUtil.add(0.1, 0.2); // 0.3
+
+floatUtil.add(2.22, 0.1); // 2.32
+```
+
+### subtract(arg1, arg2)
+减法
+
+```js
+floatUtil.subtract(1.5, 1.2); // 0.3
+
+floatUtil.subtract(0.3, 0.2); // 0.1
+```
+
+### multiply(arg1, arg2)
+乘法
+
+```js
+floatUtil.multiply(19.9, 100); // 1990
+
+floatUtil.multiply(0.7, 180); // 126
+```
+
+### divide(arg1, arg2)
+除法
+
+```js
+floatUtil.divide(0.3, 0.1); // 3
+
+floatUtil.divide(0.69, 10); // 0.069
 ```
 
 ***
