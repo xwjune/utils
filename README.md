@@ -7,6 +7,7 @@
 ## Install globally or locally
 $ npm i jun-utils -S
 ```
+
 ```js
 import { check } from 'jun-utils';
 
@@ -251,7 +252,7 @@ stringUtil.convertYuanToFen(null, '--'); // --
 ```
 
 ### convertCurrency(str, [format='零元整'])
-数字金额转换为大写人民币汉字 
+数字金额转换为中文人民币大写
 
 最大处理数字 `999999999999.99`
 
@@ -272,7 +273,7 @@ stringUtil.convertCurrency('1.10'); // 壹元壹角
 ***
 
 ## floatUtil
-**浮点数运算**
+**浮点数运算【解决精度问题】**
 
 ```js
 import { floatUtil } from 'jun-utils';

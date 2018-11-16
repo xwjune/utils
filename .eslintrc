@@ -27,6 +27,7 @@
     "no-plusplus": 0,
     "no-underscore-dangle": 0,
     "no-use-before-define": [2, { "functions": false }],
+    "no-unused-vars": [2, { "vars": "all", "args": "none" }],
     "prefer-destructuring": 0,
     "comma-dangle": [0],
     "arrow-parens": [0],
