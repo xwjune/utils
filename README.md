@@ -279,16 +279,18 @@ stringUtil.convertCurrency('1.10'); // 壹元壹角
 import { floatUtil } from 'jun-utils';
 ```
 
-### add(arg1, arg2)
+### add(arg1, arg2, [format=''])
 加法
 
 ```js
 floatUtil.add(0.1, 0.2); // 0.3
 
 floatUtil.add(2.22, 0.1); // 2.32
+
+floatUtil.add(2.22, 'xx', '--'); // --
 ```
 
-### subtract(arg1, arg2)
+### subtract(arg1, arg2, [format=''])
 减法
 
 ```js
@@ -297,7 +299,7 @@ floatUtil.subtract(1.5, 1.2); // 0.3
 floatUtil.subtract(0.3, 0.2); // 0.1
 ```
 
-### multiply(arg1, arg2)
+### multiply(arg1, arg2, [format=''])
 乘法
 
 ```js
@@ -306,7 +308,7 @@ floatUtil.multiply(19.9, 100); // 1990
 floatUtil.multiply(0.7, 180); // 126
 ```
 
-### divide(arg1, arg2)
+### divide(arg1, arg2, [format=''])
 除法
 
 ```js

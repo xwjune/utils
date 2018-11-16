@@ -97,52 +97,56 @@ export default {
    *
    * @param {Number} arg1 - 运算数1
    * @param {Number} arg2 - 运算数2
-   * @returns {Number|Boolean} 两运算数正确返回运算结果，否则返回false
+   * @param {String} [format=''] - 格式化
+   * @returns {Number|String} 两运算数正确返回运算结果
    */
-  add(arg1, arg2) {
+  add(arg1, arg2, format = '') {
     if (isNumber(arg1) && isNumber(arg2)) {
       return operation(arg1, arg2, 'add');
     }
-    return false;
+    return format;
   },
   /**
    * 减法
    *
    * @param {Number} arg1 - 运算数1
    * @param {Number} arg2 - 运算数2
-   * @returns {Number|Boolean} 两运算数正确返回运算结果，否则返回false
+   * @param {String} [format=''] - 格式化
+   * @returns {Number|Boolean} 两运算数正确返回运算结果
    */
-  subtract(arg1, arg2) {
+  subtract(arg1, arg2, format = '') {
     if (isNumber(arg1) && isNumber(arg2)) {
       return operation(arg1, arg2, 'subtract');
     }
-    return false;
+    return format;
   },
   /**
    * 乘法
    *
    * @param {Number} arg1 - 运算数1
    * @param {Number} arg2 - 运算数2
-   * @returns {Number|Boolean} 两运算数正确返回运算结果，否则返回false
+   * @param {String} [format=''] - 格式化
+   * @returns {Number|Boolean} 两运算数正确返回运算结果
    */
-  multiply(arg1, arg2) {
+  multiply(arg1, arg2, format = '') {
     if (isNumber(arg1) && isNumber(arg2)) {
       return multiply(arg1, arg2);
     }
-    return false;
+    return format;
   },
   /**
    * 除法
    *
    * @param {Number} arg1 - 运算数1
    * @param {Number} arg2 - 运算数2
-   * @returns {Number|Boolean} 两运算数正确返回运算结果，否则返回false
+   * @param {String} [format=''] - 格式化
+   * @returns {Number|Boolean} 两运算数正确返回运算结果
    */
-  divide(arg1, arg2) {
+  divide(arg1, arg2, format = '') {
     if (isNumber(arg1) && isNumber(arg2)) {
       return operation(arg1, arg2, 'divide');
     }
-    return false;
+    return format;
   },
 };
 
