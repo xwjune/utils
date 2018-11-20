@@ -331,7 +331,6 @@ class Check {
 
   // todo
   // 日期是否正确判断
-  // 银行卡号
 }
 
 export default new Check();

@@ -124,7 +124,7 @@ class Ctypt {
     let enc3;
     let enc4;
     let i = 0;
-    const input = value.replace(/[^A-Za-z0-9-_=]/g, '');
+    const input = value.replace(/[^0-9A-Za-z-_=]/g, '');
 
     while (i < input.length) {
       enc1 = keyStr.indexOf(input.charAt(i++));
