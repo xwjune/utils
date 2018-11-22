@@ -1,9 +1,8 @@
 {
   "ignore": "node_modules",
   "presets": [
-    "latest",
     "es2015",
-    "stage-0"
+    "stage-1"
   ],
   "plugins": [
     "transform-runtime"
