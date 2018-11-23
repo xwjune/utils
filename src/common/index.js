@@ -95,9 +95,6 @@ function loadScript(url, callback) {
  * 阻止事件冒泡
  *
  * @param {Object} evt - event
- * @example
- *
- * stopPropagation(event);
  */
 function stopPropagation(evt) {
   if (!evt) return;
@@ -113,9 +110,6 @@ function stopPropagation(evt) {
  * 阻止事件默认行为
  *
  * @param {Object} evt - event
- * @example
- *
- * preventDefault(event);
  */
 function preventDefault(evt) {
   if (!evt) return;

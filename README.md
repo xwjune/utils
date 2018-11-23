@@ -451,51 +451,23 @@ import { appUtil } from 'jun-utils';
 ### isIos()
 IOS环境判断
 
-```js
-appUtil.isIos();
-```
-
 ### isAndroid()
 Android环境判断
-
-```js
-appUtil.isAndroid();
-```
 
 ### isMobile()
 移动端【手机、平板设备】环境判断
 
-```js
-appUtil.isMobile();
-```
-
 ### isWeChat()
 微信客户端判断
-
-```js
-appUtil.isWeChat();
-```
 
 ### isAliPay()
 支付宝客户端判断
 
-```js
-appUtil.isAliPay();
-```
-
 ### isTaobao()
 淘宝客户端判断
 
-```js
-appUtil.isTaobao();
-```
-
 ### alipayJSBridgeReady([callback])
 监听alipay容器初始化
-
-```js
-appUtil.alipayJSBridgeReady();
-```
 
 ### alipayTitle(title, [subtitle])
 支付宝设置标题
@@ -507,16 +479,8 @@ appUtil.alipayTitle('标题', '副标题');
 ### alipayPopWindow()
 支付宝关闭当前页面
 
-```js
-appUtil.alipayPopWindow();
-```
-
 ### alipayExitApp()
 支付宝退出当前应用
-
-```js
-appUtil.alipayExitApp();
-```
 
 ***
 
@@ -553,16 +517,8 @@ common.loadScript('https://xxx.js', () => {
 ### stopPropagation(evt)
 阻止事件冒泡
 
-```js
-common.stopPropagation(event);
-```
-
 ### preventDefault(evt);
 阻止事件默认行为
-
-```js
-common.preventDefault(event);
-```
 
 ### addEvent(target, type, handler, [useCapture=false]);
 添加事件监听
@@ -583,6 +539,22 @@ const handler = () => {
 };
 common.removeEvent(window, 'load', handler);
 ```
+
+### getCookie(name)
+读取cookie
+
+### setCookie(name, value, [options={}])
+创建cookie
+
+```js
+// 一天后过期
+common.setCookie('name', 'value', {
+  maxAge: 60*60*24,
+});
+```
+
+### delCookie(name)
+删除cookie
 
 ***
 

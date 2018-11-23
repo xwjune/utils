@@ -70,9 +70,9 @@ function setCookie(name, value, options = {}) {
     str += '; Secure';
   }
   if (options.sameSite) {
-    if (options.sameSite.search(/^Strict$/i) !== -1) {
+    if (options.sameSite.search(/^strict$/i) !== -1) {
       str += '; SameSite=Strict';
-    } else if (options.sameSite.search(/^Lax$/i) !== -1) {
+    } else if (options.sameSite.search(/^lax$/i) !== -1) {
       str += '; SameSite=Lax';
     }
   }
@@ -90,7 +90,7 @@ function delCookie(name) {
   exp.setTime(exp.getTime() - 1);
   const value = getCookie(name);
   if (value !== null) {
-    document.cookie = `${name}=${value}; expires=${exp.toUTCString()}`;
+    document.cookie = `${name}=${value}; Expires=${exp.toUTCString()}`;
   }
 }
 
