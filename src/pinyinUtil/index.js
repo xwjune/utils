@@ -9,7 +9,7 @@ import dictCity from './dict_city_polyphone';
  * getHanzi - 单个拼音转汉字
  */
 
-// 汉字与拼音映射
+// 汉字与拼音映射表
 const dictWithtone = {};
 // 拼音与汉字映射表
 const dictPy2hz = {};

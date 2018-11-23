@@ -276,6 +276,8 @@ stringUtil.convertCurrency('1.10'); // 壹元壹角
 ## pinyinUtil
 **汉字与拼音互转**
 
+字符范围：Unicode字符中`4E00(19968)-9FA5(40869)`共计`20902`
+
 ```js
 import { pinyinUtil } from 'jun-utils';
 ```
