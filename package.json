@@ -1,6 +1,6 @@
 {
   "name": "jun-utils",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "jun-utils",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,14 @@
   "keywords": [
     "jun",
     "utils",
-    "public"
+    "public",
+    "check",
+    "pinyinUtil",
+    "stringUtil",
+    "floatUtil",
+    "appUtil",
+    "treeUtil",
+    "crypt"
   ],
   "author": "小巷 <xwjune@163.com>",
   "license": "ISC",

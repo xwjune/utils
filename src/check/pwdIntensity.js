@@ -8,7 +8,7 @@
  *    ③ 小写字母
  *    ④ 符号【键盘上可以打出来的符号】
  *
- * @param {String} pwd - 密码
+ * @param {*} pwd - 密码
  * @return {Number} intensity - 密码强度 1-弱|2-中|3-强
  * @example
  *
@@ -21,7 +21,7 @@
  * pwdIntensity('123456abcABC');
  * // => 3
  */
-export default function (pwd = '') {
+export default function pwdIntensity(pwd = '') {
   // 密码长度
   const len = pwd.length;
   // 规则满足条数

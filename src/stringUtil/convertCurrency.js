@@ -39,7 +39,7 @@
  * convertCurrency('1.10');
  * // => 壹元壹角
  */
-function convertCurrency(money, format = '零元整') {
+export default function convertCurrency(money, format = '零元整') {
   if (!/^-?(\d|[1-9]\d+)(\.\d+)?$/.test(money)) {
     return format;
   }
@@ -126,8 +126,6 @@ function convertCurrency(money, format = '零元整') {
 
   return chineseStr;
 }
-
-export default convertCurrency;
 
 // 0 零元整
 // 0.0 零元整

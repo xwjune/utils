@@ -77,7 +77,7 @@ check.postcode('310000'); // true
 ```
 
 ### isNull(value)
-空校验
+空数据校验
 
 空数据集合 `undefined,'undefined',null,'null','(null)','NaN',''`
 
@@ -202,17 +202,6 @@ check.pwdIntensity('123456abcABC'); // 3
 import { stringUtil } from 'jun-utils';
 ```
 
-### isNull(str)
-空校验
-
-空数据集合 `undefined,'undefined',null,'null','(null)','NaN',''`
-
-```js
-stringUtil.isNull(); // true
-
-stringUtil.isNull('undefined'); // true
-```
-
 ### filterNull(str, [format=''])
 空数据过滤
 
@@ -238,7 +227,7 @@ stringUtil.convertFenToYuan(null, '--'); // --
 ```
 
 ### convertYuanToFen(str, [format='0'])
-元转化为分
+元转化成分
 
 ```js
 stringUtil.convertYuanToFen('20'); // 2000
