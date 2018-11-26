@@ -9,8 +9,12 @@
     "lint:fix": "eslint --fix --ext .js src",
     "prebuild": "npm run clean",
     "build": "cross-env babel src --out-dir lib",
-    "precommit": "lint-staged",
     "prepare": "npm run build"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "repository": {
     "type": "git",
