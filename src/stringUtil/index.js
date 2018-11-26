@@ -99,14 +99,14 @@ class StringUtil {
     }
     const len = str.length;
     switch (len) {
-    case 1:
-      result += `0.0${str}`;
-      break;
-    case 2:
-      result += `0.${str}`;
-      break;
-    default:
-      result += `${str.substr(0, len - 2)}.${str.substr(len - 2)}`;
+      case 1:
+        result += `0.0${str}`;
+        break;
+      case 2:
+        result += `0.${str}`;
+        break;
+      default:
+        result += `${str.substr(0, len - 2)}.${str.substr(len - 2)}`;
     }
 
     return result;
@@ -146,18 +146,18 @@ class StringUtil {
       const strArr = str.split('.');
       const len = strArr[1].length;
       switch (len) {
-      case 1:
-        // 特殊数据：0.0 => 000、 0.1 => 010
-        result = `${strArr[0]}${strArr[1]}0`;
-        break;
-      case 2:
-        // 特殊数据：0.00 => 000、 0.01 => 001、 0.10 => 010
-        result = str.replace('.', '');
-        break;
-      default:
-        // 只保留两位小数
-        // 特殊数据：0.000 => 000、 0.001 => 000、 0.010 => 001、 0.101 => 010
-        result = `${strArr[0]}${strArr[1].substr(0, 2)}`;
+        case 1:
+          // 特殊数据：0.0 => 000、 0.1 => 010
+          result = `${strArr[0]}${strArr[1]}0`;
+          break;
+        case 2:
+          // 特殊数据：0.00 => 000、 0.01 => 001、 0.10 => 010
+          result = str.replace('.', '');
+          break;
+        default:
+          // 只保留两位小数
+          // 特殊数据：0.000 => 000、 0.001 => 000、 0.010 => 001、 0.101 => 010
+          result = `${strArr[0]}${strArr[1].substr(0, 2)}`;
       }
     } else {
       result = `${str}00`;

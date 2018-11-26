@@ -42,16 +42,16 @@ function operation(arg1, arg2, type) {
   }
 
   switch (type) {
-  case 'add':
-    result = (r1 + r2) / m;
-    break;
-  case 'subtract':
-    result = (r1 - r2) / m;
-    break;
-  case 'divide':
-    result = r1 / r2;
-    break;
-  default:
+    case 'add':
+      result = (r1 + r2) / m;
+      break;
+    case 'subtract':
+      result = (r1 - r2) / m;
+      break;
+    case 'divide':
+      result = r1 / r2;
+      break;
+    default:
   }
 
   return result;

@@ -3,26 +3,21 @@
     "browser": true,
     "node": true,
     "commonjs": true,
-    "es6": true
+    "es6": true,
+    "amd": true
   },
   "extends": [
-    "airbnb",
-    "plugin:react/recommended"
+    "airbnb"
   ],
   "parser": "babel-eslint",
   "parserOptions": {
     "ecmaVersion": 6,
     "ecmaFeatures": {
-      "experimentalObjectRestSpread": true,
-      "jsx": true
+      "objectLiteralComputedProperties": true,
+      "experimentalObjectRestSpread": true
     }
   },
   "rules": {
-    "indent": [1, 2],
-    "semi": [2, "always"],
-    "quotes": [1, "single"],
-    "max-len": 1,
-    "no-eval": 2,
     "no-param-reassign": 0,
     "no-plusplus": 0,
     "no-underscore-dangle": 0,
@@ -38,24 +33,6 @@
     "import/prefer-default-export": [0],
     "import/no-unresolved": 0,
     "import/extensions": 0,
-    "import/no-extraneous-dependencies": [0],
-    "jsx-a11y/anchor-is-valid": 0,
-    "jsx-a11y/no-static-element-interactions": [0],
-    "jsx-a11y/no-noninteractive-element-interactions": [0],
-    "jsx-a11y/no-noninteractive-element-to-interactive-role": [1],
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
-    "react/prop-types": [1],
-    "react/sort-comp": [1],
-    "react/forbid-prop-types": [0],
-    "react/display-name": [0],
-    "react/require-default-props": [0],
-    "react/destructuring-assignment": [0],
-    "react/self-closing-comp": [
-      "error", {
-        "component": false,
-        "html": false
-      }
-    ],
-    "jsx-a11y/click-events-have-key-events": 0
+    "import/no-extraneous-dependencies": [0]
   }
 }
