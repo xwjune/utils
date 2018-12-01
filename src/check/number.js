@@ -10,12 +10,20 @@
  *
  * isNumber('-20');
  * // => true
- *
- * isNumber('.2');
- * // => false
  */
 export function isNumber(value) {
-  return /^-?\d+(\.\d+)?$/.test(value);
+  // return /^-?\d+(\.\d+)?$/.test(value); // 不兼容转换为科学计数法的数字
+  if (typeof value === 'number') {
+    return true;
+  }
+  if (
+    typeof value === 'string'
+    && value !== ''
+    && !Number.isNaN(Number(value))
+  ) {
+    return true;
+  }
+  return false;
 }
 
 /**

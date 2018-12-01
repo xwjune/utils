@@ -1,5 +1,6 @@
 import cookie from './cookie';
 import event from './event';
+import selectText from './selectText';
 
 /**
  * 通用方法
@@ -14,6 +15,7 @@ import event from './event';
  * getCookie - 读取cookie
  * setCookie - 创建cookie
  * delCookie - 删除cookie
+ * selectText - 选中文本
  */
 
 /**
@@ -132,4 +134,5 @@ export default {
   getCookie: cookie.getCookie,
   setCookie: cookie.setCookie,
   delCookie: cookie.delCookie,
+  selectText,
 };

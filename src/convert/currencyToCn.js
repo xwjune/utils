@@ -1,3 +1,5 @@
+import { isNumber } from '../check/number';
+
 /**
  * 数字金额转换为中文人民币大写
  * 最大处理数字：999999999999.99
@@ -13,34 +15,34 @@
  *     又如￥107000.53应写成人民币壹拾万柒仟元零伍角叁分，或者写成人民币壹拾万零柒仟元伍角叁分。
  *   4、阿拉伯金额数字角位是“0”而分位不是“0”时，中文大写金额“元”后面应写“零”字。如￥16409.02应写成人民币壹万陆仟肆佰零玖元零贰分。
  *
- * @param {String} money - 数字金额
+ * @param {Number} money - 数字金额
  * @param {String} [format='零元整'] - 格式化
  * @returns {String} 中文金额
  * @example
  *
- * convertCurrency('0');
+ * currencyToCn(0);
  * // => 零元整
  *
- * convertCurrency('');
+ * currencyToCn();
  * // => 零元整
  *
- * convertCurrency('', '--');
+ * currencyToCn('', '--');
  * // => --
  *
- * convertCurrency('100000000');
+ * currencyToCn(100000000);
  * // => 壹亿元整
  *
- * convertCurrency('100000001');
+ * currencyToCn(100000001);
  * // => 壹亿零壹元整
  *
- * convertCurrency('1.01');
+ * currencyToCn(1.01);
  * // => 壹元零壹分
  *
- * convertCurrency('1.10');
+ * currencyToCn(1.10);
  * // => 壹元壹角
  */
-export default function convertCurrency(money, format = '零元整') {
-  if (!/^-?(\d|[1-9]\d+)(\.\d+)?$/.test(money)) {
+export default function currencyToCn(money, format = '零元整') {
+  if (!isNumber(money)) {
     return format;
   }
   const digits = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖']; // 中文数字

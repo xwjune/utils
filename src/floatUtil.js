@@ -1,3 +1,5 @@
+import { isNumber } from './check/number';
+
 /**
  * 浮点数运算【解决精度问题】
  *
@@ -51,7 +53,7 @@ function operation(arg1, arg2, type) {
     case 'divide':
       result = r1 / r2;
       break;
-    default:
+    // no default
   }
 
   return result;
@@ -79,16 +81,6 @@ function multiply(arg1, arg2) {
     m += 0;
   }
   return Number(r1.replace('.', '')) * Number(r2.replace('.', '')) / (10 ** m);
-}
-
-/**
- * 数字判断
- *
- * @param {Number} value - 数字
- * @returns {Boolean}
- */
-function isNumber(value) {
-  return /^-?(\d|[1-9]\d+)(\.\d+)?$/.test(value);
 }
 
 export default {

@@ -22,6 +22,7 @@ check.cellphone('13456789012'); // true
 * [floatUtil](#floatUtil)
 * [treeUtil](#treeUtil)
 * [appUtil](#appUtil)
+* [convert](#convert)
 * [common](#common)
 * [crypt](#crypt)
 * [pickTime](#pickTime)
@@ -94,8 +95,6 @@ check.isNull('undefined'); // true
 check.isNumber('20'); // true
 
 check.isNumber('-20'); // true
-
-check.isNumber('.2'); // false
 ```
 
 ### isInteger(value)
@@ -211,53 +210,6 @@ stringUtil.filterNull('xxx'); // xxx
 stringUtil.filterNull(); //
 
 stringUtil.filterNull(null, '--'); // --
-```
-
-### convertFenToYuan(str, [format='0.00'])
-分转化成元
-
-```js
-stringUtil.convertFenToYuan('2000'); // 20.00
-
-stringUtil.convertFenToYuan('2000.45'); // 20.00
-
-stringUtil.convertFenToYuan(); // 0.00
-
-stringUtil.convertFenToYuan(null, '--'); // --
-```
-
-### convertYuanToFen(str, [format='0'])
-元转化成分
-
-```js
-stringUtil.convertYuanToFen('20'); // 2000
-
-stringUtil.convertYuanToFen('0.02'); // 2
-
-stringUtil.convertYuanToFen('0.002'); // 0
-
-stringUtil.convertYuanToFen(); // 0
-
-stringUtil.convertYuanToFen(null, '--'); // --
-```
-
-### convertCurrency(str, [format='零元整'])
-数字金额转换为中文人民币大写
-
-最大处理数字 `999999999999.99`
-
-```js
-stringUtil.convertCurrency('0'); // 零元整
-
-stringUtil.convertCurrency(''); // 零元整
-
-stringUtil.convertCurrency('100000000'); // 壹亿元整
-
-stringUtil.convertCurrency('100000001'); // 壹亿零壹元整
-
-stringUtil.convertCurrency('1.01'); // 壹元零壹分
-
-stringUtil.convertCurrency('1.10'); // 壹元壹角
 ```
 
 ***
@@ -475,6 +427,73 @@ appUtil.alipayTitle('标题', '副标题');
 
 ***
 
+## convert
+**数据转换**
+
+```js
+import { convert } from 'jun-utils';
+```
+
+### bytesToSize(value, [digit=1], [format='0B'])
+数据容量单位换算
+
+```js
+convert.bytesToSize(10240); // 10.0KB
+
+convert.bytesToSize(1024*1024, 2); // 1.00MB
+
+convert.bytesToSize('xx'); // 0B
+```
+
+### fenToYuan(value, [format='0.00'])
+分转化成元
+
+```js
+convert.fenToYuan(2000); // 20.00
+
+convert.fenToYuan(2000.45); // 20.00
+
+convert.fenToYuan(); // 0.00
+
+convert.fenToYuan(null, '--'); // --
+```
+
+### yuanToFen(value, [format='0'])
+元转化成分
+
+```js
+convert.yuanToFen(20); // 2000
+
+convert.yuanToFen(0.02); // 2
+
+convert.yuanToFen(0.002); // 0
+
+convert.yuanToFen(); // 0
+
+stringUtil.yuanToFen(null, '--'); // --
+```
+
+### currencyToCn(value, [format='零元整'])
+数字金额转换为中文人民币大写
+
+最大处理数字 `999999999999.99`
+
+```js
+convert.currencyToCn(0); // 零元整
+
+convert.currencyToCn(); // 零元整
+
+convert.currencyToCn(100000000); // 壹亿元整
+
+convert.currencyToCn(100000001); // 壹亿零壹元整
+
+convert.currencyToCn(1.01); // 壹元零壹分
+
+convert.currencyToCn(1.10); // 壹元壹角
+```
+
+***
+
 ## common
 **通用方法**
 
@@ -547,6 +566,18 @@ common.setCookie('name', 'value', {
 ### delCookie(name)
 删除cookie
 
+### selectText(textNode, [start=0], [length])
+选中文本
+
+```js
+<input type="text" value="12元" />
+
+// 鼠标停留在’元‘前面
+common.selectText(document.querySelector('input'), 2, 0);
+
+// 选中所有
+common.selectText(document.querySelector('input'));
+```
 ***
 
 ## crypt
