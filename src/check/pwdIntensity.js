@@ -8,7 +8,7 @@
  *    ③ 小写字母
  *    ④ 符号【键盘上可以打出来的符号】
  *
- * @param {*} pwd - 密码
+ * @param {*} value - 密码
  * @return {Number} intensity - 密码强度 1-弱|2-中|3-强
  * @example
  *
@@ -21,9 +21,10 @@
  * pwdIntensity('123456abcABC');
  * // => 3
  */
-export default function pwdIntensity(pwd = '') {
+export default function pwdIntensity(value) {
+  if (!value) return 1;
   // 密码长度
-  const len = pwd.length;
+  const len = value.length;
   // 规则满足条数
   let rule = 0;
 
@@ -33,13 +34,13 @@ export default function pwdIntensity(pwd = '') {
 
   /* ---------- 规则二校验 ----------*/
   // 数字
-  if (/\d/g.test(pwd)) rule += 1;
+  if (/[0-9]/.test(value)) rule += 1;
   // 大写字母
-  if (/[A-Z]/g.test(pwd)) rule += 1;
+  if (/[A-Z]/.test(value)) rule += 1;
   // 小写字母
-  if (/[a-z]/g.test(pwd)) rule += 1;
+  if (/[a-z]/.test(value)) rule += 1;
   // 包含以下特殊符号
-  if (/(`|~|!|@|#|\$|%|\^|&|\*|\(|\)|-|_|\+|=|\{|\}|\[|\]|:|;|'|"|<|>|,|\.|\?|\/|\||\\)/.test(pwd)) rule += 1;
+  if (/[`~!@#$%^&*()\-_=+[{\]}\\|;:'",<.>/?]/.test(value)) rule += 1;
 
   switch (rule) {
     case 0:

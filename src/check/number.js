@@ -12,13 +12,15 @@
  * // => true
  */
 export function isNumber(value) {
-  // return /^-?\d+(\.\d+)?$/.test(value); // 不兼容转换为科学计数法的数字
   if (typeof value === 'number') {
     return true;
   }
   if (
     typeof value === 'string'
     && value !== ''
+    && !/^\./.test(value) // 排除数据 .x【.2、.3】
+    && !/\.$/.test(value) // 排除数据 x.【2.、3.】
+    && !/^0[^.]/.test(value) // 排除数据02、002等
     && !Number.isNaN(Number(value))
   ) {
     return true;
@@ -28,6 +30,7 @@ export function isNumber(value) {
 
 /**
  * 整数校验
+ * 不兼容科学计数法的数字
  *
  * @param {*} value - The value to check.
  * @return {Boolean} Return `true` if validated, else `false`.
@@ -51,6 +54,7 @@ export function isInteger(value) {
 
 /**
  * 小数校验
+ * 不兼容科学计数法的数字
  *
  * @param {*} value - The value to check.
  * @return {Boolean} Return `true` if validated, else `false`.
