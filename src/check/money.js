@@ -19,5 +19,5 @@
  * // => false
  */
 export default function money(value) {
-  return /^-?(\d|[1-9]\d+)(\.\d{1,2})?$/.test(value);
+  return /^-?(0|[1-9][0-9]*)(\.\d{1,2})?$/.test(value);
 }

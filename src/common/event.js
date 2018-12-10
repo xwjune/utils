@@ -19,7 +19,7 @@
  * };
  * addEvent(window, 'load', handler);
  */
-function addEvent(target, type, handler, useCapture = false) {
+export function addEvent(target, type, handler, useCapture = false) {
   if (target.addEventListener) {
   // DOM2.0
     target.addEventListener(type, handler, useCapture);
@@ -46,7 +46,7 @@ function addEvent(target, type, handler, useCapture = false) {
  * };
  * removeEvent(window, 'load', handler);
  */
-function removeEvent(target, type, handler, useCapture = false) {
+export function removeEvent(target, type, handler, useCapture = false) {
   if (target.removeEventListener) {
   // DOM2.0
     target.removeEventListener(type, handler, useCapture);
@@ -58,8 +58,3 @@ function removeEvent(target, type, handler, useCapture = false) {
     target[`on${type}`] = null;
   }
 }
-
-export default {
-  addEvent,
-  removeEvent,
-};

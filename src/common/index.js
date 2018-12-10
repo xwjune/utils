@@ -1,5 +1,20 @@
-import cookie from './cookie';
-import event from './event';
+import {
+  getCookie,
+  setCookie,
+  delCookie,
+} from './cookie';
+import {
+  addEvent,
+  removeEvent,
+} from './event';
+import {
+  getWinHeight,
+  getWinWidth,
+  getWinScrollHeight,
+  getWinScrollWidth,
+  getWinScrollTop,
+  getWinScrollLeft,
+} from './document';
 import selectText from './selectText';
 
 /**
@@ -15,6 +30,12 @@ import selectText from './selectText';
  * getCookie - 读取cookie
  * setCookie - 创建cookie
  * delCookie - 删除cookie
+ * getWinHeight - 获取窗口可视区的高度
+ * getWinWidth - 获取窗口可视区的宽度
+ * getWinScrollHeight - 获取窗口可视区内容的总高度
+ * getWinScrollWidth - 获取窗口可视区内容的总宽度
+ * getWinScrollTop - 获取窗口可视区滚动条垂直偏移
+ * getWinScrollLeft - 获取窗口可视区滚动条水平偏移
  * selectText - 选中文本
  */
 
@@ -129,10 +150,16 @@ export default {
   loadScript,
   stopPropagation,
   preventDefault,
-  addEvent: event.addEvent,
-  removeEvent: event.removeEvent,
-  getCookie: cookie.getCookie,
-  setCookie: cookie.setCookie,
-  delCookie: cookie.delCookie,
+  addEvent,
+  removeEvent,
+  getCookie,
+  setCookie,
+  delCookie,
+  getWinHeight,
+  getWinWidth,
+  getWinScrollHeight,
+  getWinScrollWidth,
+  getWinScrollTop,
+  getWinScrollLeft,
   selectText,
 };

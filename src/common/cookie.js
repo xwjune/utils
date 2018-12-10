@@ -12,7 +12,7 @@
  * @param {String} name
  * @returns {String}
  */
-function getCookie(name) {
+export function getCookie(name) {
   const reg = new RegExp(`(^|\\s)${name}=([^;]*)(;|$)`);
   let result;
   try {
@@ -44,7 +44,7 @@ function getCookie(name) {
  *   maxAge: 60*60*24,
  * });
  */
-function setCookie(name, value, options = {}) {
+export function setCookie(name, value, options = {}) {
   if (!name) return;
   let str = `${name}=${encodeURIComponent(value)}`;
 
@@ -85,7 +85,7 @@ function setCookie(name, value, options = {}) {
  *
  * @param {String} name
  */
-function delCookie(name) {
+export function delCookie(name) {
   const exp = new Date();
   exp.setTime(exp.getTime() - 1);
   const value = getCookie(name);
@@ -93,9 +93,3 @@ function delCookie(name) {
     document.cookie = `${name}=${value}; Expires=${exp.toUTCString()}`;
   }
 }
-
-export default {
-  getCookie,
-  setCookie,
-  delCookie,
-};

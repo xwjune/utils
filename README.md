@@ -566,6 +566,24 @@ common.setCookie('name', 'value', {
 ### delCookie(name)
 删除cookie
 
+### getWinHeight()
+获取窗口可视区的高度
+
+### getWinWidth()
+获取窗口可视区的宽度
+
+### getWinScrollHeight()
+获取窗口可视区内容的总高度
+
+### getWinScrollWidth()
+获取窗口可视区内容的总宽度
+
+### getWinScrollTop()
+获取窗口可视区滚动条垂直偏移
+
+### getWinScrollLeft()
+获取窗口可视区滚动条水平偏移
+
 ### selectText(textNode, [start=0], [length])
 选中文本
 

@@ -49,7 +49,7 @@ export function isNumber(value) {
  * // => false
  */
 export function isInteger(value) {
-  return /^-?(\d|[1-9]\d+)$/.test(value);
+  return /^-?(0|[1-9][0-9]*)$/.test(value);
 }
 
 /**
@@ -73,5 +73,5 @@ export function isInteger(value) {
  * // => false
  */
 export function isDecimal(value) {
-  return /^-?(\d|[1-9]\d+)\.\d+$/.test(value);
+  return /^-?(0|[1-9][0-9]*)\.\d+$/.test(value);
 }
