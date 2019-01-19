@@ -1,4 +1,3 @@
-
 export { default as check } from './check';
 export { default as stringUtil } from './stringUtil';
 export { default as pinyinUtil } from './pinyinUtil';

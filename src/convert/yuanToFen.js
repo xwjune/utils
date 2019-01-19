@@ -1,6 +1,6 @@
 /**
  * 元->分
- * 为防止浮点数及大数运算精度丢失，故采用字符串形式解析
+ * 为防止浮点数运算精度丢失，故采用字符串形式解析
  *
  * @param {Number} money - 元
  * @param {String} [format='0'] - 格式化
@@ -25,7 +25,7 @@
 import { isNumber } from '../check/number';
 
 export default function yuanToFen(money, format = '0') {
-  if (!isNumber(money)) {
+  if (!isNumber(money, false)) {
     return format;
   }
   const str = money.toString();

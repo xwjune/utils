@@ -2,6 +2,7 @@
  * 数字校验
  *
  * @param {*} value - The value to check.
+ * @param {Boolean} [exponent=true] - 是否包含科学计数法数字
  * @return {Boolean} Return `true` if validated, else `false`.
  * @example
  *
@@ -10,20 +11,23 @@
  *
  * isNumber('-20');
  * // => true
+ *
+ * isNumber('.2');
+ * // => false
+ *
+ * isNumber(.2);
+ * // => true
+ *
+ * isNumber(9.007199254740992e+21, false);
+ * // => false
  */
-export function isNumber(value) {
+export function isNumber(value, exponent = true) {
   if (typeof value === 'number') {
-    return true;
+    return exponent ? true : !/e\+[0-9]+$/.test(value);
   }
-  if (
-    typeof value === 'string'
-    && value !== ''
-    && !/^\./.test(value) // 排除数据 .x【.2、.3】
-    && !/\.$/.test(value) // 排除数据 x.【2.、3.】
-    && !/^0[^.]/.test(value) // 排除数据02、002等
-    && !Number.isNaN(Number(value))
-  ) {
-    return true;
+  if (typeof value === 'string') {
+    // 已排除数据02、002等
+    return /^-?(0|[1-9][0-9]*)(\.[0-9]+)?$/.test(value);
   }
   return false;
 }
@@ -73,5 +77,5 @@ export function isInteger(value) {
  * // => false
  */
 export function isDecimal(value) {
-  return /^-?(0|[1-9][0-9]*)\.\d+$/.test(value);
+  return /^-?(0|[1-9][0-9]*)\.[0-9]+$/.test(value);
 }

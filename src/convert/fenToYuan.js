@@ -1,14 +1,18 @@
 /**
  * 分->元
- * 为防止浮点数及大数运算精度丢失，故采用字符串形式解析
+ * 为防止浮点数运算精度丢失，故采用字符串形式解析
  *
  * @param {Number} money - 分
  * @param {String} [format='0.00'] - 格式化
+ * @param {Boolean} [cutZero=false] - 是否去掉小数末尾多余的零
  * @returns {String} 元
  * @example
  *
  * fenToYuan(2000);
  * // => 20.00
+ *
+ * fenToYuan(2000, '0', true);
+ * // => 20
  *
  * fenToYuan(2000.45); // 非正确格式，舍去小数部分
  * // => 20.00
@@ -21,8 +25,8 @@
  */
 import { isNumber } from '../check/number';
 
-export default function fenToYuan(money, format = '0.00') {
-  if (!isNumber(money)) {
+export default function fenToYuan(money, format = '0.00', cutZero = false) {
+  if (!isNumber(money, false)) {
     return format;
   }
   let str = money.toString();
@@ -45,6 +49,11 @@ export default function fenToYuan(money, format = '0.00') {
       break;
     default:
       result += `${str.substr(0, len - 2)}.${str.substr(len - 2)}`;
+  }
+
+  if (cutZero) {
+    // Cut zero at the ending.
+    result = result.match(/-?[0-9]+(\.[0-9]*[1-9])?/)[0];
   }
 
   return result;

@@ -33,6 +33,9 @@
  * currencyToCn(100000001);
  * // => 壹亿零壹元整
  *
+ * currencyToCn(999999999999.99);
+ * // => 玖仟玖佰玖拾玖亿玖仟玖佰玖拾玖万玖仟玖佰玖拾玖元玖角玖分
+ *
  * currencyToCn(1.01);
  * // => 壹元零壹分
  *
@@ -42,7 +45,7 @@
 import { isNumber } from '../check/number';
 
 export default function currencyToCn(money, format = '零元整') {
-  if (!isNumber(money)) {
+  if (!isNumber(money, false)) {
     return format;
   }
   const digits = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖']; // 中文数字

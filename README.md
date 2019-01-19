@@ -87,17 +87,23 @@ check.isNull(); // true
 check.isNull('undefined'); // true
 ```
 
-### isNumber(value)
+### isNumber(value, [exponent=true])
 数字校验
 
 ```js
 check.isNumber('20'); // true
 
 check.isNumber('-20'); // true
+
+check.isNumber('.2'); // false
+
+check.isNumber(.2); // true
+
+check.isNumber(9.007199254740992e+21, false); // false
 ```
 
 ### isInteger(value)
-整数校验
+整数校验 `不兼容科学计数法的数字`
 
 ```js
 check.isInteger('20'); // true
@@ -110,7 +116,7 @@ check.isInteger('020'); // false
 ```
 
 ### isDecimal(value)
-小数校验
+小数校验 `不兼容科学计数法的数字`
 
 ```js
 check.isDecimal('0.2'); // true
@@ -444,11 +450,13 @@ convert.bytesToSize(1024*1024, 2); // 1.00MB
 convert.bytesToSize('xx'); // 0B
 ```
 
-### fenToYuan(value, [format='0.00'])
+### fenToYuan(value, [format='0.00'], [cutZero=false])
 分转化成元
 
 ```js
 convert.fenToYuan(2000); // 20.00
+
+convert.fenToYuan(2000, '0', true); // 20
 
 convert.fenToYuan(2000.45); // 20.00
 
@@ -485,6 +493,8 @@ convert.currencyToCn(); // 零元整
 convert.currencyToCn(100000000); // 壹亿元整
 
 convert.currencyToCn(100000001); // 壹亿零壹元整
+
+convert.currencyToCn(999999999999.99); // 玖仟玖佰玖拾玖亿玖仟玖佰玖拾玖万玖仟玖佰玖拾玖元玖角玖分
 
 convert.currencyToCn(1.01); // 壹元零壹分
 
