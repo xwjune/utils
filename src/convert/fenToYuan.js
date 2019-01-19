@@ -1,5 +1,3 @@
-import { isNumber } from '../check/number';
-
 /**
  * 分->元
  * 为防止浮点数及大数运算精度丢失，故采用字符串形式解析
@@ -21,6 +19,8 @@ import { isNumber } from '../check/number';
  * fenToYuan(null, '--');
  * // => --
  */
+import { isNumber } from '../check/number';
+
 export default function fenToYuan(money, format = '0.00') {
   if (!isNumber(money)) {
     return format;

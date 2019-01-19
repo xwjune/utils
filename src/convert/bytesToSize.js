@@ -1,5 +1,3 @@
-import { isNumber } from '../check/number';
-
 /**
  * 数据容量单位换算
  *
@@ -18,6 +16,8 @@ import { isNumber } from '../check/number';
  * bytesToSize('xx');
  * // => 0B
  */
+import { isNumber } from '../check/number';
+
 export default function bytesToSize(bytes, digit = 1, format = '0B') {
   if (!isNumber(bytes)) {
     return format;

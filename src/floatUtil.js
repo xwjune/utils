@@ -1,5 +1,3 @@
-import { isNumber } from './check/number';
-
 /**
  * 浮点数运算【解决精度问题】
  *
@@ -8,6 +6,7 @@ import { isNumber } from './check/number';
  * multiply - 乘法
  * divide - 除法
  */
+import { isNumber } from './check/number';
 
 /**
  * 通用运算

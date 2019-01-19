@@ -1,22 +1,3 @@
-import {
-  getCookie,
-  setCookie,
-  delCookie,
-} from './cookie';
-import {
-  addEvent,
-  removeEvent,
-} from './event';
-import {
-  getWinHeight,
-  getWinWidth,
-  getWinScrollHeight,
-  getWinScrollWidth,
-  getWinScrollTop,
-  getWinScrollLeft,
-} from './document';
-import selectText from './selectText';
-
 /**
  * 通用方法
  *
@@ -38,6 +19,24 @@ import selectText from './selectText';
  * getWinScrollLeft - 获取窗口可视区滚动条水平偏移
  * selectText - 选中文本
  */
+import {
+  getCookie,
+  setCookie,
+  delCookie,
+} from './cookie';
+import {
+  addEvent,
+  removeEvent,
+} from './event';
+import {
+  getWinHeight,
+  getWinWidth,
+  getWinScrollHeight,
+  getWinScrollWidth,
+  getWinScrollTop,
+  getWinScrollLeft,
+} from './document';
+import selectText from './selectText';
 
 /**
  * 生成uuid

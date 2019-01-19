@@ -1,5 +1,3 @@
-import { isNumber } from '../check/number';
-
 /**
  * 数字金额转换为中文人民币大写
  * 最大处理数字：999999999999.99
@@ -41,6 +39,8 @@ import { isNumber } from '../check/number';
  * currencyToCn(1.10);
  * // => 壹元壹角
  */
+import { isNumber } from '../check/number';
+
 export default function currencyToCn(money, format = '零元整') {
   if (!isNumber(money)) {
     return format;

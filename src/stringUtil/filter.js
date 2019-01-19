@@ -1,5 +1,3 @@
-import isNull from '../check/isNull';
-
 /**
  * 空数据过滤
  *
@@ -17,6 +15,8 @@ import isNull from '../check/isNull';
  * filterNull(null, '--');
  * // => --
  */
+import isNull from '../check/isNull';
+
 export function filterNull(str, format = '') {
   if (isNull(str)) {
     return format;

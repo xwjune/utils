@@ -1,6 +1,3 @@
-import dictionary from './dictionary';
-import dictCity from './dict_city_polyphone';
-
 /**
  * 汉字与拼音互转
  *
@@ -8,6 +5,8 @@ import dictCity from './dict_city_polyphone';
  * getCityPinyin - 获取城市拼音【城市多音字已处理】
  * getHanzi - 单个拼音转汉字
  */
+import dictionary from './dictionary';
+import dictCity from './dict_city_polyphone';
 
 // 汉字与拼音映射表
 const dictWithtone = {};

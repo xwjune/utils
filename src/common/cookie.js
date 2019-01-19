@@ -41,7 +41,7 @@ export function getCookie(name) {
  *
  * // 一天后过期
  * setCookie('name', 'value', {
- *   maxAge: 60*60*24,
+ *   maxAge: 60 * 60 * 24,
  * });
  */
 export function setCookie(name, value, options = {}) {

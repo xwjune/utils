@@ -1,3 +1,10 @@
+/**
+ * base64加密/解密【用于暴露在url中的重要参数】
+ * 索引表已做特殊处理
+ *
+ * encode - 加密
+ * decode - 解密
+ */
 /* eslint-disable no-bitwise */
 
 // 索引表
@@ -51,13 +58,6 @@ function utf8Decode(utftext) {
   return string;
 }
 
-/**
- * base64加密/解密【用于暴露在url中的重要参数】
- * 索引表已做特殊处理
- *
- * encode - 加密
- * decode - 解密
- */
 class Ctypt {
   /**
    * 加密

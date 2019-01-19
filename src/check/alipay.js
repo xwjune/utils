@@ -1,6 +1,3 @@
-import email from './email';
-import { cellphone } from './phone';
-
 /**
  * 支付宝账号校验
  * 规则：邮箱或手机号
@@ -15,6 +12,9 @@ import { cellphone } from './phone';
  * alipay('13456789012');
  * // => true
  */
+import email from './email';
+import { cellphone } from './phone';
+
 export default function alipay(value) {
   return email(value) || cellphone(value);
 }

@@ -25,7 +25,6 @@ check.cellphone('13456789012'); // true
 * [convert](#convert)
 * [common](#common)
 * [crypt](#crypt)
-* [pickTime](#pickTime)
 
 ## check
 **校验库**
@@ -618,50 +617,3 @@ crypt.encode('123456'); // CJ8pD3Ks
 ```js
 crypt.decode('CJ8pD3Ks'); // 123456
 ```
-
-***
-
-## pickTime
-**预约时间解析**
-
-根据对应的时间区间和间隔天数，推算出可选的时间范围，可用于快递上门取件等场景
-
-```js
-import { pickTime } from 'jun-utils';
-```
-
-### pickTime(range, interval, [attributes])
-
-```js
-// 9:00~13:00 T+2 当前时间：2018-08-11 10:10
-pickTime([9, 13], 2, { key: 'value', name: 'label' });
-// =>
-[{
-  label: '08月11日',
-  value: '1533916800',
-  children: [
-    { label: '11:00-12:00', value: '1533956400' },
-    { label: '12:00-13:00', value: '1533960000' },
-  ],
-}, {
-  label: '08月12日',
-  value: '1534003200',
-  children: [
-    { label: '09:00-10:00', value: '1534035600' },
-    { label: '10:00-11:00', value: '1534039200' },
-    { label: '11:00-12:00', value: '1534042800' },
-    { label: '12:00-13:00', value: '1534046400' },
-  ],
-}, {
-  label: '08月13日',
-  value: '1534089600',
-  children: [
-    { label: '09:00-10:00', value: '1534122000' },
-    { label: '10:00-11:00', value: '1534125600' },
-    { label: '11:00-12:00', value: '1534129200' },
-    { label: '12:00-13:00', value: '1534132800' },
-  ],
-}];
-```
-
-***
