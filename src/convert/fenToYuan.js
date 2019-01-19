@@ -29,16 +29,18 @@ export default function fenToYuan(money, format = '0.00', cutZero = false) {
   if (!isNumber(money, false)) {
     return format;
   }
+
   let str = money.toString();
   let result = '';
   if (str[0] === '-') {
-    result = '-';
+    result += '-';
     str = str.substr(1);
   }
   if (str.indexOf('.') > -1) {
     // Trim decimal at the ending.
-    str = str.replace(/\.\d+$/, '');
+    str = str.replace(/\.[0-9]+$/, '');
   }
+
   const len = str.length;
   switch (len) {
     case 1:

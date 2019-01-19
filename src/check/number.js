@@ -2,7 +2,7 @@
  * 数字校验
  *
  * @param {*} value - The value to check.
- * @param {Boolean} [exponent=true] - 是否包含科学计数法数字
+ * @param {Boolean} [scientific=true] - 是否排除科学计数法数字【true-不排除，false-排除】
  * @return {Boolean} Return `true` if validated, else `false`.
  * @example
  *
@@ -21,9 +21,9 @@
  * isNumber(9.007199254740992e+21, false);
  * // => false
  */
-export function isNumber(value, exponent = true) {
+export function isNumber(value, scientific = true) {
   if (typeof value === 'number') {
-    return exponent ? true : !/e\+[0-9]+$/.test(value);
+    return scientific ? true : !/e\+[0-9]+$/.test(value);
   }
   if (typeof value === 'string') {
     // 已排除数据02、002等
@@ -34,7 +34,7 @@ export function isNumber(value, exponent = true) {
 
 /**
  * 整数校验
- * 不兼容科学计数法的数字
+ * 不兼容科学计数法数字
  *
  * @param {*} value - The value to check.
  * @return {Boolean} Return `true` if validated, else `false`.
@@ -58,7 +58,7 @@ export function isInteger(value) {
 
 /**
  * 小数校验
- * 不兼容科学计数法的数字
+ * 不兼容科学计数法数字
  *
  * @param {*} value - The value to check.
  * @return {Boolean} Return `true` if validated, else `false`.

@@ -23,6 +23,7 @@ function operation(arg1, arg2, type) {
   let result;
   let t1;
   let t2;
+
   try {
     t1 = r1.split('.')[1].length;
   } catch (e) {
@@ -33,6 +34,7 @@ function operation(arg1, arg2, type) {
   } catch (e) {
     t2 = 0;
   }
+
   const m = 10 ** Math.max(t1, t2);
   const cm = 10 ** Math.abs(t1 - t2);
   r1 = Number(r1.replace('.', ''));
@@ -70,6 +72,7 @@ function multiply(arg1, arg2) {
   const r1 = arg1.toString();
   const r2 = arg2.toString();
   let m = 0;
+
   try {
     m += r1.split('.')[1].length;
   } catch (e) {
@@ -80,6 +83,7 @@ function multiply(arg1, arg2) {
   } catch (e) {
     m += 0;
   }
+
   return Number(r1.replace('.', '')) * Number(r2.replace('.', '')) / (10 ** m);
 }
 

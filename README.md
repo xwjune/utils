@@ -3,17 +3,19 @@
 [git地址](https://github.com/xwjune/jun-utils.git)
 
 ## 使用
+
 ```bash
 ## Install globally or locally
 $ npm i jun-utils -S
 ```
 
 ```js
-import { check } from 'jun-utils';
+import { check } from 'jun-utils'; // import check from 'jun-utils/lib/check';
 
 // 手机号码校验
 check.cellphone('13456789012'); // true
 ```
+
 索引：
 
 * [check](#check)
@@ -87,7 +89,7 @@ check.isNull(); // true
 check.isNull('undefined'); // true
 ```
 
-### isNumber(value, [exponent=true])
+### isNumber(value, [scientific=true])
 数字校验
 
 ```js
@@ -103,7 +105,7 @@ check.isNumber(9.007199254740992e+21, false); // false
 ```
 
 ### isInteger(value)
-整数校验 `不兼容科学计数法的数字`
+整数校验 `不兼容科学计数法数字`
 
 ```js
 check.isInteger('20'); // true
@@ -116,7 +118,7 @@ check.isInteger('020'); // false
 ```
 
 ### isDecimal(value)
-小数校验 `不兼容科学计数法的数字`
+小数校验 `不兼容科学计数法数字`
 
 ```js
 check.isDecimal('0.2'); // true
@@ -568,7 +570,7 @@ common.removeEvent(window, 'load', handler);
 ```js
 // 一天后过期
 common.setCookie('name', 'value', {
-  maxAge: 60*60*24,
+  maxAge: 60 * 60 * 24,
 });
 ```
 

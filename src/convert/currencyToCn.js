@@ -48,6 +48,7 @@ export default function currencyToCn(money, format = '零元整') {
   if (!isNumber(money, false)) {
     return format;
   }
+
   const digits = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖']; // 中文数字
   const radices = ['', '拾', '佰', '仟']; // 基本单位
   const bigRadices = ['', '万', '亿']; // 整数部分扩展单位

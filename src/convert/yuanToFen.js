@@ -28,8 +28,9 @@ export default function yuanToFen(money, format = '0') {
   if (!isNumber(money, false)) {
     return format;
   }
+
   const str = money.toString();
-  let result = '0';
+  let result = '';
   if (str.indexOf('.') > -1) {
     const strArr = str.split('.');
     const len = strArr[1].length;
