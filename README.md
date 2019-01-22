@@ -78,15 +78,13 @@ check.email('te_st@sima.vip.com'); // true
 check.postcode('310000'); // true
 ```
 
-### isNull(value)
-空数据校验
-
-空数据集合 `undefined,'undefined',null,'null','(null)','NaN',''`
+### isNull(value, [others=[]])
+空数据校验 `undefined, null, ''`
 
 ```js
 check.isNull(); // true
 
-check.isNull('undefined'); // true
+check.isNull('null', ['null', '(null)']); // true
 ```
 
 ### isNumber(value, [scientific=true])

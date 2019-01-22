@@ -1,6 +1,6 @@
 {
   "name": "jun-utils",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "npm包",
   "main": "index.js",
   "scripts": {

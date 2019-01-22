@@ -2,7 +2,7 @@
  * 数字校验
  *
  * @param {*} value - The value to check.
- * @param {Boolean} [scientific=true] - 是否排除科学计数法数字【true-不排除，false-排除】
+ * @param {Boolean} [scientific=true] - Whether a scientific notation Number including.
  * @return {Boolean} Return `true` if validated, else `false`.
  * @example
  *
@@ -26,7 +26,6 @@ export function isNumber(value, scientific = true) {
     return scientific ? true : !/e\+[0-9]+$/.test(value);
   }
   if (typeof value === 'string') {
-    // 已排除数据02、002等
     return /^-?(0|[1-9][0-9]*)(\.[0-9]+)?$/.test(value);
   }
   return false;
