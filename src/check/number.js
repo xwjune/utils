@@ -2,7 +2,7 @@
  * 数字校验
  *
  * @param {*} value - The value to check.
- * @param {Boolean} [scientific=true] - Whether a scientific notation Number including.
+ * @param {Boolean} [scientific=true] - Whether the number of scientific notation including.
  * @return {Boolean} Return `true` if validated, else `false`.
  * @example
  *

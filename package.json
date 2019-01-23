@@ -1,7 +1,7 @@
 {
   "name": "jun-utils",
   "version": "1.5.2",
-  "description": "npm包",
+  "description": "utils, public library",
   "main": "index.js",
   "scripts": {
     "clean": "rimraf lib",
@@ -24,6 +24,7 @@
     "jun",
     "utils",
     "public",
+    "library",
     "check",
     "checkUtil",
     "pinyin",
