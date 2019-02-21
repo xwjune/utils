@@ -1,6 +1,6 @@
 > jun-utils
 
-[git地址](https://github.com/xwjune/jun-utils.git)
+[git地址](https://github.com/xwjune/utils.git)
 
 ## 使用
 
@@ -522,6 +522,10 @@ common.generateUUID(); // cd2f4b1f-daf2-451c-a9a6-db716c1d82bb
 
 ```js
 common.getParameter('name', 'http://www.w3school.com?name=xxx'); // xxx
+
+common.getParameter('name', 'http://www.w3school.com?name='); // ''
+
+common.getParameter('name', 'http://www.w3school.com'); // null
 ```
 
 ### loadScript(url, [callback])

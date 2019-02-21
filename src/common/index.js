@@ -69,11 +69,17 @@ function generateUUID() {
  *
  * getParameter('name', 'http://www.w3school.com?name=xxx');
  * // => xxx
+ *
+ * getParameter('name', 'http://www.w3school.com?name=');
+ * // => ''
+ *
+ * getParameter('name', 'http://www.w3school.com');
+ * // => null
  */
 function getParameter(name, url = window.location.search) {
-  const regexp = new RegExp(`[?&]${name}=([^&]*)`, 'ig');
+  const regexp = new RegExp(`[?&]${name}=([^&#]*)`, 'ig');
   const result = regexp.exec(url);
-  return result === null ? '' : decodeURIComponent(result[1]);
+  return result === null ? null : decodeURIComponent(result[1]);
 }
 
 /**
