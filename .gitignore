@@ -2,15 +2,15 @@
 
 # dependencies
 /node_modules
-
-# production
-/dist
-
-# misc
-.DS_Store
 /npm-debug.log*
 /yarn-error.log
 /yarn.lock
 /package-lock.json
+
+# production
+/lib
+
+# misc
+.DS_Store
 /.vscode
 /.idea

@@ -77,7 +77,7 @@ function generateUUID() {
  * // => null
  */
 function getParameter(name, url = window.location.search) {
-  const regexp = new RegExp(`[?&]${name}=([^&#]*)`, 'ig');
+  const regexp = new RegExp(`[?&]${name}=([^&#]*)`, 'i');
   const result = regexp.exec(url);
   return result === null ? null : decodeURIComponent(result[1]);
 }

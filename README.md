@@ -1,13 +1,22 @@
 > jun-utils
 
-[git地址](https://github.com/xwjune/utils.git)
+## Installation
 
-## 使用
+Install with npm:
 
 ```bash
-## Install globally or locally
-$ npm i jun-utils -S
+npm install --save-dev jun-utils
 ```
+
+Install with yarn:
+
+```bash
+yarn add jun-utils --dev
+```
+
+## Usage
+
+ES6 module:
 
 ```js
 import { check } from 'jun-utils'; // import check from 'jun-utils/lib/check';
@@ -16,11 +25,30 @@ import { check } from 'jun-utils'; // import check from 'jun-utils/lib/check';
 check.cellphone('13456789012'); // true
 ```
 
+script:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>jun-utils</title>
+  <script src="jun-utils.min.js"></script>
+</head>
+<body>
+  <script type="text/javascript">
+    junUtils.check.cellphone('13456789012'); // true
+  </script>
+</body>
+</html>
+```
+
+## API
+
 索引：
 
 * [check](#check)
 * [stringUtil](#stringUtil)
-* [pinyinUtil](#pinyinUtil)
 * [floatUtil](#floatUtil)
 * [treeUtil](#treeUtil)
 * [appUtil](#appUtil)
@@ -215,44 +243,6 @@ stringUtil.filterNull('xxx'); // xxx
 stringUtil.filterNull(); //
 
 stringUtil.filterNull(null, '--'); // --
-```
-
-***
-
-## pinyinUtil
-**汉字与拼音互转**
-
-字符范围：Unicode字符中`4E00(19968)-9FA5(40869)`共计`20902`
-
-```js
-import { pinyinUtil } from 'jun-utils';
-```
-
-### getPinyin(chinese, [splitter=''], [withtone=false])
-根据汉字获取拼音
-
-```js
-pinyinUtil.getPinyin('小明', ' '); // xiao ming
-
-pinyinUtil.getPinyin('小明', ' ', true); // xiǎo míng
-
-pinyinUtil.getPinyin('小明plus', ' '); // xiao ming plus
-```
-
-### getCityPinyin(city, [splitter=''], [withtone=false])
-获取城市拼音【城市多音字已处理】
-
-```js
-pinyinUtil.getCityPinyin('重庆市'); // chongqingshi
-
-pinyinUtil.getCityPinyin('西藏', ' ', true); // xī zhàng
-```
-
-## getHanzi(pinyin)
-单个拼音转汉字
-
-```js
-pinyinUtil.getHanzi('diu'); // 丟丢銩铥颩
 ```
 
 ***
