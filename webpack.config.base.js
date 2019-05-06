@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const package = require('./package.json');
+const packageConfig = require('./package.json');
 
 module.exports = {
   entry: './src/index.js',
@@ -20,6 +20,6 @@ module.exports = {
     }],
   },
   plugins: [
-    new webpack.BannerPlugin(`v${package.version} | Copyright © 小巷 <xwjune@163.com> | All rights reserved.`),
+    new webpack.BannerPlugin(`v${packageConfig.version} | Copyright © 小巷 <xwjune@163.com> | All rights reserved.`),
   ],
 };

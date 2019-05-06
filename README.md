@@ -355,8 +355,8 @@ const treeData = [{
 treeUtil.dataPick(treeData, ['330000', '330100']); // ['浙江省', '杭州市']
 ```
 
-### dataMatch(treeData, value, [attributes])
-判断数据是否存在
+### dataFind(treeData, value, [attributes])
+数据查找
 
 ```js
 const treeData = [{
@@ -374,7 +374,7 @@ const treeData = [{
     { id: '320200', name: '无锡市' },
   ]
 }];
-treeUtil.dataMatch(treeData, '杭州市', { key: 'name' }); // true
+treeUtil.dataFind(treeData, '330100'); // { id: '330100', name: '杭州市' }
 ```
 
 ***

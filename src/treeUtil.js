@@ -3,7 +3,7 @@
  *
  * dataConvert - 数据转换
  * dataPick - 数据提取
- * dataMatch - 判断数据是否存在
+ * dataFind - 数据查找
  */
 
 /**
@@ -184,14 +184,14 @@ function dataPick(treeData = [], values = [], attributes = {}) {
 }
 
 /**
- * 判断数据是否存在
+ * 数据查找
  *
  * @param {Object[]} treeData - 源数据
  * @param {String} value - 属性值
  * @param {Object} [attributes] - 配置参数
  * @param {String} [attributes.key='id'] - key
  * @param {String} [attributes.children='children'] - 子集合key
- * @return {Boolean} 是-存在，false-不存在
+ * @return {Object|undefined}
  * @example
  *
  * const treeData = [{
@@ -210,31 +210,36 @@ function dataPick(treeData = [], values = [], attributes = {}) {
  *   ],
  * }];
  *
- * dataMatch(treeData, '杭州市', { key: 'name' });
- * // => true
+ * dataFind(treeData, '330100');
+ * // => { id: '330100', name: '杭州市' }
  */
-function dataMatch(treeData = [], value, attributes = {}) {
+function dataFind(treeData = [], value, attributes = {}) {
   const {
     key = 'id', // key
     children = 'children', // 子集合key
   } = attributes;
+  let result;
   const find = (data) => {
-    return data.some((item) => {
+    return data.find((item) => {
       if (item[key] === value) {
+        result = {
+          ...item,
+        };
         return true;
       }
-      if (item[children]) {
+      if (item[children] && item[children].length > 0) {
         return find(item[children]);
       }
       return false;
     });
   };
+  find(treeData);
 
-  return find(treeData);
+  return result;
 }
 
 export default {
   dataConvert,
   dataPick,
-  dataMatch,
+  dataFind,
 };
