@@ -18,8 +18,9 @@ describe('加法', () => {
     arg2: 2.22,
     output: 2.32,
   }].forEach((el) => {
-    test(`${el.arg1} + ${el.arg2} => ${el.output}`, () => {
+    test(`${el.arg1} + ${el.arg2} = ${el.output}`, () => {
       expect(floatUtil.add(el.arg1, el.arg2)).toBe(el.output);
+      expect(el.arg1 + el.arg2).not.toBe(el.output);
     });
   });
   test('错误输入', () => {
@@ -37,8 +38,9 @@ describe('减法', () => {
     arg2: 0.2,
     output: 0.1,
   }].forEach((el) => {
-    test(`${el.arg1} + ${el.arg2} => ${el.output}`, () => {
+    test(`${el.arg1} - ${el.arg2} = ${el.output}`, () => {
       expect(floatUtil.subtract(el.arg1, el.arg2)).toBe(el.output);
+      expect(el.arg1 - el.arg2).not.toBe(el.output);
     });
   });
 });
@@ -61,8 +63,9 @@ describe('乘法', () => {
     arg2: 100,
     output: 3970,
   }].forEach((el) => {
-    test(`${el.arg1} + ${el.arg2} => ${el.output}`, () => {
+    test(`${el.arg1} * ${el.arg2} = ${el.output}`, () => {
       expect(floatUtil.multiply(el.arg1, el.arg2)).toBe(el.output);
+      expect(el.arg1 * el.arg2).not.toBe(el.output);
     });
   });
 });
@@ -81,8 +84,9 @@ describe('除法', () => {
     arg2: 100,
     output: 0.112,
   }].forEach((el) => {
-    test(`${el.arg1} + ${el.arg2} => ${el.output}`, () => {
+    test(`${el.arg1} / ${el.arg2} = ${el.output}`, () => {
       expect(floatUtil.divide(el.arg1, el.arg2)).toBe(el.output);
+      expect(el.arg1 / el.arg2).not.toBe(el.output);
     });
   });
 });
