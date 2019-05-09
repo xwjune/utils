@@ -7,7 +7,7 @@
  * divide - 除法
  */
 /* eslint-disable no-mixed-operators */
-import { isNumber } from './check/number';
+import { isNumber } from '../check/number';
 
 /**
  * 通用运算

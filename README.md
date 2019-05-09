@@ -25,7 +25,7 @@ import { check } from 'jun-utils'; // import check from 'jun-utils/lib/check';
 check.cellphone('13456789012'); // true
 ```
 
-script:
+Script:
 
 ```html
 <!DOCTYPE html>
@@ -318,7 +318,7 @@ treeUtil.dataConvert(source, attributes);
 // => 
 [{
   id: '330000',
-  name: '浙江省', 
+  name: '浙江省',
   children: [
     { id: '330100', name: '杭州市' },
     { id: '330200', name: '宁波市' },
@@ -339,12 +339,12 @@ treeUtil.dataConvert(source, attributes);
 ```js
 const treeData = [{
   id: '330000',
-  name: '浙江省', 
+  name: '浙江省',
   children: [
     { id: '330100', name: '杭州市' },
     { id: '330200', name: '宁波市' },
   ]
-}, { 
+}, {
   id: '320000',
   name: '江苏省',
   children: [
@@ -361,12 +361,12 @@ treeUtil.dataPick(treeData, ['330000', '330100']); // ['浙江省', '杭州市']
 ```js
 const treeData = [{
   id: '330000',
-  name: '浙江省', 
+  name: '浙江省',
   children: [
     { id: '330100', name: '杭州市' },
     { id: '330200', name: '宁波市' },
   ]
-}, { 
+}, {
   id: '320000',
   name: '江苏省',
   children: [
@@ -435,9 +435,9 @@ import { convert } from 'jun-utils';
 ```js
 convert.bytesToSize(10240); // 10.0KB
 
-convert.bytesToSize(1024*1024, 2); // 1.00MB
+convert.bytesToSize(1024 * 1024, 2); // 1.00MB
 
-convert.bytesToSize('xx'); // 0B
+convert.bytesToSize('32g'); // 0B
 ```
 
 ### fenToYuan(value, [format='0.00'], [cutZero=false])
@@ -446,9 +446,9 @@ convert.bytesToSize('xx'); // 0B
 ```js
 convert.fenToYuan(2000); // 20.00
 
-convert.fenToYuan(2000, '0', true); // 20
+convert.fenToYuan(2000, '0', true); // 20 去掉小数末尾多余的零
 
-convert.fenToYuan(2000.45); // 20.00
+convert.fenToYuan(2000.45); // 20.00 非正确格式，舍去小数部分
 
 convert.fenToYuan(); // 0.00
 

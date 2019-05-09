@@ -8,6 +8,7 @@
 /* eslint-disable no-bitwise */
 
 // 索引表
+// ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/
 const keyStr = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_=';
 
 // UTF-8 encoding
@@ -58,7 +59,7 @@ function utf8Decode(utftext) {
   return string;
 }
 
-class Ctypt {
+class Crypt {
   /**
    * 加密
    *
@@ -124,7 +125,7 @@ class Ctypt {
     let enc3;
     let enc4;
     let i = 0;
-    const input = value.replace(/[^0-9A-Za-z\-_=]/g, '');
+    const input = value.replace(/[^A-Za-z0-9\-_=]/g, '');
 
     while (i < input.length) {
       enc1 = keyStr.indexOf(input.charAt(i++));
@@ -147,4 +148,4 @@ class Ctypt {
   };
 }
 
-export default new Ctypt();
+export default new Crypt();

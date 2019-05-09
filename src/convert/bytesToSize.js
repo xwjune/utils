@@ -10,10 +10,10 @@
  * bytesToSize(10240);
  * // => 10.0KB
  *
- * bytesToSize(1024*1024, 2);
+ * bytesToSize(1024 * 1024, 2);
  * // => 1.00MB
  *
- * bytesToSize('xx');
+ * bytesToSize('32g');
  * // => 0B
  */
 import { isNumber } from '../check/number';
