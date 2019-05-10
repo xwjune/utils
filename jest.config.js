@@ -1,5 +1,5 @@
-const path = require('path');
+const testDir = process.env.TEST_DIR || 'src';
 
 module.exports = {
-  rootDir: path.resolve(__dirname, process.env.ROOT_DIR ? process.env.ROOT_DIR : 'src'),
+  roots: [`<rootDir>/${testDir}`],
 };
