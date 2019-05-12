@@ -1,15 +1,8 @@
-{
+module.exports = {
   "presets": [
     "@babel/preset-env"
   ],
   "plugins": [
-    [
-      "@babel/plugin-transform-runtime",
-      {
-        "corejs": 2
-      }
-    ],
-
     // Stage 1
     "@babel/plugin-proposal-export-default-from",
     "@babel/plugin-proposal-logical-assignment-operators",
@@ -56,4 +49,4 @@
     ],
     "@babel/plugin-proposal-json-strings"
   ]
-}
+};

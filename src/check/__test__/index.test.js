@@ -172,13 +172,32 @@ describe('支付宝账号校验', () => {
 });
 
 describe('弱密码校验', () => {
-  test('123456', () => {
-    expect(check.pwdIntensity('123456')).toBe(1);
+  [
+    '',
+    '123',
+    '123456',
+    '111111111111111111111111111111111',
+  ].forEach((el) => {
+    test(el, () => {
+      expect(check.pwdIntensity(el)).toBe(1);
+    });
   });
-  test('123456abc', () => {
-    expect(check.pwdIntensity('123456abc')).toBe(2);
+  [
+    '123456abc',
+    '123456ABC',
+    'abcABC',
+    '123456@',
+  ].forEach((el) => {
+    test(el, () => {
+      expect(check.pwdIntensity(el)).toBe(2);
+    });
   });
-  test('123456abcABC', () => {
-    expect(check.pwdIntensity('123456abcABC')).toBe(3);
+  [
+    '123456abcABC',
+    '123456abcABC@',
+  ].forEach((el) => {
+    test(el, () => {
+      expect(check.pwdIntensity(el)).toBe(3);
+    });
   });
 });
