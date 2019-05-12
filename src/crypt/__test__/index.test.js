@@ -13,6 +13,9 @@ describe('加密', () => {
   }, {
     input: 'ABC',
     output: 'GK93',
+  }, {
+    input: '©',
+    output: 'mga=',
   }].forEach((el) => {
     test(`${el.input} => ${el.output}`, () => {
       expect(crypt.encode(el.input)).toBe(el.output);
@@ -33,6 +36,9 @@ describe('解密', () => {
   }, {
     input: 'GK93',
     output: 'ABC',
+  }, {
+    input: 'mga=',
+    output: '©',
   }].forEach((el) => {
     test(`${el.input} => ${el.output}`, () => {
       expect(crypt.decode(el.input)).toBe(el.output);

@@ -23,8 +23,11 @@ describe('加法', () => {
       expect(el.arg1 + el.arg2).not.toBe(el.output);
     });
   });
+  test('整数输入', () => {
+    expect(floatUtil.add(2, 2)).toBe(4);
+  });
   test('错误输入', () => {
-    expect(floatUtil.add(2.22, 'xx', '--')).toBe('--');
+    expect(floatUtil.add(2.22, '2g', '--')).toBe('--');
   });
 });
 
@@ -42,6 +45,12 @@ describe('减法', () => {
       expect(floatUtil.subtract(el.arg1, el.arg2)).toBe(el.output);
       expect(el.arg1 - el.arg2).not.toBe(el.output);
     });
+  });
+  test('整数输入', () => {
+    expect(floatUtil.subtract(2, 2)).toBe(0);
+  });
+  test('错误输入', () => {
+    expect(floatUtil.subtract(2.22, '2g', '--')).toBe('--');
   });
 });
 
@@ -68,6 +77,12 @@ describe('乘法', () => {
       expect(el.arg1 * el.arg2).not.toBe(el.output);
     });
   });
+  test('整数输入', () => {
+    expect(floatUtil.multiply(2, 2)).toBe(4);
+  });
+  test('错误输入', () => {
+    expect(floatUtil.multiply(2.22, '2g')).toBe('');
+  });
 });
 
 describe('除法', () => {
@@ -88,5 +103,11 @@ describe('除法', () => {
       expect(floatUtil.divide(el.arg1, el.arg2)).toBe(el.output);
       expect(el.arg1 / el.arg2).not.toBe(el.output);
     });
+  });
+  test('整数输入', () => {
+    expect(floatUtil.divide(2, 2)).toBe(1);
+  });
+  test('错误输入', () => {
+    expect(floatUtil.divide(2.22, '2g')).toBe('');
   });
 });

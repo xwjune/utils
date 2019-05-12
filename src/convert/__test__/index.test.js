@@ -5,6 +5,21 @@ import currencyToCn from '../currencyToCn';
 
 describe('数据容量单位换算', () => {
   const testMap = [{
+    input: '',
+    output: '0B',
+  }, {
+    input: '32g',
+    output: '0B',
+  }, {
+    input: -10,
+    output: '0B',
+  }, {
+    input: 0,
+    output: '0B',
+  }, {
+    input: 0.3,
+    output: '0.3B',
+  }, {
     input: 10000,
     output: '9.8KB',
   }, {
@@ -58,21 +73,36 @@ describe('数据容量单位换算', () => {
   test('保留两位有效数：10240 => 10.00KB', () => {
     expect(bytesToSize(10240, 2)).toBe('10.00KB');
   });
-  test('错误输入: 32g => 0B', () => {
-    expect(bytesToSize('32g')).toBe('0B');
-  });
-  test('空值格式化', () => {
-    expect(bytesToSize(null, 2, '')).toBe('');
-  });
 });
 
 describe('分转化成元', () => {
   const testMap = [{
+    input: '',
+    output: '0.00',
+  }, {
+    input: '0.2',
+    output: '0.00',
+  }, {
+    input: '2.0',
+    output: '0.02',
+  }, {
+    input: '2',
+    output: '0.02',
+  }, {
+    input: '20',
+    output: '0.20',
+  }, {
+    input: '200',
+    output: '2.00',
+  }, {
     input: '2000',
     output: '20.00',
   }, {
     input: '2000.45',
     output: '20.00',
+  }, {
+    input: '-2000',
+    output: '-20.00',
   }];
   testMap.forEach((el) => {
     test(`${el.input} => ${el.output}`, () => {
@@ -82,9 +112,6 @@ describe('分转化成元', () => {
   test('去掉小数末尾多余的零', () => {
     expect(fenToYuan(2000, '0', true)).toBe('20');
   });
-  test('空值输入', () => {
-    expect(fenToYuan()).toBe('0.00');
-  });
   test('空值格式化', () => {
     expect(fenToYuan(null, '--')).toBe('--');
   });
@@ -92,22 +119,43 @@ describe('分转化成元', () => {
 
 describe('元转化为分', () => {
   const testMap = [{
-    input: '20',
-    output: '2000',
-  }, {
-    input: '0.02',
-    output: '2',
-  }, {
-    input: '0.002',
+    input: '',
     output: '0',
+  }, {
+    input: '0.000',
+    output: '0',
+  }, {
+    input: '0.001',
+    output: '0',
+  }, {
+    input: '0.010',
+    output: '1',
+  }, {
+    input: '0.101',
+    output: '10',
+  }, {
+    input: '0.00',
+    output: '0',
+  }, {
+    input: '0.01',
+    output: '1',
+  }, {
+    input: '0.10',
+    output: '10',
+  }, {
+    input: '0.0',
+    output: '0',
+  }, {
+    input: '0.1',
+    output: '10',
+  }, {
+    input: '10',
+    output: '1000',
   }];
   testMap.forEach((el) => {
     test(`${el.input} => ${el.output}`, () => {
       expect(yuanToFen(el.input)).toBe(el.output);
     });
-  });
-  test('空值输入', () => {
-    expect(yuanToFen()).toBe('0');
   });
   test('空值格式化', () => {
     expect(yuanToFen(null, '--')).toBe('--');
@@ -166,9 +214,6 @@ describe('数字金额转换为中文人民币大写', () => {
   }, {
     input: '100000001',
     output: '壹亿零壹元整',
-  }, {
-    input: '999999999999.99',
-    output: '玖仟玖佰玖拾玖亿玖仟玖佰玖拾玖万玖仟玖佰玖拾玖元玖角玖分',
   }];
   testMap.forEach((el) => {
     test(`${el.input} => ${el.output}`, () => {
@@ -180,5 +225,8 @@ describe('数字金额转换为中文人民币大写', () => {
   });
   test('空值格式化', () => {
     expect(currencyToCn('', '--')).toBe('--');
+  });
+  test('边界值', () => {
+    expect(currencyToCn('1000000000000')).toBe('超大金额');
   });
 });
