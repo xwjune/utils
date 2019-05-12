@@ -20,7 +20,6 @@
  * @param {String} [attributes.tName='name'] - 树节点名称key
  * @param {String} [attributes.children='children'] - 子集合key
  * @param {Array} [attributes.otherKeys=[]] - 其他key【将转化为树节点属性】
- * @param {Function} [attributes.onParse] - 源数据解析回调
  * @return {Object[]} 树结构数据
  * @example
  *
@@ -61,16 +60,12 @@ function dataConvert(source = [], attributes = {}) {
     tName = 'name', // 树节点名称key
     children = 'children', // 子集合key
     otherKeys = [], // 其他属性
-    onParse, // 源数据解析回调
   } = attributes;
   const restData = [...source]; // 源数据
   const treeData = []; // 树结构数据
 
   // 根节点解析
   for (let i = 0, iLen = restData.length; i < iLen; i++) {
-    if (onParse && typeof onParse === 'function') {
-      onParse(restData[i]);
-    }
     if (restData[i][pId] === rootId) {
       const node = {
         [tId]: restData[i][id],
