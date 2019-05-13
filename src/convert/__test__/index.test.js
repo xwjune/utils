@@ -1,6 +1,7 @@
 import bytesToSize from '../bytesToSize';
 import fenToYuan from '../fenToYuan';
 import yuanToFen from '../yuanToFen';
+import numberToCn from '../numberToCn';
 import currencyToCn from '../currencyToCn';
 
 describe('数据容量单位换算', () => {
@@ -162,6 +163,94 @@ describe('元转化为分', () => {
   });
 });
 
+describe('阿拉伯数字转中文', () => {
+  const testMap = [{
+    input: '0',
+    output: '零',
+  }, {
+    input: '0.00',
+    output: '零点零零',
+  }, {
+    input: '0.01',
+    output: '零点零壹',
+  }, {
+    input: '0.10',
+    output: '零点壹零',
+  }, {
+    input: '1',
+    output: '壹',
+  }, {
+    input: '10',
+    output: '壹拾',
+  }, {
+    input: '100',
+    output: '壹佰',
+  }, {
+    input: '1000',
+    output: '壹仟',
+  }, {
+    input: '1008',
+    output: '壹仟零捌',
+  }, {
+    input: '1080',
+    output: '壹仟零捌拾',
+  }, {
+    input: '10000',
+    output: '壹万',
+  }, {
+    input: '10008',
+    output: '壹万零捌',
+  }, {
+    input: '108000',
+    output: '壹拾万捌仟',
+  }, {
+    input: '10000000',
+    output: '壹仟万',
+  }, {
+    input: '10000800',
+    output: '壹仟万零捌佰',
+  }, {
+    input: '10008000',
+    output: '壹仟万捌仟',
+  }, {
+    input: '100000000',
+    output: '壹亿',
+  }, {
+    input: '100000008',
+    output: '壹亿零捌',
+  }, {
+    input: '100000800',
+    output: '壹亿零捌佰',
+  }, {
+    input: '100080000',
+    output: '壹亿零捌万',
+  }, {
+    input: '100080800',
+    output: '壹亿零捌万零捌佰',
+  }, {
+    input: '100008000',
+    output: '壹亿零捌仟',
+  }, {
+    input: '10000000000',
+    output: '壹佰亿',
+  }, {
+    input: '999999999999.99',
+    output: '玖仟玖佰玖拾玖亿玖仟玖佰玖拾玖万玖仟玖佰玖拾玖点玖玖',
+  }];
+  testMap.forEach((el) => {
+    test(`${el.input} => ${el.output}`, () => {
+      expect(numberToCn(el.input)).toBe(el.output);
+    });
+  });
+  test('数据错误', () => {
+    expect(numberToCn()).toBe('数据错误');
+    expect(numberToCn('12x')).toBe('数据错误');
+  });
+  test('边界值', () => {
+    expect(numberToCn(1000000000000)).toBe('超大数字');
+  });
+});
+
 describe('数字金额转换为中文人民币大写', () => {
   const testMap = [{
     input: '0',
@@ -172,9 +261,6 @@ describe('数字金额转换为中文人民币大写', () => {
   }, {
     input: '0.00',
     output: '零元整',
-  }, {
-    input: '-0.00',
-    output: '负零元整',
   }, {
     input: '0.01',
     output: '零壹分',
@@ -194,31 +280,46 @@ describe('数字金额转换为中文人民币大写', () => {
     input: '1.0',
     output: '壹元整',
   }, {
-    input: '100',
-    output: '壹佰元整',
+    input: '1',
+    output: '壹元整',
+  }, {
+    input: '1000',
+    output: '壹仟元整',
   }, {
     input: '10000',
     output: '壹万元整',
   }, {
-    input: '10001',
-    output: '壹万零壹元整',
+    input: '10000.08',
+    output: '壹万元零捌分',
   }, {
-    input: '100001',
-    output: '壹拾万零壹元整',
+    input: '10008',
+    output: '壹万零捌元整',
   }, {
-    input: '10000010',
-    output: '壹仟万零壹拾元整',
+    input: '108000',
+    output: '壹拾万捌仟元整',
+  }, {
+    input: '10000800',
+    output: '壹仟万零捌佰元整',
+  }, {
+    input: '10008000',
+    output: '壹仟万捌仟元整',
   }, {
     input: '100000000',
     output: '壹亿元整',
   }, {
-    input: '100000001',
-    output: '壹亿零壹元整',
+    input: '100000800',
+    output: '壹亿零捌佰元整',
+  }, {
+    input: '999999999999.99',
+    output: '玖仟玖佰玖拾玖亿玖仟玖佰玖拾玖万玖仟玖佰玖拾玖元玖角玖分',
   }];
   testMap.forEach((el) => {
     test(`${el.input} => ${el.output}`, () => {
       expect(currencyToCn(el.input)).toBe(el.output);
     });
+  });
+  test('错误输入', () => {
+    expect(currencyToCn('1x')).toBe('数据错误');
   });
   test('空值输入', () => {
     expect(currencyToCn()).toBe('零元整');
@@ -227,6 +328,6 @@ describe('数字金额转换为中文人民币大写', () => {
     expect(currencyToCn('', '--')).toBe('--');
   });
   test('边界值', () => {
-    expect(currencyToCn('1000000000000')).toBe('超大金额');
+    expect(currencyToCn(1000000000000)).toBe('超大金额');
   });
 });

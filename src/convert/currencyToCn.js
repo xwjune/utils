@@ -27,6 +27,9 @@
  * currencyToCn('', '--');
  * // => --
  *
+ * currencyToCn('1x');
+ * // => 数据错误
+ *
  * currencyToCn(100000000);
  * // => 壹亿元整
  *
@@ -42,20 +45,22 @@
  * currencyToCn(1.10);
  * // => 壹元壹角
  */
+import isNull from '../check/isNull';
 import { isNumber } from '../check/number';
+import numberToCn from './numberToCn';
 
 export default function currencyToCn(money, format = '零元整') {
-  if (!isNumber(money, false)) {
+  if (isNull(money)) {
     return format;
+  }
+  if (!isNumber(money, false) || Number(money) < 0) {
+    return '数据错误';
   }
 
   const digits = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖']; // 中文数字
-  const radices = ['', '拾', '佰', '仟']; // 基本单位
-  const bigRadices = ['', '万', '亿']; // 整数部分扩展单位
   const decRadices = ['角', '分']; // 小数部分扩展单位
   const cnDollar = '元'; // 金额整数部分后面跟的字符
   const cnInteger = '整'; // 整数金额时后面跟的字符
-  const cnMinus = '负'; // 负数字符
   const cnMaxResult = '超大金额'; // 超过最大数的返回值
   const maxNum = 999999999999.99; // 最大的处理数字
   let integral = ''; // 金额整数部分
@@ -63,10 +68,6 @@ export default function currencyToCn(money, format = '零元整') {
   let chineseStr = ''; // 返回的中文金额字符串
 
   money = money.toString();
-  if (money[0] === '-') {
-    chineseStr += cnMinus;
-    money = money.substr(1);
-  }
   // Greater than the maximum number.
   if (Number(money) > maxNum) {
     return cnMaxResult;
@@ -81,31 +82,13 @@ export default function currencyToCn(money, format = '零元整') {
 
   // Process integral part if it is larger than 0:
   if (Number(integral) > 0) {
-    let zeroCount = 0;
-    for (let i = 0, intLen = integral.length; i < intLen; i++) {
-      const p = intLen - i - 1; // 当前数字的坐标
-      const d = integral.substr(i, 1); // 当前数字
-      const m = p % 4;
-      if (d === '0') {
-        zeroCount++;
-      } else {
-        if (zeroCount > 0) {
-          chineseStr += digits[0]; // 多个零合并显示
-        }
-        zeroCount = 0;
-        chineseStr += digits[Number(d)] + radices[m];
-      }
-      // 整数部分扩展单位处理
-      if (m === 0 && zeroCount < 4) {
-        chineseStr += bigRadices[p / 4];
-      }
-    }
+    chineseStr += numberToCn(integral);
     chineseStr += cnDollar;
   }
   // Process decimal part:
   if (decimal !== '') {
     for (let i = 0, decLen = decimal.length; i < decLen; i++) {
-      const d = decimal.substr(i, 1);
+      const d = decimal[i]; // 当前数字
       const ds = decimal.substr(-1); // 小数末尾数值
       if (d === '0') {
         // 特殊数据处理：x.0【不显示小数】、 x.00【不显示小数】、 x.10【不显示分位】
@@ -118,8 +101,8 @@ export default function currencyToCn(money, format = '零元整') {
     }
   }
 
-  if (chineseStr === '' || chineseStr === cnMinus) {
-  // 0、 -0、 0.0、 0.00
+  if (chineseStr === '') {
+  // 0、 0.0、 0.00
     chineseStr += digits[0] + cnDollar + cnInteger;
   } else if (
     decimal === ''
@@ -136,7 +119,6 @@ export default function currencyToCn(money, format = '零元整') {
 // 0 零元整
 // 0.0 零元整
 // 0.00 零元整
-// -0.00 负零元整
 // 0.01 零壹分
 // 0.10 壹角
 // 1.01 壹元零壹分

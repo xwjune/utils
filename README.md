@@ -127,6 +127,10 @@ check.isNumber('.2'); // false
 
 check.isNumber(.2); // true
 
+check.isNumber(9.007199254740992e+21); // true
+
+check.isNumber('9.007199254740992e+21'); // false
+
 check.isNumber(9.007199254740992e+21, false); // false
 ```
 
@@ -470,6 +474,30 @@ convert.yuanToFen(); // 0
 stringUtil.yuanToFen(null, '--'); // --
 ```
 
+### numberToCn(value)
+阿拉伯数字转中文
+`处理数字不超过1000000000000【壹万亿】`
+
+```js
+convert.numberToCn(0.01); // 零点零壹
+
+convert.numberToCn(100); // 壹佰
+
+convert.numberToCn(1008); // 壹仟零捌
+
+convert.numberToCn(10008000); // 壹仟万捌仟
+
+convert.numberToCn(100000800); // 壹亿零捌佰
+
+convert.numberToCn(100008000); // 壹亿零捌仟
+
+convert.numberToCn('12x'); // 数据错误
+
+convert.numberToCn(1000000000000); // 超大数字
+```
+
+***
+
 ### currencyToCn(value, [format='零元整'])
 数字金额转换为中文人民币大写
 
@@ -489,6 +517,10 @@ convert.currencyToCn(999999999999.99); // 玖仟玖佰玖拾玖亿玖仟玖佰�
 convert.currencyToCn(1.01); // 壹元零壹分
 
 convert.currencyToCn(1.10); // 壹元壹角
+
+convert.currencyToCn('1x'); // 数据错误
+
+convert.currencyToCn(1000000000000); // 超大金额
 ```
 
 ***

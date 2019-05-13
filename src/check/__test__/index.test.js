@@ -67,16 +67,19 @@ describe('数字校验', () => {
       expect(check.isNumber(el)).toBeTruthy();
     });
   });
-  test('isNumber(.2)', () => {
+  test('.2【number】', () => {
     expect(check.isNumber(.2)).toBeTruthy(); // eslint-disable-line no-floating-decimal
   });
-  test("isNumber('.2')", () => {
+  test('.2【string】', () => {
     expect(check.isNumber('.2')).toBeFalsy();
   });
-  test('9.007199254740992e+21', () => {
+  test('9.007199254740992e+21【number】', () => {
     expect(check.isNumber(9.007199254740992e+21)).toBeTruthy();
   });
-  test('isNumber(9.007199254740992e+21, false)', () => {
+  test('9.007199254740992e+21【string】', () => {
+    expect(check.isNumber('9.007199254740992e+21')).toBeFalsy();
+  });
+  test('忽略科学计数法数字', () => {
     expect(check.isNumber(9.007199254740992e+21, false)).toBeFalsy();
   });
 });
