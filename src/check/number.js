@@ -18,6 +18,12 @@
  * isNumber(.2);
  * // => true
  *
+ * isNumber(9.007199254740992e+21);
+ * // => true
+ *
+ * isNumber('9.007199254740992e+21');
+ * // => false
+ *
  * isNumber(9.007199254740992e+21, false);
  * // => false
  */
