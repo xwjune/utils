@@ -10,7 +10,7 @@
  * 3. 每级末尾不管有几个“0”，都不读；其他数位上有一个“0”或几个“0”，都只读一个零。
  *
  * @param {Number} value - 阿拉伯数字
- * @returns {string} 中文数字
+ * @returns {String} 中文数字
  */
 import { isNumber } from '../check/number';
 
@@ -18,25 +18,21 @@ export default function numberToCn(value) {
   if (!isNumber(value, false) || Number(value) < 0) {
     return '数据错误';
   }
+  value = value.toString();
+  // 边界值校验【小于壹万亿】
+  if (Number(value) >= 1000000000000) {
+    return '超大数字';
+  }
 
   const digits = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖']; // 中文数字
   const radices = ['', '拾', '佰', '仟']; // 基本单位
   const bigRadices = ['', '万', '亿']; // 数级单位
   const point = '点';
-  const maxNum = 1000000000000; // 边界值【小于壹万亿】
-  let integral = ''; // 整数部分
-  let decimal = ''; // 小数部分
+  const [
+    integral, // 整数部分
+    decimal, // 小数部分
+  ] = value.split('.');
   let result = ''; // 返回值
-
-  value = value.toString();
-  if (Number(value) >= maxNum) {
-    return '超大数字';
-  }
-  if (value.indexOf('.') === -1) {
-    integral = value;
-  } else {
-    [integral, decimal] = value.split('.');
-  }
 
   // Process integral part:
   if (Number(integral) > 0) {
@@ -44,7 +40,7 @@ export default function numberToCn(value) {
     for (let i = 0, intLen = integral.length; i < intLen; i++) {
       const d = integral[i]; // 当前数字
       const p = intLen - i - 1; // 当前数字索引
-      const m = p % 4; // modulus
+      const m = p % 4; // modulo
       if (d === '0') {
         zeroCount++;
       } else {
@@ -65,7 +61,7 @@ export default function numberToCn(value) {
   }
 
   // Process decimal part:
-  if (decimal !== '') {
+  if (decimal !== undefined) {
     result += point;
     for (let i = 0, decLen = decimal.length; i < decLen; i++) {
       const d = decimal[i]; // 当前数字

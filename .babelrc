@@ -1,4 +1,4 @@
-module.exports = {
+{
   "presets": [
     "@babel/preset-env"
   ],
@@ -49,4 +49,4 @@ module.exports = {
     ],
     "@babel/plugin-proposal-json-strings"
   ]
-};
+}

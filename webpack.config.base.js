@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const babelConfig = require('./.babelrc');
 const packageConfig = require('./package.json');
 
 module.exports = {
@@ -24,12 +23,11 @@ module.exports = {
             [
               '@babel/plugin-transform-runtime',
               {
-                corejs: 2
-              }
+                corejs: 2,
+              },
             ],
-            ...babelConfig.plugins,
-          ]
-        }
+          ],
+        },
       },
     }],
   },

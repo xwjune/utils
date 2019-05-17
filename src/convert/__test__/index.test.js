@@ -244,6 +244,7 @@ describe('阿拉伯数字转中文', () => {
   });
   test('数据错误', () => {
     expect(numberToCn()).toBe('数据错误');
+    expect(numberToCn('-12')).toBe('数据错误');
     expect(numberToCn('12x')).toBe('数据错误');
   });
   test('边界值', () => {
@@ -320,6 +321,7 @@ describe('数字金额转换为中文人民币大写', () => {
   });
   test('错误输入', () => {
     expect(currencyToCn('1x')).toBe('数据错误');
+    expect(currencyToCn('-12')).toBe('数据错误');
   });
   test('空值输入', () => {
     expect(currencyToCn()).toBe('零元整');
