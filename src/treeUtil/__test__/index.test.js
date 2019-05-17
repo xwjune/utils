@@ -66,14 +66,14 @@ describe('数据提取', () => {
     children: [
       { id: '330100', name: '杭州市' },
       { id: '330200', name: '宁波市' },
-    ]
+    ],
   }, {
     id: '320000',
     name: '江苏省',
     children: [
       { id: '320100', name: '南京市' },
       { id: '320200', name: '无锡市' },
-    ]
+    ],
   }];
   const attributes = {
     origin: 'name',
@@ -96,14 +96,14 @@ describe('数据查找', () => {
     children: [
       { id: '330100', name: '杭州市' },
       { id: '330200', name: '宁波市' },
-    ]
+    ],
   }, {
     id: '320000',
     name: '江苏省',
     children: [
       { id: '320100', name: '南京市' },
       { id: '320200', name: '无锡市' },
-    ]
+    ],
   }];
   test('dataFind', () => {
     expect(treeUtil.dataFind(treeData, '330100')).toEqual({ id: '330100', name: '杭州市' });

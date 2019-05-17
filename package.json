@@ -1,10 +1,10 @@
 {
   "name": "jun-utils",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "description": "utils, public library",
   "main": "index.js",
   "scripts": {
-    "build": "npm run build:lib && npm run build:umd && npm run build:umd:min",
+    "build": "./scripts/build.sh",
     "build:lib": "babel src --out-dir lib --ignore 'src/**/__test__'",
     "build:umd": "webpack --config webpack.config.development.js",
     "build:umd:min": "webpack --config webpack.config.production.js",
