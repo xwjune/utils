@@ -32,6 +32,6 @@ module.exports = {
     }],
   },
   plugins: [
-    new webpack.BannerPlugin(`v${packageConfig.version} | Copyright © 小巷 <xwjune@163.com> | All rights reserved.`),
+    new webpack.BannerPlugin(`jun-utils v${packageConfig.version}\n\nCopyright 2018-present, 小巷 <xwjune@163.com>, Inc.\nAll rights reserved.`),
   ],
 };
