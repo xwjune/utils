@@ -5,6 +5,6 @@ module.exports = merge(baseConfig, {
   devtool: 'none',
   mode: 'development',
   output: {
-    filename: 'jun-utils.js',
+    filename: '[name].js',
   },
 });
