@@ -1,9 +1,11 @@
 const path = require('path');
 const webpack = require('webpack');
-const packageConfig = require('./package.json');
+const pkg = require('./package.json');
 
 module.exports = {
-  entry: './src/index.js',
+  entry: {
+    [pkg.name]: './src/index',
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
     library: 'junUtils',
@@ -32,6 +34,6 @@ module.exports = {
     }],
   },
   plugins: [
-    new webpack.BannerPlugin(`jun-utils v${packageConfig.version}\n\nCopyright 2018-present, 小巷 <xwjune@163.com>, Inc.\nAll rights reserved.`),
+    new webpack.BannerPlugin(`${pkg.name} v${pkg.version}\n\nCopyright 2018-present, ${pkg.author}, Inc.\nAll rights reserved.`),
   ],
 };

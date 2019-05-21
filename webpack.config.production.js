@@ -4,6 +4,6 @@ const baseConfig = require('./webpack.config.base');
 module.exports = merge(baseConfig, {
   mode: 'production',
   output: {
-    filename: 'jun-utils.min.js',
+    filename: '[name].min.js',
   },
 });
