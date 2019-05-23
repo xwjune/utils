@@ -5,16 +5,16 @@
   "main": "index.js",
   "scripts": {
     "build": "./scripts/build.sh",
-    "build:lib": "babel src --out-dir lib --ignore 'src/**/__test__'",
-    "build:umd": "webpack --config webpack.config.development.js",
-    "build:umd:min": "webpack --config webpack.config.production.js",
-    "prebuild": "npm run clean",
-    "prepare": "npm run build",
+    "build:lib": "babel src --out-dir lib --ignore 'src/**/__tests__'",
+    "build:umd": "webpack --config webpack.config.development.js --progress",
+    "build:umd:min": "webpack --config webpack.config.production.js --progress",
     "lint": "eslint . --ext .js",
     "lint:fix": "eslint . --fix --ext .js",
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "clean": "rimraf lib dist"
+    "clean": "rimraf lib dist",
+    "prebuild": "npm run clean",
+    "prepare": "npm run build"
   },
   "husky": {
     "hooks": {
