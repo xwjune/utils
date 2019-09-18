@@ -16,6 +16,7 @@
  * ip - ip地址校验
  * alipay - 支付宝账号校验
  * pwdIntensity - 弱密码校验
+ * illegalChar - 非法字符校验
  */
 import {
   cellphone,
@@ -36,6 +37,7 @@ import idCard from './idCard';
 import ip from './ip';
 import alipay from './alipay';
 import pwdIntensity from './pwdIntensity';
+import illegalChar from './illegalChar';
 
 export default {
   cellphone,
@@ -53,6 +55,7 @@ export default {
   ip,
   alipay,
   pwdIntensity,
+  illegalChar,
 };
 
 // todo
