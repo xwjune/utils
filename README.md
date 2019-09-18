@@ -229,6 +229,16 @@ check.pwdIntensity('123456abc'); // 2
 check.pwdIntensity('123456abcABC'); // 3
 ```
 
+### illegalChar(value)
+非法字符校验 `",\,\n`
+
+```js
+check.illegalChar('123\n123'); // true
+check.illegalChar('123\\123'); // true
+check.illegalChar('123"123'); // true
+check.illegalChar('123'); // false
+```
+
 ***
 
 ## stringUtil

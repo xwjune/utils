@@ -203,4 +203,19 @@ describe('弱密码校验', () => {
       expect(check.pwdIntensity(el)).toBe(3);
     });
   });
+
+  describe('非法字符校验', () => {
+    [
+      '123\n123',
+      '123\\123',
+      '123"123',
+    ].forEach((el) => {
+      test(el, () => {
+        expect(check.illegalChar(el)).toBeTruthy();
+      });
+    });
+    test('123', () => {
+      expect(check.illegalChar('123')).toBeFalsy();
+    });
+  });
 });
