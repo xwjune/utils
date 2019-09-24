@@ -234,6 +234,8 @@ check.pwdIntensity('123456abcABC'); // 3
 
 ```js
 check.illegalChar('123\n123'); // true
+check.illegalChar('123\t123'); // true
+check.illegalChar('123\v123'); // true
 check.illegalChar('123\\123'); // true
 check.illegalChar('123"123'); // true
 check.illegalChar('123'); // false

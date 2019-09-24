@@ -1,6 +1,6 @@
 /**
  * 非法字符校验
- * 非法字符集：【",\,\n】
+ * 非法字符集：【",\,\n,\t,\v】
  *
  * @param {*} value - The value to check.
  * @return {Boolean} Return `true` if validated, else `false`.
@@ -9,5 +9,5 @@
  * // => true
  */
 export default function illegalChar(value) {
-  return /["\\\n]/.test(value);
+  return /["\\\n\t\v]/.test(value);
 }
