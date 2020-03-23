@@ -70,11 +70,9 @@ export function setCookie(name, value, options = {}) {
     str += '; Secure';
   }
   if (options.sameSite) {
-    if (options.sameSite.search(/^strict$/i) !== -1) {
-      str += '; SameSite=Strict';
-    } else if (options.sameSite.search(/^lax$/i) !== -1) {
-      str += '; SameSite=Lax';
-    }
+    str += `; SameSite=${options.sameSite}`;
+  } else {
+    str += '; SameSite=None';
   }
 
   document.cookie = str;
