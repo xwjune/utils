@@ -71,8 +71,6 @@ export function setCookie(name, value, options = {}) {
   }
   if (options.sameSite) {
     str += `; SameSite=${options.sameSite}`;
-  } else {
-    str += '; SameSite=None';
   }
 
   document.cookie = str;
