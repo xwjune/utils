@@ -164,9 +164,9 @@ check.isDecimal('00.2'); // false
 金额【元】判断
 
 ```js
-check.money('-20'); // true
+check.money('-20'); // false
 
-check.money('-20.00'); // true
+check.money('20.00'); // true
 
 check.money('20.002'); // false
 

@@ -111,12 +111,12 @@ describe('小数校验', () => {
 });
 
 describe('金额【元】判断', () => {
-  ['-20', '20.00'].forEach((el) => {
+  ['20', '20.00'].forEach((el) => {
     test(el, () => {
       expect(check.money(el)).toBeTruthy();
     });
   });
-  ['20.002', '002'].forEach((el) => {
+  ['20.002', '002', '-20'].forEach((el) => {
     test(el, () => {
       expect(check.money(el)).toBeFalsy();
     });
