@@ -7,7 +7,7 @@
  * @example
  *
  * money('-20');
- * // => true
+ * // => false
  *
  * money('20.00');
  * // => true
@@ -19,5 +19,5 @@
  * // => false
  */
 export default function money(value) {
-  return /^-?(0|[1-9][0-9]*)(\.\d{1,2})?$/.test(value);
+  return /^(0|[1-9][0-9]*)(\.\d{1,2})?$/.test(value);
 }
