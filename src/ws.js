@@ -29,8 +29,11 @@ const createWebSocket = (url, options = {}) => {
 
     ws.onopen = () => {
       console.log(`【${url}】WebSocket Open.`);
-      if (retry && options.reconnect) { // 重连回调
-        options.reconnect(ws);
+      if (retry) {
+        _limitConnect = limitConnect; // 重连次数重置
+        if (options.reconnect) { // 重连回调
+          options.reconnect(ws);
+        }
       }
       if (options.onopen) {
         options.onopen(ws);
