@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-operators */
 /**
  * 浮点数运算【解决精度问题】
  *
@@ -6,7 +7,6 @@
  * multiply - 乘法
  * divide - 除法
  */
-/* eslint-disable no-mixed-operators */
 import { isNumber } from '../check/number';
 
 /**
