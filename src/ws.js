@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 /**
- * webSocket
+ * webSocket【断线重连】
  * @param {string} url - 服务器网址
  * @param {Object} options - 配置参数
  * @param {number} options.timeout - 重连频率【毫秒】
