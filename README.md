@@ -667,14 +667,15 @@ crypt.encode('123456'); // CJ8pD3Ks
 crypt.decode('CJ8pD3Ks'); // 123456
 ```
 
-## ws(url, [options])
-**websocket断线重连**
+## ws
+**webSocket【断线重连】**
 
 ```js
 import { ws } from 'jun-utils';
 ```
 
-### API
+### ws(url, [options])
+
 | Property | Description | Type | Default |
 | :------- | :---------- | :--- | :------ |
 | url | 服务器网址 | string | - |
