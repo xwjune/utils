@@ -2,13 +2,13 @@
 /**
  * webSocket【断线重连】
  * @param {string} url - 服务器网址
- * @param {Object} options - 配置参数
- * @param {number} options.timeout - 重连频率【毫秒】
- * @param {number} options.limitConnect - 断线重连次数
- * @param {function} options.onopen - 连接建立回调
- * @param {function} options.onclose - 连接关闭回调
- * @param {function} options.onmessage - 接收数据回调
- * @param {function} options.reconnect - 重连回调
+ * @param {object} [options={}] - 配置参数
+ * @param {number} [options.timeout=3000] - 重连频率【毫秒】
+ * @param {number} [options.limitConnect=3] - 断线重连次数
+ * @param {function} [options.onopen] - 连接建立回调
+ * @param {function} [options.onclose] - 连接关闭回调
+ * @param {function} [options.onmessage] - 接收数据回调
+ * @param {function} [options.reconnect] - 重连回调
  */
 const createWebSocket = (url, options = {}) => {
   const {
@@ -31,18 +31,18 @@ const createWebSocket = (url, options = {}) => {
       console.log(`【${url}】WebSocket Open.`);
       if (retry) {
         _limitConnect = limitConnect; // 重连次数重置
-        if (options.reconnect) { // 重连回调
-          options.reconnect(ws);
+        if (options.reconnect) {
+          options.reconnect(ws); // 重连回调
         }
       }
       if (options.onopen) {
-        options.onopen(ws);
+        options.onopen(ws); // 连接建立回调
       }
     };
 
     ws.onmessage = (event) => {
       if (options.onmessage) {
-        options.onmessage(event.data);
+        options.onmessage(event.data); // 接收数据回调
       }
     };
 
@@ -68,7 +68,7 @@ const createWebSocket = (url, options = {}) => {
           connect(true);
         }, timeout);
       } else if (options.onclose) {
-        options.onclose();
+        options.onclose(); // 连接关闭回调
       }
     }
   }
