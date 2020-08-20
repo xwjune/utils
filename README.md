@@ -679,6 +679,7 @@ import { ws } from 'jun-utils';
 | Property | Description | Type | Default |
 | :------- | :---------- | :--- | :------ |
 | url | 服务器网址 | string | - |
+| options | 配置参数 | object | {} |
 | options.timeout | 重连频率【毫秒】 | number  | 3000 |
 | options.limitConnect | 断线重连次数 | number | 3 |
 | options.onopen | 连接建立回调 | function(ws) | - |
