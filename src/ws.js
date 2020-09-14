@@ -28,7 +28,7 @@ const createWebSocket = (url, options = {}) => {
     ws = new WebSocket(url);
 
     ws.onopen = () => {
-      console.log(`【${url}】WebSocket Open.`);
+      console.log(`'${url}' WebSocket Open.`);
       if (retry) {
         _limitConnect = limitConnect; // 重连次数重置
         if (options.reconnect) {
@@ -47,24 +47,24 @@ const createWebSocket = (url, options = {}) => {
     };
 
     ws.onerror = () => {
-      console.warn('WebSocket Error.');
+      console.warn(`'${url}' WebSocket Error.`);
       reconnect();
     };
 
     ws.onclose = () => {
-      console.warn('WebSocket Closed.');
+      console.warn(`'${url}' WebSocket Closed.`);
       reconnect();
     };
   }
 
   function reconnect() {
     if (!lockReconnect) {
-      lockReconnect = true;
+      lockReconnect = true; // 加锁
       if (_limitConnect > 0) {
         _limitConnect--;
         setTimeout(() => {
-          console.log(`Reconnect ${limitConnect - _limitConnect} Times.`);
-          lockReconnect = false;
+          lockReconnect = false; // 解锁
+          console.log(`WebSocket Reconnect ${limitConnect - _limitConnect} Times.`);
           connect(true);
         }, timeout);
       } else if (options.onclose) {
