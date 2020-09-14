@@ -6,12 +6,14 @@
  * yuanToFen - 元转化为分
  * numberToCn - 阿拉伯数字转中文
  * currencyToCn - 数字金额转换为中文人民币大写
+ * combination - 列出n个数组所有组合
  */
 import bytesToSize from './bytesToSize';
 import fenToYuan from './fenToYuan';
 import yuanToFen from './yuanToFen';
 import numberToCn from './numberToCn';
 import currencyToCn from './currencyToCn';
+import combination from './combination';
 
 export default {
   bytesToSize,
@@ -19,4 +21,5 @@ export default {
   yuanToFen,
   numberToCn,
   currencyToCn,
+  combination,
 };

@@ -3,6 +3,7 @@ import fenToYuan from '../fenToYuan';
 import yuanToFen from '../yuanToFen';
 import numberToCn from '../numberToCn';
 import currencyToCn from '../currencyToCn';
+import combination from '../combination';
 
 describe('数据容量单位换算', () => {
   const testMap = [{
@@ -331,5 +332,27 @@ describe('数字金额转换为中文人民币大写', () => {
   });
   test('边界值', () => {
     expect(currencyToCn(1000000000000)).toBe('超大金额');
+  });
+});
+
+describe('列出n个数组所有组合', () => {
+  const source = [
+    ['黑色', '白色'],
+    ['64G', '128G'],
+    ['国行', '港行'],
+    ['全网通'],
+  ];
+  const result = [
+    ['黑色', '64G', '国行', '全网通'],
+    ['黑色', '64G', '港行', '全网通'],
+    ['黑色', '128G', '国行', '全网通'],
+    ['黑色', '128G', '港行', '全网通'],
+    ['白色', '64G', '国行', '全网通'],
+    ['白色', '64G', '港行', '全网通'],
+    ['白色', '128G', '国行', '全网通'],
+    ['白色', '128G', '港行', '全网通'],
+  ];
+  test('combination', () => {
+    expect(combination(source)).toEqual(result);
   });
 });
