@@ -23,7 +23,6 @@
  *  ['白色', '128G', '港行', '全网通'],
  * ]
  */
-
 export default function combination(arr) {
   return arr.reduce((total, cur) => {
     const res = [];

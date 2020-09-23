@@ -509,8 +509,6 @@ convert.numberToCn('12x'); // 数据错误
 convert.numberToCn(1000000000000); // 超大数字
 ```
 
-***
-
 ### currencyToCn(value, [format='零元整'])
 数字金额转换为中文人民币大写
 
