@@ -11,15 +11,16 @@
  * 将具有层级关系的数组转化为树结构数组
  *
  * @param {Object[]} source - 源数据【有层级关系】
- * @param {Object} attributes - 配置参数
- * @param {String} attributes.pId - 源数据父主键key
- * @param {String} [attributes.rootId] - 源数据根节点主键值，将父主键值与之相等的数据视为顶层树节点【缺省此参数，将没有父主键的数据视为顶层树节点】
- * @param {String} [attributes.id='id'] - 源数据主键key
- * @param {String} [attributes.name='name'] - 源数据名称key
- * @param {String} [attributes.tId='id'] - 树节点主键key
- * @param {String} [attributes.tName='name'] - 树节点名称key
- * @param {String} [attributes.children='children'] - 子集合key
- * @param {Array} [attributes.otherKeys=[]] - 其他key【将转化为树节点属性】
+ * @param {Object} options - 配置参数
+ * @param {String} options.pId - 源数据父主键key
+ * @param {String} [options.rootId] - 源数据根节点主键值，将父主键值与之相等的数据视为顶层树节点【缺省此参数，将没有父主键的数据视为顶层树节点】
+ * @param {String} [options.id='id'] - 源数据主键key
+ * @param {String} [options.name='name'] - 源数据名称key
+ * @param {String} [options.tId='id'] - 树节点主键key
+ * @param {String} [options.tName='name'] - 树节点名称key
+ * @param {String} [options.children='children'] - 树节点子集合key
+ * @param {Boolean} [options.raw=false] - 是否保留所有属性
+ * @param {Array} [options.otherKeys=[]] - 其他需要保留的属性【raw=true时无效】
  * @return {Object[]} 树结构数据
  * @example
  *
@@ -31,26 +32,26 @@
  *   { id: '320100', value: '南京市', parentId: '320000' },
  *   { id: '320200', value: '无锡市', parentId: '320000' },
  * ];
- * const attributes = { rootId: '100000', pId: 'parentId', name: 'value' };
+ * const options = { rootId: '100000', pId: 'parentId', name: 'value' };
  *
- * dataConvert(source, attributes);
+ * dataConvert(source, options);
  * // => [{
- *   id: '330000',
- *   name: '浙江省',
- *   children: [
- *     { id: '330100', name: '杭州市' },
- *     { id: '330200', name: '宁波市' },
- *   ]
- * }, {
  *   id: '320000',
  *   name: '江苏省',
  *   children: [
  *     { id: '320100', name: '南京市' },
  *     { id: '320200', name: '无锡市' },
  *   ]
+ * }, {
+ *   id: '330000',
+ *   name: '浙江省',
+ *   children: [
+ *     { id: '330100', name: '杭州市' },
+ *     { id: '330200', name: '宁波市' },
+ *   ]
  * }]
  */
-function dataConvert(source = [], attributes = {}) {
+function dataConvert(source = [], options = {}) {
   const {
     rootId, // 源数据根节点主键值
     pId, // 源数据父主键key
@@ -58,67 +59,48 @@ function dataConvert(source = [], attributes = {}) {
     name = 'name', // 源数据名称key
     tId = 'id', // 树节点主键key
     tName = 'name', // 树节点名称key
-    children = 'children', // 子集合key
-    otherKeys = [], // 其他属性
-  } = attributes;
-  const restData = [...source]; // 源数据
-  const treeData = []; // 树结构数据
+    children = 'children', // 树节点子集合key
+    raw = false, // 是否保留所有属性
+    otherKeys = [], // 其他需要保留的属性
+  } = options;
+  const dataObj = {}; // 缓存数据
+  const delPid = !raw && !otherKeys.includes(pId); // 是否删除数据父主键key
 
-  // 根节点解析
-  for (let i = 0, iLen = restData.length; i < iLen; i++) {
-    if (restData[i][pId] === rootId) {
-      const node = {
-        [tId]: restData[i][id],
-        [tName]: restData[i][name],
-      };
+  // 缓存数据
+  source.forEach((item) => {
+    const obj = {
+      [tId]: item[id],
+      [tName]: item[name],
+      [pId]: item[pId],
+    };
+    if (raw) {
+      Object.assign(obj, { ...item });
+    } else {
       otherKeys.forEach((key) => {
-        Object.assign(node, {
-          [key]: restData[i][key],
+        Object.assign(obj, {
+          [key]: item[key],
         });
       });
-      treeData.push(node);
-      restData.splice(i, 1);
-      iLen -= 1;
-      i -= 1;
     }
-  }
+    dataObj[item[id]] = obj;
+  });
 
-  // 子节点解析
-  const pickChild = (node) => {
-    if (restData.length !== 0) {
-      for (let i = 0, iLen = node.length; i < iLen; i++) {
-        for (let j = 0, jLen = restData.length; j < jLen; j++) {
-          if (node[i][tId] === restData[j][pId]) {
-            if (!node[i][children]) {
-              Object.assign(node[i], {
-                [children]: [],
-              });
-            }
-            const child = {
-              [tId]: restData[j][id],
-              [tName]: restData[j][name],
-            };
-            otherKeys.forEach((key) => {
-              Object.assign(child, {
-                [key]: restData[j][key],
-              });
-            });
-            node[i][children].push(child);
-            restData.splice(j, 1);
-            jLen -= 1;
-            j -= 1;
-          }
-        }
-        if (node[i][children]) {
-          pickChild(node[i][children]);
-        }
+  return Object.values(dataObj).filter((item) => {
+    if (item[pId] !== rootId) {
+      if (!dataObj[item[pId]][children]) {
+        dataObj[item[pId]][children] = [];
       }
+      dataObj[item[pId]][children].push(item);
+      if (delPid) {
+        delete item[pId];
+      }
+      return false;
     }
-  };
-
-  pickChild(treeData);
-
-  return treeData;
+    if (delPid) {
+      delete item[pId];
+    }
+    return true;
+  });
 }
 
 /**
@@ -127,10 +109,10 @@ function dataConvert(source = [], attributes = {}) {
  *
  * @param {Object[]} treeData - 源数据
  * @param {Array} values - 原始值
- * @param {Object} [attributes] - 配置参数
- * @param {String} [attributes.origin='id'] - 原始key
- * @param {String} [attributes.key='name'] - 提取key
- * @param {String} [attributes.children='children'] - 子集合key
+ * @param {Object} [options] - 配置参数
+ * @param {String} [options.origin='id'] - 原始key
+ * @param {String} [options.key='name'] - 提取key
+ * @param {String} [options.children='children'] - 子集合key
  * @return {Array} 提取的数据
  * @example
  *
@@ -153,12 +135,12 @@ function dataConvert(source = [], attributes = {}) {
  * dataPick(treeData, ['330000', '330100']);
  * // => ['浙江省', '杭州市']
  */
-function dataPick(treeData = [], values = [], attributes = {}) {
+function dataPick(treeData = [], values = [], options = {}) {
   const {
     origin = 'id', // 原始key
     key = 'name', // 提取key
     children = 'children', // 子集合key
-  } = attributes;
+  } = options;
   const newValues = [];
   const pick = (source = [], index = 0) => {
     source.some((item) => {
@@ -183,9 +165,9 @@ function dataPick(treeData = [], values = [], attributes = {}) {
  *
  * @param {Object[]} treeData - 源数据
  * @param {String} value - 属性值
- * @param {Object} [attributes] - 配置参数
- * @param {String} [attributes.key='id'] - key
- * @param {String} [attributes.children='children'] - 子集合key
+ * @param {Object} [options] - 配置参数
+ * @param {String} [options.key='id'] - key
+ * @param {String} [options.children='children'] - 子集合key
  * @return {Object|undefined}
  * @example
  *
@@ -208,11 +190,11 @@ function dataPick(treeData = [], values = [], attributes = {}) {
  * dataFind(treeData, '330100');
  * // => { id: '330100', name: '杭州市' }
  */
-function dataFind(treeData = [], value, attributes = {}) {
+function dataFind(treeData = [], value, options = {}) {
   const {
     key = 'id', // key
     children = 'children', // 子集合key
-  } = attributes;
+  } = options;
   let result;
   const find = (data) => {
     return data.find((item) => {
