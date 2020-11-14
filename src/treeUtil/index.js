@@ -86,16 +86,19 @@ function dataConvert(source = [], options = {}) {
   });
 
   return Object.values(dataObj).filter((item) => {
-    if (item[pId] !== rootId) {
-      if (!dataObj[item[pId]][children]) {
-        dataObj[item[pId]][children] = [];
-      }
-      dataObj[item[pId]][children].push(item);
-      if (delPid) {
-        delete item[pId];
+    if (item[pId] !== rootId) { // 非根节点子节点集合
+      if (dataObj[item[pId]]) {
+        if (!dataObj[item[pId]][children]) {
+          dataObj[item[pId]][children] = [];
+        }
+        dataObj[item[pId]][children].push(item);
+        if (delPid) {
+          delete item[pId];
+        }
       }
       return false;
     }
+    // 根节点子节点集合
     if (delPid) {
       delete item[pId];
     }

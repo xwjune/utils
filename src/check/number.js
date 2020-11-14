@@ -2,7 +2,6 @@
  * 数字校验
  *
  * @param {*} value - The value to check.
- * @param {Boolean} [scientific=true] - Whether the number of scientific notation including.
  * @return {Boolean} Return `true` if validated, else `false`.
  * @example
  *
@@ -20,19 +19,19 @@
  *
  * isNumber(9.007199254740992e+21);
  * // => true
- *
- * isNumber('9.007199254740992e+21');
- * // => false
- *
- * isNumber(9.007199254740992e+21, false);
- * // => false
  */
-export function isNumber(value, scientific = true) {
+export function isNumber(value) {
   if (typeof value === 'number') {
-    return scientific ? true : !/e\+[0-9]+$/.test(value);
+    return true;
   }
-  if (typeof value === 'string') {
-    return /^-?(0|[1-9][0-9]*)(\.[0-9]+)?$/.test(value);
+  if (
+    typeof value === 'string'
+    && value !== ''
+    && value[0] !== '.'
+    && !value.startsWith('-.')
+    && !Number.isNaN(Number(value))
+  ) {
+    return true;
   }
   return false;
 }

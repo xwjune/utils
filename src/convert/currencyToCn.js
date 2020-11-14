@@ -13,7 +13,7 @@
  *     又如￥107000.53应写成人民币壹拾万柒仟元零伍角叁分，或者写成人民币壹拾万零柒仟元伍角叁分。
  *   4、阿拉伯金额数字角位是“0”而分位不是“0”时，中文大写金额“元”后面应写“零”字。如￥16409.02应写成人民币壹万陆仟肆佰零玖元零贰分。
  *
- * @param {Number} money - 数字金额
+ * @param {Number} value - 数字金额
  * @param {String} [format='零元整'] - 格式化
  * @returns {String} 中文金额
  * @example
@@ -45,15 +45,13 @@
  * currencyToCn(1.10);
  * // => 壹元壹角
  */
-import isNull from '../check/isNull';
-import { isNumber } from '../check/number';
 import numberToCn from './numberToCn';
 
-export default function currencyToCn(money, format = '零元整') {
-  if (isNull(money)) {
+export default function currencyToCn(value, format = '零元整') {
+  if (!value) {
     return format;
   }
-  if (!isNumber(money, false) || Number(money) < 0) {
+  if (!/^(0|[1-9][0-9]*)(\.[0-9]+)?$/.test(value)) {
     return '数据错误';
   }
 
@@ -67,15 +65,15 @@ export default function currencyToCn(money, format = '零元整') {
   let decimal = ''; // 金额小数部分
   let chineseStr = ''; // 返回的中文金额字符串
 
-  money = money.toString();
+  value = value.toString();
   // Greater than the maximum number.
-  if (Number(money) > maxNum) {
+  if (Number(value) > maxNum) {
     return cnMaxResult;
   }
-  if (money.indexOf('.') === -1) {
-    integral = money;
+  if (value.indexOf('.') === -1) {
+    integral = value;
   } else {
-    [integral, decimal] = money.split('.');
+    [integral, decimal] = value.split('.');
     // cut down redundant decimal digits that are after the second.
     decimal = decimal.substr(0, 2);
   }

@@ -62,8 +62,14 @@ describe('空校验', () => {
 });
 
 describe('数字校验', () => {
-  ['20', '-20', '0.2'].forEach((el) => {
-    test(el, () => {
+  test('error', () => {
+    ['', undefined, null, 'null', '.2', '-.2'].forEach((el) => {
+      expect(check.isNumber(el)).toBeFalsy();
+    });
+    expect(check.isNumber()).toBeFalsy();
+  });
+  test('correct', () => {
+    ['20', '-20', '0.2'].forEach((el) => {
       expect(check.isNumber(el)).toBeTruthy();
     });
   });
@@ -73,14 +79,9 @@ describe('数字校验', () => {
   test('.2【string】', () => {
     expect(check.isNumber('.2')).toBeFalsy();
   });
-  test('9.007199254740992e+21【number】', () => {
+  test('科学计数法数字', () => {
     expect(check.isNumber(9.007199254740992e+21)).toBeTruthy();
-  });
-  test('9.007199254740992e+21【string】', () => {
-    expect(check.isNumber('9.007199254740992e+21')).toBeFalsy();
-  });
-  test('忽略科学计数法数字', () => {
-    expect(check.isNumber(9.007199254740992e+21, false)).toBeFalsy();
+    expect(check.isNumber('9.007199254740992e+21')).toBeTruthy();
   });
 });
 

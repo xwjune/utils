@@ -12,10 +12,8 @@
  * @param {Number} value - 阿拉伯数字
  * @returns {String} 中文数字
  */
-import { isNumber } from '../check/number';
-
 export default function numberToCn(value) {
-  if (!isNumber(value, false) || Number(value) < 0) {
+  if (!/^(0|[1-9][0-9]*)(\.[0-9]+)?$/.test(value)) {
     return '数据错误';
   }
   value = value.toString();
