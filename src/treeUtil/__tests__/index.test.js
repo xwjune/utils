@@ -96,6 +96,16 @@ describe('数据转换', () => {
       name: 'value',
     })).toEqual(result);
   });
+  test('dataConvert-3【未知父节点】', () => {
+    expect(treeUtil.dataConvert([
+      ...source,
+      { id: '320300', value: '未知市', parentId: '340000', py: 'weizhi' },
+    ], {
+      rootId: '100000',
+      pId: 'parentId',
+      name: 'value',
+    })).toEqual(result);
+  });
   test('其他属性提取', () => {
     expect(treeUtil.dataConvert(source, {
       rootId: '100000',

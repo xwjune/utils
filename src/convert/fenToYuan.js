@@ -2,7 +2,7 @@
  * 分->元
  * 为防止浮点数运算精度丢失，故采用字符串形式解析
  *
- * @param {Number} money - 分
+ * @param {Number} value - 分
  * @param {String} [format='0.00'] - 格式化
  * @param {Boolean} [cutZero=false] - 是否去掉小数末尾多余的零
  * @returns {String} 元
@@ -23,14 +23,12 @@
  * fenToYuan(null, '--');
  * // => --
  */
-import { isNumber } from '../check/number';
-
-export default function fenToYuan(money, format = '0.00', cutZero = false) {
-  if (!isNumber(money, false)) {
+export default function fenToYuan(value, format = '0.00', cutZero = false) {
+  if (!/^-?(0|[1-9][0-9]*)(\.[0-9]+)?$/.test(value)) {
     return format;
   }
 
-  let str = money.toString();
+  let str = value.toString();
   let result = '';
   if (str[0] === '-') {
     result += '-';

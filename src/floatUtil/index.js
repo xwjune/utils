@@ -7,7 +7,9 @@
  * multiply - 乘法
  * divide - 除法
  */
-import { isNumber } from '../check/number';
+function isNumber(value) {
+  return /^-?(0|[1-9][0-9]*)(\.[0-9]+)?$/.test(value);
+}
 
 /**
  * 通用运算

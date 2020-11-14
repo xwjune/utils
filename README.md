@@ -116,7 +116,7 @@ check.isNull(); // true
 check.isNull('null', ['null', '(null)']); // true
 ```
 
-### isNumber(value, [scientific=true])
+### isNumber(value)
 数字校验
 
 ```JavaScript
@@ -129,10 +129,6 @@ check.isNumber('.2'); // false
 check.isNumber(.2); // true
 
 check.isNumber(9.007199254740992e+21); // true
-
-check.isNumber('9.007199254740992e+21'); // false
-
-check.isNumber(9.007199254740992e+21, false); // false
 ```
 
 ### isInteger(value)
@@ -590,6 +586,17 @@ combination(arr);
   ['白色', '128G', '国行', '全网通'],
   ['白色', '128G', '港行', '全网通'],
 ];
+```
+
+### toThousands(value, [format=''])
+数字千位符分隔
+
+```JavaScript
+convert.toThousands(12345678); // 12,345,678
+
+convert.toThousands(12345678.90); // 12,345,678.90
+
+convert.toThousands(); // ''
 ```
 
 ***

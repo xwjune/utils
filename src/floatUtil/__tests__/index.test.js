@@ -6,6 +6,10 @@ describe('加法', () => {
     arg2: 0.2,
     output: 0.3,
   }, {
+    arg1: -0.2,
+    arg2: 0.3,
+    output: 0.1,
+  }, {
     arg1: 0.1,
     arg2: 0.7,
     output: 0.8,
@@ -40,6 +44,10 @@ describe('减法', () => {
     arg1: 0.3,
     arg2: 0.2,
     output: 0.1,
+  }, {
+    arg1: 0.2,
+    arg2: -0.1,
+    output: 0.3,
   }].forEach((el) => {
     test(`${el.arg1} - ${el.arg2} = ${el.output}`, () => {
       expect(floatUtil.subtract(el.arg1, el.arg2)).toBe(el.output);
@@ -63,6 +71,10 @@ describe('乘法', () => {
     arg1: 0.7,
     arg2: 180,
     output: 126,
+  }, {
+    arg1: -0.7,
+    arg2: 180,
+    output: -126,
   }, {
     arg1: 9.7,
     arg2: 100,
@@ -90,6 +102,10 @@ describe('除法', () => {
     arg1: 0.3,
     arg2: 0.1,
     output: 3,
+  }, {
+    arg1: -0.3,
+    arg2: 0.1,
+    output: -3,
   }, {
     arg1: 0.69,
     arg2: 10,

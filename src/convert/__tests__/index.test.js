@@ -4,6 +4,7 @@ import yuanToFen from '../yuanToFen';
 import numberToCn from '../numberToCn';
 import currencyToCn from '../currencyToCn';
 import combination from '../combination';
+import toThousands from '../toThousands';
 
 describe('数据容量单位换算', () => {
   const testMap = [{
@@ -82,8 +83,17 @@ describe('分转化成元', () => {
     input: '',
     output: '0.00',
   }, {
+    input: 0.2,
+    output: '0.00',
+  }, {
+    input: .2, // eslint-disable-line no-floating-decimal
+    output: '0.00',
+  }, {
     input: '0.2',
     output: '0.00',
+  }, {
+    input: '-0.2',
+    output: '-0.00',
   }, {
     input: '2.0',
     output: '0.02',
@@ -114,8 +124,16 @@ describe('分转化成元', () => {
   test('去掉小数末尾多余的零', () => {
     expect(fenToYuan(2000, '0', true)).toBe('20');
   });
+  test('error', () => {
+    expect(fenToYuan('.2', '--')).toBe('--');
+    expect(fenToYuan('-.2', '--')).toBe('--');
+    expect(fenToYuan('null', '--')).toBe('--');
+    expect(fenToYuan('9.007199254740992e+21', '--')).toBe('--');
+  });
   test('空值格式化', () => {
     expect(fenToYuan(null, '--')).toBe('--');
+    expect(fenToYuan('', '--')).toBe('--');
+    expect(fenToYuan(undefined, '--')).toBe('--');
   });
 });
 
@@ -151,16 +169,36 @@ describe('元转化为分', () => {
     input: '0.1',
     output: '10',
   }, {
+    input: 0.1,
+    output: '10',
+  }, {
+    input: .1, // eslint-disable-line no-floating-decimal
+    output: '10',
+  }, {
     input: '10',
     output: '1000',
+  }, {
+    input: '10.0201',
+    output: '1002',
+  }, {
+    input: '-10.0201',
+    output: '-1002',
   }];
   testMap.forEach((el) => {
     test(`${el.input} => ${el.output}`, () => {
       expect(yuanToFen(el.input)).toBe(el.output);
     });
   });
+  test('error', () => {
+    expect(yuanToFen('.2', '--')).toBe('--');
+    expect(yuanToFen('-.2', '--')).toBe('--');
+    expect(yuanToFen('null', '--')).toBe('--');
+    expect(yuanToFen('9.007199254740992e+21', '--')).toBe('--');
+  });
   test('空值格式化', () => {
     expect(yuanToFen(null, '--')).toBe('--');
+    expect(yuanToFen('', '--')).toBe('--');
+    expect(yuanToFen(undefined, '--')).toBe('--');
   });
 });
 
@@ -245,8 +283,14 @@ describe('阿拉伯数字转中文', () => {
   });
   test('数据错误', () => {
     expect(numberToCn()).toBe('数据错误');
+    expect(numberToCn(null)).toBe('数据错误');
+    expect(numberToCn('')).toBe('数据错误');
+    expect(numberToCn(undefined)).toBe('数据错误');
     expect(numberToCn('-12')).toBe('数据错误');
     expect(numberToCn('12x')).toBe('数据错误');
+    expect(numberToCn('.2')).toBe('数据错误');
+    expect(numberToCn('-.2')).toBe('数据错误');
+    expect(numberToCn('9.007199254740992e+21')).toBe('数据错误');
   });
   test('边界值', () => {
     expect(numberToCn(1000000000000)).toBe('超大数字');
@@ -268,6 +312,12 @@ describe('数字金额转换为中文人民币大写', () => {
     output: '零壹分',
   }, {
     input: '0.10',
+    output: '壹角',
+  }, {
+    input: 0.1,
+    output: '壹角',
+  }, {
+    input: .1, // eslint-disable-line no-floating-decimal
     output: '壹角',
   }, {
     input: '1.01',
@@ -323,9 +373,14 @@ describe('数字金额转换为中文人民币大写', () => {
   test('错误输入', () => {
     expect(currencyToCn('1x')).toBe('数据错误');
     expect(currencyToCn('-12')).toBe('数据错误');
+    expect(currencyToCn('.2')).toBe('数据错误');
+    expect(currencyToCn('9.007199254740992e+21')).toBe('数据错误');
   });
   test('空值输入', () => {
     expect(currencyToCn()).toBe('零元整');
+    expect(currencyToCn(undefined)).toBe('零元整');
+    expect(currencyToCn(null)).toBe('零元整');
+    expect(currencyToCn('')).toBe('零元整');
   });
   test('空值格式化', () => {
     expect(currencyToCn('', '--')).toBe('--');
@@ -354,5 +409,63 @@ describe('列出n个数组所有组合', () => {
   ];
   test('combination', () => {
     expect(combination(source)).toEqual(result);
+  });
+});
+
+describe('数字千位符分隔', () => {
+  const testMap = [{
+    input: 12,
+    output: '12',
+  }, {
+    input: 0.2,
+    output: '0.2',
+  }, {
+    input: .2, // eslint-disable-line no-floating-decimal
+    output: '0.2',
+  }, {
+    input: '12',
+    output: '12',
+  }, {
+    input: '123',
+    output: '123',
+  }, {
+    input: '1234',
+    output: '1,234',
+  }, {
+    input: '12345',
+    output: '12,345',
+  }, {
+    input: '123456',
+    output: '123,456',
+  }, {
+    input: '1234567',
+    output: '1,234,567',
+  }, {
+    input: '1234.56',
+    output: '1,234.56',
+  }, {
+    input: '1234.5678',
+    output: '1,234.5678',
+  }, {
+    input: '-1234.5678',
+    output: '-1,234.5678',
+  }, {
+    input: '9.007199254740992e+21',
+    output: '9.007199254740992e+21',
+  }];
+  testMap.forEach((el) => {
+    test(`${el.input} => ${el.output}`, () => {
+      expect(toThousands(el.input)).toBe(el.output);
+    });
+  });
+  test('error', () => {
+    expect(toThousands()).toBe('');
+    expect(toThousands(undefined)).toBe('');
+    expect(toThousands(null)).toBe('');
+    expect(toThousands('')).toBe('');
+    expect(toThousands('.2')).toBe('');
+    expect(toThousands('-.2')).toBe('');
+    expect(toThousands('x12')).toBe('');
+    expect(toThousands('1.2.')).toBe('');
   });
 });
