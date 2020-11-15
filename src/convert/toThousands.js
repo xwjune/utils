@@ -2,7 +2,6 @@
  * 数字千位符分隔
  *
  * @param {Number} value - 数字
- * @param {String} [format=''] - 格式化
  * @returns {String}
  * @example
  *
@@ -14,9 +13,9 @@
  */
 import { isNumber } from '../check/number';
 
-export default function toThousands(value, format = '') {
+export default function toThousands(value) {
   if (!isNumber(value)) {
-    return format;
+    return '';
   }
   let str = value.toString();
   const regExp = new RegExp('^(-?[0-9]+)([0-9]{3})');
@@ -26,10 +25,10 @@ export default function toThousands(value, format = '') {
   return str;
 }
 
-// function toThousands(value, format = '') {
+// function toThousands(value) {
 //   const n = Number(value); // Number()、Nubmer('')、Number(null) => 0，Number(undefined) => NaN
 //   if (value === '' || value === null || Number.isNaN(n)) {
-//     return format;
+//     return '';
 //   }
 //   let str = n.toString();
 //   const regExp = new RegExp('^(-?[0-9]+)([0-9]{3})');

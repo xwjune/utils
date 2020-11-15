@@ -489,19 +489,32 @@ convert.bytesToSize(1024 * 1024, 2); // 1.00MB
 convert.bytesToSize('32g'); // 0B
 ```
 
-### fenToYuan(value, [format='0.00'], [cutZero=false])
+### fenToYuan(value, options)
 分转化成元
+
+#### API
+| Property | Description | Type | Default |
+| :------- | :---------- | :--- | :------ |
+| value | 分 | string \| number | - |
+| options | 配置参数 | object | {} |
+| options.format | 空数据格式化 | string  | '0.00' |
+| options.cutZero | 是否去掉小数末尾多余的零 | boolean  | false |
+| options.toThousands | 是否使用千位分隔符 | boolean | false |
 
 ```JavaScript
 convert.fenToYuan(2000); // 20.00
-
-convert.fenToYuan(2000, '0', true); // 20 去掉小数末尾多余的零
 
 convert.fenToYuan(2000.45); // 20.00 非正确格式，舍去小数部分
 
 convert.fenToYuan(); // 0.00
 
-convert.fenToYuan(null, '--'); // --
+convert.fenToYuan(undefined, { format: '--' }); // -- 空数据格式化
+
+fenToYuan(2000, { cutZero: true }); // 20 去掉小数末尾多余的零
+
+fenToYuan(300000, { toThousands: true }); // 3,000 数字千位符分隔
+
+fenToYuan('num'); // '' 错误数据
 ```
 
 ### yuanToFen(value, [format='0'])
@@ -512,11 +525,13 @@ convert.yuanToFen(20); // 2000
 
 convert.yuanToFen(0.02); // 2
 
-convert.yuanToFen(0.002); // 0
+convert.yuanToFen(0.002); // 0 非正确格式
 
 convert.yuanToFen(); // 0
 
-stringUtil.yuanToFen(null, '--'); // --
+convert.yuanToFen(undefined, '--'); // -- 空数据格式化
+
+convert.yuanToFen('num'); // '' 错误数据
 ```
 
 ### numberToCn(value)
@@ -550,6 +565,8 @@ convert.numberToCn(1000000000000); // 超大数字
 convert.currencyToCn(0); // 零元整
 
 convert.currencyToCn(); // 零元整
+
+convert.currencyToCn(undefined, '--'); // -- 空数据格式化
 
 convert.currencyToCn(100000000); // 壹亿元整
 
@@ -590,7 +607,7 @@ combination(arr);
 ];
 ```
 
-### toThousands(value, [format=''])
+### toThousands(value)
 数字千位符分隔
 
 ```JavaScript
