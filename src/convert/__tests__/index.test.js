@@ -80,11 +80,29 @@ describe('数据容量单位换算', () => {
 
 describe('分转化成元', () => {
   const testMap = [{
+    input: undefined,
+    output: '0.00',
+  }, {
+    input: null,
+    output: '0.00',
+  }, {
     input: '',
     output: '0.00',
   }, {
     input: 0.2,
     output: '0.00',
+  }, {
+    input: 0,
+    output: '0.00',
+  }, {
+    input: '0',
+    output: '0.00',
+  }, {
+    input: -0,
+    output: '0.00',
+  }, {
+    input: '-0',
+    output: '-0.00',
   }, {
     input: .2, // eslint-disable-line no-floating-decimal
     output: '0.00',
@@ -122,23 +140,37 @@ describe('分转化成元', () => {
     });
   });
   test('去掉小数末尾多余的零', () => {
-    expect(fenToYuan(2000, '0', true)).toBe('20');
+    expect(fenToYuan(2000, { cutZero: true })).toBe('20');
+  });
+  test('数字千位符分隔', () => {
+    expect(fenToYuan(200000, { toThousands: true })).toBe('2,000.00');
+    expect(fenToYuan(200000, { toThousands: true, cutZero: true })).toBe('2,000');
+    expect(fenToYuan(200022, { toThousands: true })).toBe('2,000.22');
   });
   test('error', () => {
-    expect(fenToYuan('.2', '--')).toBe('--');
-    expect(fenToYuan('-.2', '--')).toBe('--');
-    expect(fenToYuan('null', '--')).toBe('--');
-    expect(fenToYuan('9.007199254740992e+21', '--')).toBe('--');
+    expect(fenToYuan('.2')).toBe('');
+    expect(fenToYuan('-.2')).toBe('');
+    expect(fenToYuan('9.007199254740992e+21')).toBe('');
+    expect(fenToYuan('null')).toBe('');
+    expect(fenToYuan('num')).toBe('');
   });
-  test('空值格式化', () => {
-    expect(fenToYuan(null, '--')).toBe('--');
-    expect(fenToYuan('', '--')).toBe('--');
-    expect(fenToYuan(undefined, '--')).toBe('--');
+  test('空数据', () => {
+    expect(fenToYuan()).toBe('0.00');
+    expect(fenToYuan(undefined)).toBe('0.00');
+    expect(fenToYuan(null)).toBe('0.00');
+    expect(fenToYuan('')).toBe('0.00');
+    expect(fenToYuan(undefined, { format: '--' })).toBe('--');
   });
 });
 
 describe('元转化为分', () => {
   const testMap = [{
+    input: undefined,
+    output: '0',
+  }, {
+    input: null,
+    output: '0',
+  }, {
     input: '',
     output: '0',
   }, {
@@ -169,6 +201,15 @@ describe('元转化为分', () => {
     input: '0.1',
     output: '10',
   }, {
+    input: 0,
+    output: '0',
+  }, {
+    input: -0,
+    output: '0',
+  }, {
+    input: '-0',
+    output: '-0',
+  }, {
     input: 0.1,
     output: '10',
   }, {
@@ -190,10 +231,10 @@ describe('元转化为分', () => {
     });
   });
   test('error', () => {
-    expect(yuanToFen('.2', '--')).toBe('--');
-    expect(yuanToFen('-.2', '--')).toBe('--');
-    expect(yuanToFen('null', '--')).toBe('--');
-    expect(yuanToFen('9.007199254740992e+21', '--')).toBe('--');
+    expect(yuanToFen('.2')).toBe('');
+    expect(yuanToFen('-.2')).toBe('');
+    expect(yuanToFen('null')).toBe('');
+    expect(yuanToFen('9.007199254740992e+21')).toBe('');
   });
   test('空值格式化', () => {
     expect(yuanToFen(null, '--')).toBe('--');
@@ -299,6 +340,15 @@ describe('阿拉伯数字转中文', () => {
 
 describe('数字金额转换为中文人民币大写', () => {
   const testMap = [{
+    input: undefined,
+    output: '零元整',
+  }, {
+    input: null,
+    output: '零元整',
+  }, {
+    input: '',
+    output: '零元整',
+  }, {
     input: '0',
     output: '零元整',
   }, {
@@ -383,7 +433,7 @@ describe('数字金额转换为中文人民币大写', () => {
     expect(currencyToCn('')).toBe('零元整');
   });
   test('空值格式化', () => {
-    expect(currencyToCn('', '--')).toBe('--');
+    expect(currencyToCn(undefined, '--')).toBe('--');
   });
   test('边界值', () => {
     expect(currencyToCn(1000000000000)).toBe('超大金额');

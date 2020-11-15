@@ -3,7 +3,7 @@
  * 为防止浮点数运算精度丢失，故采用字符串形式解析
  *
  * @param {Number} value - 元
- * @param {String} [format='0'] - 格式化
+ * @param {String} [format='0'] - 空数据格式化
  * @returns {String} 分
  * @example
  *
@@ -13,18 +13,28 @@
  * yuanToFen(0.02);
  * // => 2
  *
- * yuanToFen(0.002);
+ * yuanToFen(0.002); // 非正确格式
  * // => 0
  *
  * yuanToFen();
  * // => 0
  *
- * yuanToFen(null, '--');
+ * yuanToFen(undefined, '--'); // 空数据格式化
  * // => --
+ *
+ * yuanToFen('num'); // 错误数据
+ * // => ''
  */
 export default function yuanToFen(value, format = '0') {
-  if (!/^-?(0|[1-9][0-9]*)(\.[0-9]+)?$/.test(value)) {
+  if (
+    value === undefined
+    || value === null
+    || value === ''
+  ) {
     return format;
+  }
+  if (!/^-?(0|[1-9][0-9]*)(\.[0-9]+)?$/.test(value)) {
+    return '';
   }
 
   const str = value.toString();
