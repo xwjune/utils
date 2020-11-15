@@ -53,11 +53,13 @@ describe('邮编校验', () => {
 });
 
 describe('空校验', () => {
-  test('isNull()', () => {
+  test('correct', () => {
     expect(check.isNull()).toBeTruthy();
-  });
-  test("isNull('null', ['null', '(null)'])", () => {
-    expect(check.isNull('null', ['null', '(null)'])).toBeTruthy();
+    expect(check.isNull(undefined)).toBeTruthy();
+    expect(check.isNull(null)).toBeTruthy();
+    expect(check.isNull('')).toBeTruthy();
+    expect(check.isNull('null')).toBeFalsy();
+    expect(check.isNull('undefined')).toBeFalsy();
   });
 });
 

@@ -25,3 +25,16 @@ export default function toThousands(value, format = '') {
   }
   return str;
 }
+
+// function toThousands(value, format = '') {
+//   const n = Number(value); // Number()、Nubmer('')、Number(null) => 0，Number(undefined) => NaN
+//   if (value === '' || value === null || Number.isNaN(n)) {
+//     return format;
+//   }
+//   let str = n.toString();
+//   const regExp = new RegExp('^(-?[0-9]+)([0-9]{3})');
+//   while (regExp.test(str)) {
+//     str = str.replace(regExp, '$1,$2');
+//   }
+//   return str;
+// }
