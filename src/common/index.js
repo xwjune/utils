@@ -17,7 +17,9 @@
  * getWinScrollWidth - 获取窗口可视区内容的总宽度
  * getWinScrollTop - 获取窗口可视区滚动条垂直偏移
  * getWinScrollLeft - 获取窗口可视区滚动条水平偏移
+ * getBoundingClientRect - 获取元素相对于窗口可视区的位置
  * selectText - 选中文本
+ * getStyle - 获取元素样式
  */
 import {
   getCookie,
@@ -35,8 +37,10 @@ import {
   getWinScrollWidth,
   getWinScrollTop,
   getWinScrollLeft,
+  getElementOffset,
 } from './document';
 import selectText from './selectText';
+import getStyle from './getStyle';
 
 /**
  * 生成uuid
@@ -166,5 +170,7 @@ export default {
   getWinScrollWidth,
   getWinScrollTop,
   getWinScrollLeft,
+  getElementOffset,
   selectText,
+  getStyle,
 };

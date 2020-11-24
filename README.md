@@ -714,6 +714,9 @@ common.setCookie('name', 'value', {
 ### getWinScrollLeft()
 获取窗口可视区滚动条水平偏移
 
+### getElementOffset(element)
+获取元素相对于窗口可视区的位置
+
 ### selectText(textNode, [start=0], [length])
 选中文本
 
@@ -726,6 +729,10 @@ common.selectText(document.querySelector('input'), 2, 0);
 // 选中所有
 common.selectText(document.querySelector('input'));
 ```
+
+### getStyle(element, name)
+获取元素样式
+
 ***
 
 ## crypt
