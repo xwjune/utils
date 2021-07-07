@@ -26,15 +26,19 @@ export function isNumber(value) {
   }
   if (
     typeof value === 'string'
-    && value !== ''
-    && value[0] !== '.'
-    && !value.startsWith('-.')
     && !Number.isNaN(Number(value))
+    && value !== '' // Number('') => 0
+    && !value.startsWith('.') // Number('.2') => 0.2
+    && !value.startsWith('-.') // Number('-.2') => -0.2
   ) {
     return true;
   }
   return false;
 }
+// 正则表达式
+// export function isNumber(value) {
+//   return !/^-?(0|[1-9][0-9]*)(\.[0-9]+)?$/.test(value);
+// }
 
 /**
  * 整数校验
