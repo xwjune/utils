@@ -86,8 +86,10 @@ function dataConvert(source = [], options = {}) {
   });
 
   return Object.values(dataObj).filter((item) => {
-    if (item[pId] !== rootId) { // 非根节点子节点集合
-      if (dataObj[item[pId]]) { // 父节点是否为有效值
+    if (item[pId] !== rootId) {
+      // 非根节点子节点集合
+      if (dataObj[item[pId]]) {
+        // 父节点是否为有效值
         if (!dataObj[item[pId]][children]) {
           dataObj[item[pId]][children] = [];
         }
