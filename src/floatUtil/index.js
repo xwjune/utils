@@ -99,7 +99,7 @@ export default {
    * @returns {Number|String} 运算结果
    */
   add(arg1, arg2, format = '') {
-    if (isNumber(arg1, false) && isNumber(arg2, false)) {
+    if (isNumber(arg1) && isNumber(arg2)) {
       return operation(arg1, arg2, 'add');
     }
     return format;
@@ -113,7 +113,7 @@ export default {
    * @returns {Number|String} 运算结果
    */
   subtract(arg1, arg2, format = '') {
-    if (isNumber(arg1, false) && isNumber(arg2, false)) {
+    if (isNumber(arg1) && isNumber(arg2)) {
       return operation(arg1, arg2, 'subtract');
     }
     return format;
@@ -127,7 +127,7 @@ export default {
    * @returns {Number|String} 运算结果
    */
   multiply(arg1, arg2, format = '') {
-    if (isNumber(arg1, false) && isNumber(arg2, false)) {
+    if (isNumber(arg1) && isNumber(arg2)) {
       return multiply(arg1, arg2);
     }
     return format;
@@ -141,7 +141,7 @@ export default {
    * @returns {Number|String} 运算结果
    */
   divide(arg1, arg2, format = '') {
-    if (isNumber(arg1, false) && isNumber(arg2, false)) {
+    if (isNumber(arg1) && isNumber(arg2)) {
       return operation(arg1, arg2, 'divide');
     }
     return format;
