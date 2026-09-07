@@ -19,10 +19,16 @@
  * fenToYuan(2000.45); // 非正确格式，舍去小数部分
  * // => 20.00
  *
+ * fenToYuan(1e21); // Number 科学计数法先展开再转换
+ * // => 10000000000000000000.00
+ *
+ * fenToYuan('-0'); // 负零归一化为 0.00
+ * // => 0.00
+ *
  * fenToYuan();
  * // => 0.00
  *
- * fenToYuan(undefined, { format: '-- }); // 空数据格式化
+ * fenToYuan(undefined, { format: '--' }); // 空数据格式化
  * // => --
  *
  * fenToYuan(300000, { toThousands: true }); // 数字千位符分隔
@@ -31,6 +37,8 @@
  * fenToYuan('num'); // 错误数据
  * // => ''
  */
+import { expandNumber } from './util';
+
 export default function fenToYuan(value, options = {}) {
   const {
     format = '0.00', // 空数据格式化
@@ -44,11 +52,12 @@ export default function fenToYuan(value, options = {}) {
   ) {
     return format;
   }
-  if (!/^-?(0|[1-9][0-9]*)(\.[0-9]+)?$/.test(value)) {
+  // Number 先展开为十进制字符串，避免科学计数法【如 String(1e-7) === '1e-7'】被误判为数据错误
+  let str = typeof value === 'number' ? expandNumber(value) : value.toString();
+  if (!/^-?(0|[1-9][0-9]*)(\.[0-9]+)?$/.test(str)) {
     return '';
   }
 
-  let str = value.toString();
   let result = '';
   if (str[0] === '-') {
     result += '-';
@@ -69,6 +78,11 @@ export default function fenToYuan(value, options = {}) {
       break;
     default:
       result += `${str.substr(0, len - 2)}.${str.substr(len - 2)}`;
+  }
+
+  // 特殊数据处理：-0.00 => 0.00
+  if (result === '-0.00') {
+    result = '0.00';
   }
 
   // Cut zero at the ending.

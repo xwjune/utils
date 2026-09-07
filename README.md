@@ -128,9 +128,15 @@ check.isNumber('-20'); // true
 
 check.isNumber('.2'); // false
 
+check.isNumber(' 20 '); // false（仅接受十进制及科学计数法字面量）
+
 check.isNumber(.2); // true
 
-check.isNumber(9.007199254740992e+21); // true
+check.isNumber(1e+21); // true
+
+check.isNumber(NaN); // false（非有限数字）
+
+check.isNumber('Infinity'); // false
 ```
 
 ### isInteger(value)
@@ -487,6 +493,10 @@ convert.bytesToSize(10240); // 10.0KB
 convert.bytesToSize(1024 * 1024, 2); // 1.00MB
 
 convert.bytesToSize('32g'); // 0B
+
+convert.bytesToSize(1e-7); // 0.0000001B（Number 科学计数法先展开再转换）
+
+convert.bytesToSize(NaN); // 0B（非有限数字）
 ```
 
 ### fenToYuan(value, options)

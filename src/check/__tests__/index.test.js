@@ -71,7 +71,7 @@ describe('数字校验', () => {
     expect(check.isNumber()).toBeFalsy();
   });
   test('correct', () => {
-    ['20', '-20', '0.2'].forEach((el) => {
+    ['20', '-20', '+20', '0.2', '-0'].forEach((el) => {
       expect(check.isNumber(el)).toBeTruthy();
     });
   });
@@ -82,8 +82,18 @@ describe('数字校验', () => {
     expect(check.isNumber('.2')).toBeFalsy();
   });
   test('科学计数法数字', () => {
-    expect(check.isNumber(9.007199254740992e+21)).toBeTruthy();
-    expect(check.isNumber('9.007199254740992e+21')).toBeTruthy();
+    expect(check.isNumber(1e+21)).toBeTruthy();
+    expect(check.isNumber('1e+21')).toBeTruthy();
+  });
+  test('非有限数字', () => {
+    [NaN, Infinity, -Infinity, 'Infinity', '-Infinity', '1e999'].forEach((el) => {
+      expect(check.isNumber(el)).toBeFalsy();
+    });
+  });
+  test('非法数字字符串', () => {
+    ['+.2', ' ', ' 20 ', '0x10', '0b101', '0o17', '00.2', '020', '1.', '1e'].forEach((el) => {
+      expect(check.isNumber(el)).toBeFalsy();
+    });
   });
 });
 

@@ -1,5 +1,7 @@
 /**
  * 数字校验
+ * 字符串仅接受十进制及科学计数法字面量【如 '0x10'、' 20 '、'020' 均视为非法】
+ * NaN、Infinity 等非有限数字视为非法【如 Number('Infinity') === Infinity】
  *
  * @param {*} value - The value to check.
  * @return {Boolean} Return `true` if validated, else `false`.
@@ -11,25 +13,45 @@
  * isNumber('-20');
  * // => true
  *
+ * isNumber('+20');
+ * // => true
+ *
  * isNumber('.2');
  * // => false
  *
  * isNumber(.2);
  * // => true
  *
- * isNumber(9.007199254740992e+21);
+ * isNumber(1e+21); // 1000000000000000000000
  * // => true
+ *
+ * isNumber('1e3');
+ * // => true
+ *
+ * isNumber('0x10');
+ * // => false
+ *
+ * isNumber(' 20 ');
+ * // => false
+ *
+ * isNumber(NaN);
+ * // => false
+ *
+ * isNumber(Infinity);
+ * // => false
+ *
+ * isNumber('Infinity');
+ * // => false
  */
 export function isNumber(value) {
   if (typeof value === 'number') {
-    return true;
+    return Number.isFinite(value);
   }
   if (
     typeof value === 'string'
-    && !Number.isNaN(Number(value))
-    && value !== '' // Number('') => 0
-    && !value.startsWith('.') // Number('.2') => 0.2
-    && !value.startsWith('-.') // Number('-.2') => -0.2
+    // 白名单:普通十进制及科学计数法【Number() 还接受空白、进制字面量、前导零等,黑名单列举不全】
+    && /^[+-]?(0|[1-9][0-9]*)(\.[0-9]+)?([eE][+-]?[0-9]+)?$/.test(value)
+    && Number.isFinite(Number(value)) // '1e999' => Infinity
   ) {
     return true;
   }

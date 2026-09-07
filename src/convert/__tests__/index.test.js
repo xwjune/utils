@@ -1,10 +1,41 @@
+import { expandNumber } from '../util';
 import bytesToSize from '../bytesToSize';
 import fenToYuan from '../fenToYuan';
 import yuanToFen from '../yuanToFen';
-import numberToCn, { expandNumber } from '../numberToCn';
+import numberToCn from '../numberToCn';
 import currencyToCn from '../currencyToCn';
 import combination from '../combination';
 import toThousands from '../toThousands';
+
+describe('科学计数法展开', () => {
+  const testMap = [{
+    input: 1.5,
+    output: '1.5', // 非科学计数法原样返回
+  }, {
+    input: 1e-7,
+    output: '0.0000001', // 小数点前移到数字串开头之前
+  }, {
+    input: -1e-7,
+    output: '-0.0000001',
+  }, {
+    input: 1e21,
+    output: '1000000000000000000000', // 小数点后移到数字串末尾之后
+  }, {
+    input: -1.5e21,
+    output: '-1500000000000000000000',
+  }];
+  testMap.forEach((el) => {
+    test(`${el.input} => ${el.output}`, () => {
+      expect(expandNumber(el.input)).toBe(el.output);
+    });
+  });
+  test('小数点落在数字串中间', () => {
+    // JS 对 Number 只在 >=1e21 或 <1e-6 时才输出科学计数法，小数点必然移出数字串，
+    // 中间分支只能直接传入科学计数法字面量覆盖
+    expect(expandNumber('12.34e1')).toBe('123.4');
+    expect(expandNumber('-12.34e-1')).toBe('-1.234');
+  });
+});
 
 describe('数据容量单位换算', () => {
   const testMap = [{
@@ -22,6 +53,24 @@ describe('数据容量单位换算', () => {
   }, {
     input: 0.3,
     output: '0.3B',
+  }, {
+    input: 1e-7, // Number 科学计数法先展开再转换
+    output: '0.0000001B',
+  }, {
+    input: '1e-7', // 字符串科学计数法同样展开
+    output: '0.0000001B',
+  }, {
+    input: NaN, // 非有限数字
+    output: '0B',
+  }, {
+    input: Infinity,
+    output: '0B',
+  }, {
+    input: 'Infinity', // Number('Infinity') === Infinity
+    output: '0B',
+  }, {
+    input: '1e999', // Number('1e999') === Infinity
+    output: '0B',
   }, {
     input: 10000,
     output: '9.8KB',
@@ -76,6 +125,16 @@ describe('数据容量单位换算', () => {
   test('保留两位有效数：10240 => 10.00KB', () => {
     expect(bytesToSize(10240, 2)).toBe('10.00KB');
   });
+  test('非有限数字返回 format', () => {
+    expect(bytesToSize(NaN, 1, '--')).toBe('--');
+    expect(bytesToSize(Infinity, 1, '--')).toBe('--');
+    expect(bytesToSize('Infinity', 1, '--')).toBe('--');
+  });
+  test('digit 非法值回退默认 1，不抛 RangeError', () => {
+    expect(bytesToSize(10000, -1)).toBe('9.8KB');
+    expect(bytesToSize(10000, 101)).toBe('9.8KB');
+    expect(bytesToSize(10000, 'x')).toBe('9.8KB');
+  });
 });
 
 describe('分转化成元', () => {
@@ -102,7 +161,16 @@ describe('分转化成元', () => {
     output: '0.00',
   }, {
     input: '-0',
-    output: '-0.00',
+    output: '0.00',
+  }, {
+    input: -0.4, // 舍去小数部分后为负零
+    output: '0.00',
+  }, {
+    input: 1e-7, // Number 科学计数法先展开再转换
+    output: '0.00',
+  }, {
+    input: 1e21, // Number 科学计数法先展开再转换
+    output: '10000000000000000000.00',
   }, {
     input: .2, // eslint-disable-line no-floating-decimal
     output: '0.00',
@@ -110,8 +178,8 @@ describe('分转化成元', () => {
     input: '0.2',
     output: '0.00',
   }, {
-    input: '-0.2',
-    output: '-0.00',
+    input: '-0.2', // 舍去小数部分后为负零
+    output: '0.00',
   }, {
     input: '2.0',
     output: '0.02',
@@ -150,7 +218,7 @@ describe('分转化成元', () => {
   test('error', () => {
     expect(fenToYuan('.2')).toBe('');
     expect(fenToYuan('-.2')).toBe('');
-    expect(fenToYuan('9.007199254740992e+21')).toBe('');
+    expect(fenToYuan('1e+21')).toBe('');
     expect(fenToYuan('null')).toBe('');
     expect(fenToYuan('num')).toBe('');
   });
@@ -208,7 +276,16 @@ describe('元转化为分', () => {
     output: '0',
   }, {
     input: '-0',
-    output: '-0',
+    output: '0',
+  }, {
+    input: -0.001, // 只保留两位小数后为负零
+    output: '0',
+  }, {
+    input: 1e-7, // Number 科学计数法先展开再转换
+    output: '0',
+  }, {
+    input: 1e21, // Number 科学计数法先展开再转换
+    output: '100000000000000000000000',
   }, {
     input: 0.1,
     output: '10',
@@ -234,7 +311,8 @@ describe('元转化为分', () => {
     expect(yuanToFen('.2')).toBe('');
     expect(yuanToFen('-.2')).toBe('');
     expect(yuanToFen('null')).toBe('');
-    expect(yuanToFen('9.007199254740992e+21')).toBe('');
+    expect(yuanToFen('1e2')).toBe(''); // 字符串科学计数法不展开，视为错误数据
+    expect(yuanToFen('1e+21')).toBe('');
   });
   test('空值格式化', () => {
     expect(yuanToFen(null, '--')).toBe('--');
@@ -341,42 +419,12 @@ describe('阿拉伯数字转中文', () => {
     expect(numberToCn('12x')).toBe('数据错误');
     expect(numberToCn('.2')).toBe('数据错误');
     expect(numberToCn('-.2')).toBe('数据错误');
-    expect(numberToCn('9.007199254740992e+21')).toBe('数据错误');
+    expect(numberToCn('1e+21')).toBe('数据错误');
     expect(numberToCn(-1e-7)).toBe('数据错误'); // 展开为 '-0.0000001'，负数不合法
   });
   test('边界值', () => {
     expect(numberToCn(1000000000000)).toBe('超大数字');
-    expect(numberToCn(9.007199254740992e+21)).toBe('超大数字'); // 展开后整数部分 22 位
-  });
-});
-
-describe('科学计数法展开', () => {
-  const testMap = [{
-    input: 1.5,
-    output: '1.5', // 非科学计数法原样返回
-  }, {
-    input: 1e-7,
-    output: '0.0000001', // 小数点前移到数字串开头之前
-  }, {
-    input: -1e-7,
-    output: '-0.0000001',
-  }, {
-    input: 1e21,
-    output: '1000000000000000000000', // 小数点后移到数字串末尾之后
-  }, {
-    input: -1.5e21,
-    output: '-1500000000000000000000',
-  }];
-  testMap.forEach((el) => {
-    test(`${el.input} => ${el.output}`, () => {
-      expect(expandNumber(el.input)).toBe(el.output);
-    });
-  });
-  test('小数点落在数字串中间', () => {
-    // JS 对 Number 只在 >=1e21 或 <1e-6 时才输出科学计数法，小数点必然移出数字串，
-    // 中间分支只能直接传入科学计数法字面量覆盖
-    expect(expandNumber('12.34e1')).toBe('123.4');
-    expect(expandNumber('-12.34e-1')).toBe('-1.234');
+    expect(numberToCn(1e+21)).toBe('超大数字'); // 1000000000000000000000
   });
 });
 
@@ -466,7 +514,7 @@ describe('数字金额转换为中文人民币大写', () => {
     expect(currencyToCn('1x')).toBe('数据错误');
     expect(currencyToCn('-12')).toBe('数据错误');
     expect(currencyToCn('.2')).toBe('数据错误');
-    expect(currencyToCn('9.007199254740992e+21')).toBe('数据错误');
+    expect(currencyToCn('1e+21')).toBe('数据错误');
   });
   test('空值输入', () => {
     expect(currencyToCn()).toBe('零元整');
@@ -555,8 +603,8 @@ describe('数字千位符分隔', () => {
     input: '-1234.5678',
     output: '-1,234.5678',
   }, {
-    input: '9.007199254740992e+21',
-    output: '9.007199254740992e+21',
+    input: '1e+21',
+    output: '1e+21',
   }];
   testMap.forEach((el) => {
     test(`${el.input} => ${el.output}`, () => {
@@ -572,5 +620,7 @@ describe('数字千位符分隔', () => {
     expect(toThousands('-.2')).toBe('');
     expect(toThousands('x12')).toBe('');
     expect(toThousands('1.2.')).toBe('');
+    expect(toThousands(NaN)).toBe(''); // 非有限数字，此前会原样返回 'NaN'
+    expect(toThousands(Infinity)).toBe('');
   });
 });

@@ -16,6 +16,12 @@
  * yuanToFen(0.002); // 非正确格式
  * // => 0
  *
+ * yuanToFen(1e-7); // Number 科学计数法先展开再转换
+ * // => 0
+ *
+ * yuanToFen('-0.00'); // 负零归一化为 0
+ * // => 0
+ *
  * yuanToFen();
  * // => 0
  *
@@ -25,6 +31,8 @@
  * yuanToFen('num'); // 错误数据
  * // => ''
  */
+import { expandNumber } from './util';
+
 export default function yuanToFen(value, format = '0') {
   if (
     value === undefined
@@ -33,11 +41,12 @@ export default function yuanToFen(value, format = '0') {
   ) {
     return format;
   }
-  if (!/^-?(0|[1-9][0-9]*)(\.[0-9]+)?$/.test(value)) {
+  // Number 先展开为十进制字符串，避免科学计数法【如 String(1e-7) === '1e-7'】被误判为数据错误
+  const str = typeof value === 'number' ? expandNumber(value) : value.toString();
+  if (!/^-?(0|[1-9][0-9]*)(\.[0-9]+)?$/.test(str)) {
     return '';
   }
 
-  const str = value.toString();
   let result = '';
   if (str.indexOf('.') > -1) {
     const strArr = str.split('.');
@@ -61,6 +70,11 @@ export default function yuanToFen(value, format = '0') {
   }
   // 特殊数据处理：000 => 0、 001 => 1、 010 => 10
   result = result.replace(/^(-?)(0{1,2})/, '$1'); // Trim zeros at the beginning.
+
+  // 特殊数据处理：-0 => 0
+  if (result === '-0') {
+    result = '0';
+  }
 
   return result;
 }
