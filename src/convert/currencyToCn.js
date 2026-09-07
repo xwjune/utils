@@ -45,7 +45,7 @@
  * currencyToCn(1.10);
  * // => 壹元壹角
  */
-import numberToCn from './numberToCn';
+import numberToCn, { expandNumber } from './numberToCn';
 
 export default function currencyToCn(value, format = '零元整') {
   if (
@@ -55,32 +55,42 @@ export default function currencyToCn(value, format = '零元整') {
   ) {
     return format;
   }
-  if (!/^(0|[1-9][0-9]*)(\.[0-9]+)?$/.test(value)) {
+
+  // Number 先展开为十进制字符串，避免科学计数法【如 String(1e-7) === '1e-7'】被误判为数据错误
+  const str = typeof value === 'number' ? expandNumber(value) : value;
+  if (!/^(0|[1-9][0-9]*)(\.[0-9]+)?$/.test(str)) {
     return '数据错误';
+  }
+
+  const [
+    integral, // 金额整数部分
+    fullDecimal = '', // 完整小数部分
+  ] = str.split('.');
+  // 边界值校验
+  // 不用 Number(value) > 999999999999.99 判断：双精度浮点只有约15~16位十进制有效数字，
+  // 上限附近的最小精度间隔约0.000122，字符串转 Number 会发生舍入——
+  // 如 '999999999999.990001' 实际大于上限，舍入后却与上限相等，'>' 不成立而被漏放。
+  // 入参字符串本身就是精确值，按位数比较无精度问题：
+  // 整数达13位即超限；整数恰为999999999999时，小数前两位为99且第三位起还有非零数字即超限
+  if (
+    integral.length > 12
+    || (
+      integral === '999999999999'
+      && fullDecimal.slice(0, 2) === '99'
+      && Number(fullDecimal.slice(2)) > 0
+    )
+  ) {
+    return '超大金额';
   }
 
   const digits = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖']; // 中文数字
   const decRadices = ['角', '分']; // 小数部分扩展单位
   const cnDollar = '元'; // 金额整数部分后面跟的字符
   const cnInteger = '整'; // 整数金额时后面跟的字符
-  const cnMaxResult = '超大金额'; // 超过最大数的返回值
-  const maxNum = 999999999999.99; // 最大的处理数字
-  let integral = ''; // 金额整数部分
-  let decimal = ''; // 金额小数部分
   let chineseStr = ''; // 返回的中文金额字符串
 
-  value = value.toString();
-  // Greater than the maximum number.
-  if (Number(value) > maxNum) {
-    return cnMaxResult;
-  }
-  if (value.indexOf('.') === -1) {
-    integral = value;
-  } else {
-    [integral, decimal] = value.split('.');
-    // cut down redundant decimal digits that are after the second.
-    decimal = decimal.substr(0, 2);
-  }
+  // cut down redundant decimal digits that are after the second.
+  const decimal = fullDecimal.slice(0, 2); // 金额小数部分【两位】
 
   // Process integral part if it is larger than 0:
   if (Number(integral) > 0) {
@@ -89,9 +99,9 @@ export default function currencyToCn(value, format = '零元整') {
   }
   // Process decimal part:
   if (decimal !== '') {
+    const ds = decimal.substr(-1); // 小数末尾数值
     for (let i = 0, decLen = decimal.length; i < decLen; i++) {
       const d = decimal[i]; // 当前数字
-      const ds = decimal.substr(-1); // 小数末尾数值
       if (d === '0') {
         // 特殊数据处理：x.0【不显示小数】、 x.00【不显示小数】、 x.10【不显示分位】
         if (ds !== '0') {
@@ -135,3 +145,6 @@ export default function currencyToCn(value, format = '零元整') {
 // 100000000 壹亿元整【省略中间所有零】
 // 100000001 壹亿零壹元整【中间省略万】
 // 999999999999.99 玖仟玖佰玖拾玖亿玖仟玖佰玖拾玖万玖仟玖佰玖拾玖元玖角玖分
+// 0.0000001 零元整【Number 科学计数法自动展开，金额只精确到分】
+// 1e21 超大金额【Number 科学计数法自动展开】
+// 999999999999.990001 超大金额【按字符串比较，不受浮点进位影响】

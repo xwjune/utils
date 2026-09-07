@@ -1,7 +1,7 @@
 import bytesToSize from '../bytesToSize';
 import fenToYuan from '../fenToYuan';
 import yuanToFen from '../yuanToFen';
-import numberToCn from '../numberToCn';
+import numberToCn, { expandNumber } from '../numberToCn';
 import currencyToCn from '../currencyToCn';
 import combination from '../combination';
 import toThousands from '../toThousands';
@@ -316,6 +316,16 @@ describe('阿拉伯数字转中文', () => {
   }, {
     input: '999999999999.99',
     output: '玖仟玖佰玖拾玖亿玖仟玖佰玖拾玖万玖仟玖佰玖拾玖点玖玖',
+  }, {
+    // Number 类型入参：走 expandNumber 展开逻辑
+    input: 0.1,
+    output: '零点壹',
+  }, {
+    input: 1008,
+    output: '壹仟零捌',
+  }, {
+    input: 0.0000001, // String(1e-7) === '1e-7'，展开为 '0.0000001'
+    output: '零点零零零零零零壹',
   }];
   testMap.forEach((el) => {
     test(`${el.input} => ${el.output}`, () => {
@@ -332,9 +342,41 @@ describe('阿拉伯数字转中文', () => {
     expect(numberToCn('.2')).toBe('数据错误');
     expect(numberToCn('-.2')).toBe('数据错误');
     expect(numberToCn('9.007199254740992e+21')).toBe('数据错误');
+    expect(numberToCn(-1e-7)).toBe('数据错误'); // 展开为 '-0.0000001'，负数不合法
   });
   test('边界值', () => {
     expect(numberToCn(1000000000000)).toBe('超大数字');
+    expect(numberToCn(9.007199254740992e+21)).toBe('超大数字'); // 展开后整数部分 22 位
+  });
+});
+
+describe('科学计数法展开', () => {
+  const testMap = [{
+    input: 1.5,
+    output: '1.5', // 非科学计数法原样返回
+  }, {
+    input: 1e-7,
+    output: '0.0000001', // 小数点前移到数字串开头之前
+  }, {
+    input: -1e-7,
+    output: '-0.0000001',
+  }, {
+    input: 1e21,
+    output: '1000000000000000000000', // 小数点后移到数字串末尾之后
+  }, {
+    input: -1.5e21,
+    output: '-1500000000000000000000',
+  }];
+  testMap.forEach((el) => {
+    test(`${el.input} => ${el.output}`, () => {
+      expect(expandNumber(el.input)).toBe(el.output);
+    });
+  });
+  test('小数点落在数字串中间', () => {
+    // JS 对 Number 只在 >=1e21 或 <1e-6 时才输出科学计数法，小数点必然移出数字串，
+    // 中间分支只能直接传入科学计数法字面量覆盖
+    expect(expandNumber('12.34e1')).toBe('123.4');
+    expect(expandNumber('-12.34e-1')).toBe('-1.234');
   });
 });
 
@@ -437,6 +479,19 @@ describe('数字金额转换为中文人民币大写', () => {
   });
   test('边界值', () => {
     expect(currencyToCn(1000000000000)).toBe('超大金额');
+    expect(currencyToCn(1e21)).toBe('超大金额');
+  });
+  test('科学计数法数字', () => {
+    expect(currencyToCn(0.0000001)).toBe('零元整');
+    expect(currencyToCn(1.5e-7)).toBe('零元整');
+    // 字符串形式的科学计数法仍视为非法
+    expect(currencyToCn('1e-7')).toBe('数据错误');
+  });
+  test('边界判断不受浮点进位影响', () => {
+    expect(currencyToCn('999999999999.990001')).toBe('超大金额');
+    expect(currencyToCn('999999999999.995')).toBe('超大金额');
+    // 0.990 与 0.99 数值相等，正常转换
+    expect(currencyToCn('999999999999.990')).toBe('玖仟玖佰玖拾玖亿玖仟玖佰玖拾玖万玖仟玖佰玖拾玖元玖角玖分');
   });
 });
 

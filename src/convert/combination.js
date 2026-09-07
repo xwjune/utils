@@ -24,13 +24,10 @@
  * ]
  */
 export default function combination(arr) {
-  return arr.reduce((total, cur) => {
-    const res = [];
-    total.forEach((_total) => {
-      cur.forEach((_cur) => {
-        res.push([..._total, _cur]);
-      });
-    });
-    return res;
-  }, [[]]);
+  // 初始值 [[]] 代表"一个空组合"，之后逐组把选项并入
+  return arr.reduce(
+    // 每个已有组合 × 当前组每个选项，各自生成一个扩展后的新组合
+    (combos, options) => combos.flatMap((combo) => options.map((item) => [...combo, item])),
+    [[]],
+  );
 }
