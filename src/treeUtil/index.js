@@ -13,7 +13,8 @@
  * @param {Object[]} source - 源数据【有层级关系】
  * @param {Object} options - 配置参数
  * @param {String} options.pId - 源数据父主键key
- * @param {String} [options.rootId] - 源数据根节点主键值，将父主键值与之相等的数据视为顶层树节点【缺省此参数，将没有父主键的数据视为顶层树节点】
+ * @param {String} [options.rootId] - 源数据根节点主键值，将父主键值与之相等的数据视为顶层树节点
+ *   【缺省此参数，将父主键值为 undefined/null 的数据视为顶层树节点】
  * @param {String} [options.id='id'] - 源数据主键key
  * @param {String} [options.name='name'] - 源数据名称key
  * @param {String} [options.tId='id'] - 树节点主键key
@@ -63,7 +64,7 @@ function dataConvert(source = [], options = {}) {
     raw = false, // 是否保留所有属性
     otherKeys = [], // 其他需要保留的属性
   } = options;
-  const dataObj = {}; // 缓存数据
+  const dataObj = Object.create(null); // 缓存数据（无原型链，避免主键为 'constructor' 等时误命中原型属性）
   const delPid = !raw && !otherKeys.includes(pId); // 是否删除数据父主键key
 
   // 缓存数据
@@ -82,11 +83,21 @@ function dataConvert(source = [], options = {}) {
         });
       });
     }
+    if (dataObj[item[id]] !== undefined) {
+      // eslint-disable-next-line no-console
+      console.warn(`treeUtil.dataConvert: 源数据存在重复主键「${String(item[id])}」，后者将覆盖前者`);
+    }
     dataObj[item[id]] = obj;
   });
 
+  // 根节点判定：未指定 rootId 时，父主键值为 undefined/null 的数据视为顶层节点；
+  // 指定 rootId 时按字符串归一化比较，兼容数字/字符串主键混用
+  const isRootNode = rootId === undefined
+    ? (item) => item[pId] === undefined || item[pId] === null
+    : (item) => String(item[pId]) === String(rootId);
+
   return Object.values(dataObj).filter((item) => {
-    if (item[pId] !== rootId) {
+    if (!isRootNode(item)) {
       // 非根节点子节点集合
       if (dataObj[item[pId]]) {
         // 父节点是否为有效值
@@ -111,6 +122,7 @@ function dataConvert(source = [], options = {}) {
 /**
  * 数据提取
  * 根据某一属性的值提取出另一属性的值
+ * 路径中途失配时返回已命中的部分结果
  *
  * @param {Object[]} treeData - 源数据
  * @param {Array} values - 原始值
@@ -147,9 +159,10 @@ function dataPick(treeData = [], values = [], options = {}) {
     children = 'children', // 子集合key
   } = options;
   const newValues = [];
-  const pick = (source = [], index = 0) => {
+  const pick = (source, index = 0) => {
     source.some((item) => {
-      if (item[origin] === values[index]) {
+      // 字符串归一化比较，兼容数字/字符串主键混用
+      if (String(item[origin]) === String(values[index])) {
         newValues.push(item[key]);
         if (item[children]) {
           pick(item[children], index + 1);
@@ -173,7 +186,7 @@ function dataPick(treeData = [], values = [], options = {}) {
  * @param {Object} [options] - 配置参数
  * @param {String} [options.key='id'] - key
  * @param {String} [options.children='children'] - 子集合key
- * @return {Object|undefined}
+ * @return {Object|undefined} 命中的原树节点（修改会影响原树）
  * @example
  *
  * const treeData = [{
@@ -203,10 +216,10 @@ function dataFind(treeData = [], value, options = {}) {
   let result;
   const find = (data) => {
     return data.find((item) => {
-      if (item[key] === value) {
-        result = {
-          ...item,
-        };
+      // 字符串归一化比较，兼容数字/字符串主键混用
+      if (String(item[key]) === String(value)) {
+        // 返回原节点引用（与 Array.prototype.find 语义一致）
+        result = item;
         return true;
       }
       if (item[children] && item[children].length > 0) {

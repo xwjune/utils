@@ -106,6 +106,64 @@ describe('数据转换', () => {
       name: 'value',
     })).toEqual(result);
   });
+  test('dataConvert-4【缺省 rootId 时父主键为 null 视为顶层节点】', () => {
+    expect(treeUtil.dataConvert([
+      { id: '330000', value: '浙江省', parentId: null, py: 'zhejiang' },
+      { id: '330100', value: '杭州市', parentId: '330000', py: 'hangzhou' },
+    ], {
+      pId: 'parentId',
+      name: 'value',
+    })).toEqual([{
+      id: '330000',
+      name: '浙江省',
+      children: [{ id: '330100', name: '杭州市' }],
+    }]);
+  });
+  test('dataConvert-4-2【缺省 rootId 时父主键为 undefined 视为顶层节点】', () => {
+    expect(treeUtil.dataConvert([
+      { id: '330000', value: '浙江省', parentId: undefined, py: 'zhejiang' },
+      { id: '330100', value: '杭州市', parentId: '330000', py: 'hangzhou' },
+    ], {
+      pId: 'parentId',
+      name: 'value',
+    })).toEqual([{
+      id: '330000',
+      name: '浙江省',
+      children: [{ id: '330100', name: '杭州市' }],
+    }]);
+  });
+  test('dataConvert-5【rootId 与父主键类型不一致】', () => {
+    expect(treeUtil.dataConvert([
+      { id: 330000, value: '浙江省', parentId: 100000 },
+      { id: 330100, value: '杭州市', parentId: 330000 },
+    ], {
+      rootId: '100000', // 字符串 rootId 与数字父主键类型不一致
+      pId: 'parentId',
+      name: 'value',
+    })).toEqual([{
+      id: 330000,
+      name: '浙江省',
+      children: [{ id: 330100, name: '杭州市' }],
+    }]);
+  });
+  test('dataConvert-6【重复主键后者覆盖前者并告警】', () => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    expect(treeUtil.dataConvert([
+      { id: '330000', value: '浙江省-旧', parentId: '100000' },
+      { id: '330100', value: '杭州市', parentId: '330000' },
+      { id: '330000', value: '浙江省-新', parentId: '100000' },
+    ], {
+      rootId: '100000',
+      pId: 'parentId',
+      name: 'value',
+    })).toEqual([{
+      id: '330000',
+      name: '浙江省-新',
+      children: [{ id: '330100', name: '杭州市' }],
+    }]);
+    expect(warnSpy).toHaveBeenCalledTimes(1);
+    warnSpy.mockRestore();
+  });
   test('其他属性提取', () => {
     expect(treeUtil.dataConvert(source, {
       rootId: '100000',
@@ -175,6 +233,16 @@ describe('数据提取', () => {
     expect(treeUtil.dataPick()).toEqual([]);
     expect(treeUtil.dataPick([])).toEqual([]);
   });
+  test('dataPick【主键类型不一致】', () => {
+    const numTree = [{
+      id: 330000,
+      name: '浙江省',
+      children: [
+        { id: 330100, name: '杭州市' },
+      ],
+    }];
+    expect(treeUtil.dataPick(numTree, [330000, '330100'])).toEqual(['浙江省', '杭州市']);
+  });
 });
 
 describe('数据查找', () => {
@@ -197,5 +265,12 @@ describe('数据查找', () => {
     expect(treeUtil.dataFind(treeData, '330100')).toEqual({ id: '330100', name: '杭州市' });
     expect(treeUtil.dataFind(treeData, '330300')).toBeUndefined();
     expect(treeUtil.dataFind()).toBeUndefined();
+  });
+  test('dataFind【返回原节点引用】', () => {
+    expect(treeUtil.dataFind(treeData, '330100')).toBe(treeData[1].children[0]);
+  });
+  test('dataFind【主键类型不一致】', () => {
+    expect(treeUtil.dataFind([{ id: 330100, name: '杭州市' }], '330100'))
+      .toEqual({ id: 330100, name: '杭州市' });
   });
 });

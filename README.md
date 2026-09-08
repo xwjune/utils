@@ -368,7 +368,7 @@ import { treeUtil } from 'jun-utils';
 | source | 源数据 | object[] | [] |
 | options | 配置参数 | object | {} |
 | options.pId | 源数据父主键key | string  | - |
-| options.rootId | 源数据根节点主键值 | string | - |
+| options.rootId | 源数据根节点主键值；缺省时父主键值为 undefined/null 的数据视为顶层节点 | string | - |
 | options.id | 源数据主键key | string | id |
 | options.name | 源数据名称key | string | name |
 | options.tId | 树节点主键key | string | id |

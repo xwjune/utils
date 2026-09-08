@@ -150,4 +150,8 @@ describe('除法', () => {
     expect(floatUtil.divide(1, '0.0', '--')).toBe('--');
     expect(floatUtil.divide(0, 0, '--')).toBe('--');
   });
+  test('超出安全整数范围', () => {
+    // 放大后的整数 9999999999999990 > Number.MAX_SAFE_INTEGER(9007199254740991)
+    expect(floatUtil.divide(999999999999999, 0.1, '--')).toBe('--');
+  });
 });
