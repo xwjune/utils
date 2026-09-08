@@ -140,7 +140,7 @@ check.isNumber('Infinity'); // false
 ```
 
 ### isDecimalNumber(value)
-十进制数字校验 `仅接受十进制字面量，不兼容科学计数法`
+十进制数字校验 `仅接受数字及十进制字面量，不兼容科学计数法`
 
 ```JavaScript
 check.isDecimalNumber('20'); // true
@@ -155,6 +155,8 @@ check.isDecimalNumber(1e+21); // false（String(1e+21) => '1e+21'）
 
 check.isDecimalNumber('020'); // false
 
+check.isDecimalNumber([20]); // false（其余类型不做隐式转换）
+
 check.isDecimalNumber('1' + '0'.repeat(400)); // false（超出双精度表示范围）
 ```
 
@@ -166,9 +168,15 @@ check.isInteger('20'); // true
 
 check.isInteger('-20'); // true
 
+check.isInteger(20); // true
+
 check.isInteger('0.2'); // false
 
 check.isInteger('020'); // false
+
+check.isInteger([20]); // false（其余类型不做隐式转换）
+
+check.isInteger('1' + '0'.repeat(400)); // false（超出双精度表示范围）
 ```
 
 ### isDecimal(value)
@@ -179,9 +187,15 @@ check.isDecimal('0.2'); // true
 
 check.isDecimal('-0.2'); // true
 
+check.isDecimal(0.2); // true
+
 check.isDecimal('20'); // false
 
 check.isDecimal('00.2'); // false
+
+check.isDecimal([0.2]); // false（其余类型不做隐式转换）
+
+check.isDecimal('1' + '0'.repeat(400) + '.5'); // false（超出双精度表示范围）
 ```
 
 ### money(value)

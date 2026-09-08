@@ -121,6 +121,13 @@ describe('十进制数字校验', () => {
     // Number('1' + '0'.repeat(400)) => Infinity
     expect(check.isDecimalNumber(`1${'0'.repeat(400)}`)).toBeFalsy();
   });
+  test('非字符串/数字类型不做隐式转换', () => {
+    // String([20]) => '20' 会误匹配正则，需显式拦截
+    // eslint-disable-next-line no-new-wrappers
+    [[20], [['20']], new Number(20), { toString: () => '20' }, true].forEach((el) => {
+      expect(check.isDecimalNumber(el)).toBeFalsy();
+    });
+  });
 });
 
 describe('整数校验', () => {
@@ -134,6 +141,25 @@ describe('整数校验', () => {
       expect(check.isInteger(el)).toBeFalsy();
     });
   });
+  test('数字入参', () => {
+    [20, -20, 0].forEach((el) => {
+      expect(check.isInteger(el)).toBeTruthy();
+    });
+    [0.2, NaN, Infinity, 1e21].forEach((el) => {
+      expect(check.isInteger(el)).toBeFalsy();
+    });
+  });
+  test('非字符串/数字类型不做隐式转换', () => {
+    // eslint-disable-next-line no-new-wrappers
+    [[20], [['20']], new Number(20), { toString: () => '20' }, true].forEach((el) => {
+      expect(check.isInteger(el)).toBeFalsy();
+    });
+    expect(check.isInteger()).toBeFalsy();
+  });
+  test('超出双精度表示范围', () => {
+    // Number('1' + '0'.repeat(400)) => Infinity
+    expect(check.isInteger(`1${'0'.repeat(400)}`)).toBeFalsy();
+  });
 });
 
 describe('小数校验', () => {
@@ -146,6 +172,25 @@ describe('小数校验', () => {
     test(el, () => {
       expect(check.isDecimal(el)).toBeFalsy();
     });
+  });
+  test('数字入参', () => {
+    [0.2, -0.2].forEach((el) => {
+      expect(check.isDecimal(el)).toBeTruthy();
+    });
+    [20, NaN, Infinity, 1e-7].forEach((el) => {
+      expect(check.isDecimal(el)).toBeFalsy();
+    });
+  });
+  test('非字符串/数字类型不做隐式转换', () => {
+    // eslint-disable-next-line no-new-wrappers
+    [[0.2], [['0.2']], new Number(0.2), new String('0.2'), { toString: () => '0.2' }, true].forEach((el) => {
+      expect(check.isDecimal(el)).toBeFalsy();
+    });
+    expect(check.isDecimal()).toBeFalsy();
+  });
+  test('超出双精度表示范围', () => {
+    // Number('1' + '0'.repeat(400) + '.5') => Infinity
+    expect(check.isDecimal(`1${'0'.repeat(400)}.5`)).toBeFalsy();
   });
 });
 
