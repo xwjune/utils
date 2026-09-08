@@ -33,6 +33,18 @@ describe('加法', () => {
   test('错误输入', () => {
     expect(floatUtil.add(2.22, '2g', '--')).toBe('--');
   });
+  test('超出安全整数范围', () => {
+    // 放大后的整数 9999999999999990 > Number.MAX_SAFE_INTEGER(9007199254740991)
+    expect(floatUtil.add(999999999999999, 0.1, '--')).toBe('--');
+    expect(floatUtil.add(9007199254740992, 0.1, '--')).toBe('--');
+  });
+  test('超出双精度表示范围的数字字符串', () => {
+    expect(floatUtil.add(`1${'0'.repeat(400)}`, 1, '--')).toBe('--');
+  });
+  test('小数位数溢出', () => {
+    // 10 ** 401 => Infinity
+    expect(floatUtil.add(`0.${'0'.repeat(400)}1`, `0.${'0'.repeat(400)}1`, '--')).toBe('--');
+  });
 });
 
 describe('减法', () => {
@@ -59,6 +71,9 @@ describe('减法', () => {
   });
   test('错误输入', () => {
     expect(floatUtil.subtract(2.22, '2g', '--')).toBe('--');
+  });
+  test('超出安全整数范围', () => {
+    expect(floatUtil.subtract(999999999999999, 0.1, '--')).toBe('--');
   });
 });
 
@@ -95,6 +110,10 @@ describe('乘法', () => {
   test('错误输入', () => {
     expect(floatUtil.multiply(2.22, '2g')).toBe('');
   });
+  test('乘积超出安全整数范围', () => {
+    // 1000000000 * 1000000000 = 1e18 > Number.MAX_SAFE_INTEGER
+    expect(floatUtil.multiply(1000000000, 1000000000, '--')).toBe('--');
+  });
 });
 
 describe('除法', () => {
@@ -125,5 +144,10 @@ describe('除法', () => {
   });
   test('错误输入', () => {
     expect(floatUtil.divide(2.22, '2g')).toBe('');
+  });
+  test('除数为 0', () => {
+    expect(floatUtil.divide(1, 0, '--')).toBe('--');
+    expect(floatUtil.divide(1, '0.0', '--')).toBe('--');
+    expect(floatUtil.divide(0, 0, '--')).toBe('--');
   });
 });

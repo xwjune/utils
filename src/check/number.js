@@ -62,6 +62,7 @@ export function isNumber(value) {
  * 十进制数字校验
  * 仅接受十进制字面量，不兼容科学计数法数字
  * 【如 String(1e-7) => '1e-7'、String(1e+21) => '1e+21' 均视为非法】
+ * 超出双精度表示范围的字面量视为非法【Number('1' + '0'.repeat(400)) => Infinity】
  *
  * @param {*} value - The value to check.
  * @return {Boolean} Return `true` if validated, else `false`.
@@ -84,9 +85,13 @@ export function isNumber(value) {
  *
  * isDecimalNumber('020');
  * // => false
+ *
+ * isDecimalNumber('1' + '0'.repeat(400));
+ * // => false
  */
 export function isDecimalNumber(value) {
-  return /^-?(0|[1-9][0-9]*)(\.[0-9]+)?$/.test(value);
+  return /^-?(0|[1-9][0-9]*)(\.[0-9]+)?$/.test(value)
+    && Number.isFinite(Number(value)); // 超长数字字面量 => Infinity
 }
 
 /**

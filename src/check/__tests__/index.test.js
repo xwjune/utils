@@ -117,6 +117,10 @@ describe('十进制数字校验', () => {
     expect(check.isDecimalNumber(1e+21)).toBeFalsy();
     expect(check.isDecimalNumber(1e-7)).toBeFalsy();
   });
+  test('超出双精度表示范围', () => {
+    // Number('1' + '0'.repeat(400)) => Infinity
+    expect(check.isDecimalNumber(`1${'0'.repeat(400)}`)).toBeFalsy();
+  });
 });
 
 describe('整数校验', () => {
