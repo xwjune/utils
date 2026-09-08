@@ -2,13 +2,14 @@
  * 弱密码校验
  *
  *（1）位数为6-32位，包括6位或32位
- *（2）包含以下任意两种或以上组成元素：
+ *（2）不能包含空白字符（空格、制表符、换行等）
+ *（3）包含以下任意两种或以上组成元素：
  *    ① 数字
  *    ② 大写字母
  *    ③ 小写字母
  *    ④ 符号【键盘上可以打出来的符号】
  *
- * @param {*} value - 密码
+ * @param {String} value - 密码；非字符串或空串直接判为弱
  * @return {Number} intensity - 密码强度 1-弱|2-中|3-强
  * @example
  *
@@ -22,9 +23,10 @@
  * // => 3
  */
 export default function pwdIntensity(value) {
-  if (!value) return 1;
-  // 密码长度
-  const len = value.length;
+  // 非字符串（数字、数组等）会绕过 length 校验或被正则隐式转换，直接判弱
+  if (typeof value !== 'string' || !value) return 1;
+  // 密码长度（按字符数计，emoji 等代理对不能按 2 位充数）
+  const len = [...value].length;
   // 规则满足条数
   let rule = 0;
 
@@ -33,6 +35,10 @@ export default function pwdIntensity(value) {
   if (len < 6 || len > 32) return 1;
 
   /* ---------- 规则二校验 ----------*/
+  // 不能包含空白字符（空格、制表符、换行等）；
+  if (/\s/.test(value)) return 1;
+
+  /* ---------- 规则三校验 ----------*/
   // 数字
   if (/[0-9]/.test(value)) rule += 1;
   // 大写字母

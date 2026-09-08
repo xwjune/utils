@@ -248,12 +248,13 @@ check.alipay('13456789012'); // true
 ```
 
 ### pwdIntensity(value)
-弱密码校验 `1-弱|2-中|3-强`
+弱密码校验 `1-弱|2-中|3-强`，非字符串输入直接判弱
 
 规则：
 
 1. 位数为6-32位，包括6位或32位
-2. 包含以下任意两种或以上组成元素：
+2. 不能包含空白字符（空格、制表符、换行等）
+3. 包含以下任意两种或以上组成元素：
 	- 数字
 	- 大写字母
 	- 小写字母
@@ -265,6 +266,8 @@ check.pwdIntensity('123456'); // 1
 check.pwdIntensity('123456abc'); // 2
 
 check.pwdIntensity('123456abcABC'); // 3
+
+check.pwdIntensity(' abc123ABC'); // 1，含空格
 ```
 
 ### illegalChar(value)

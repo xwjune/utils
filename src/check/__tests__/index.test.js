@@ -264,10 +264,35 @@ describe('弱密码校验', () => {
     '123',
     '123456',
     '111111111111111111111111111111111',
+    // 长度合法但四种元素均未命中，rule 为 0
+    '中文密码测试',
   ].forEach((el) => {
     test(el, () => {
       expect(check.pwdIntensity(el)).toBe(1);
     });
+  });
+  // 含空白字符（空格、制表符、全角空格等）直接判弱，不再参与元素计数
+  [
+    '      ',
+    'abcdef ',
+    ' abc123ABC',
+    'abc123\t',
+    'abc123　',
+  ].forEach((el) => {
+    test(JSON.stringify(el), () => {
+      expect(check.pwdIntensity(el)).toBe(1);
+    });
+  });
+  // 非字符串不得绕过长度校验后被正则隐式转换
+  test('1e+21（数字类型）', () => {
+    expect(check.pwdIntensity(1e21)).toBe(1);
+  });
+  test('数组类型', () => {
+    expect(check.pwdIntensity(['a', 1, '@', 'x', 'y', 'z'])).toBe(1);
+  });
+  // 代理对按 1 个字符计，不能按 2 位充最短位数
+  test('😀😀a1（实际 4 位）', () => {
+    expect(check.pwdIntensity('😀😀a1')).toBe(1);
   });
   [
     '123456abc',
