@@ -45,7 +45,7 @@
  * currencyToCn(1.10);
  * // => 壹元壹角
  */
-import { expandNumber } from './util';
+import expandNumber from './expandNumber';
 import numberToCn from './numberToCn';
 
 export default function currencyToCn(value, format = '零元整') {

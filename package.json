@@ -1,6 +1,6 @@
 {
   "name": "jun-utils",
-  "version": "1.17.0",
+  "version": "1.18.0",
   "description": "utils, public library",
   "main": "index.js",
   "scripts": {
@@ -28,22 +28,14 @@
   "keywords": [
     "jun",
     "utils",
-    "public",
-    "library",
     "check",
-    "checkUtil",
-    "string",
-    "stringUtil",
-    "float",
-    "floatUtil",
-    "app",
-    "appUtil",
-    "tree",
-    "treeUtil",
-    "crypt",
-    "cryptUtil",
+    "validate",
     "convert",
-    "convertUtil"
+    "float",
+    "tree",
+    "crypt",
+    "string",
+    "websocket"
   ],
   "author": "小巷 <xwjune@163.com>",
   "license": "ISC",

@@ -12,7 +12,7 @@
  * @param {Number} value - 阿拉伯数字
  * @returns {String} 中文数字
  */
-import { expandNumber } from './util';
+import expandNumber from './expandNumber';
 
 export default function numberToCn(value) {
   // Number 先展开为十进制字符串，避免科学计数法【如 String(1e-7) === '1e-7'】被误判为数据错误

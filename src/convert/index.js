@@ -8,6 +8,7 @@
  * currencyToCn - 数字金额转换为中文人民币大写
  * combination - 列出n个数组所有组合
  * toThousands - 数字千位符分隔
+ * expandNumber - 科学计数法展开为十进制字符串
  */
 import bytesToSize from './bytesToSize';
 import fenToYuan from './fenToYuan';
@@ -16,6 +17,7 @@ import numberToCn from './numberToCn';
 import currencyToCn from './currencyToCn';
 import combination from './combination';
 import toThousands from './toThousands';
+import expandNumber from './expandNumber';
 
 export default {
   bytesToSize,
@@ -25,4 +27,5 @@ export default {
   currencyToCn,
   combination,
   toThousands,
+  expandNumber,
 };

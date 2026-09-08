@@ -1,14 +1,20 @@
 /**
- * convert 内部公共工具【不作为公开 API 导出】
- */
-
-/**
- * 数字转十进制字符串，展开科学计数法【如 1.5e-7 => '0.00000015'】
+ * 数字转十进制字符串，展开科学计数法
  *
  * @param {Number} num - 数字
  * @returns {String} 十进制字符串
+ * @example
+ *
+ * expandNumber(1.5e-7)
+ * // => 0.00000015
+ *
+ * expandNumber(-1.5e21)
+ * // => -1500000000000000000000
+ *
+ * expandNumber('1e+21')
+ * // => 1000000000000000000000
  */
-export function expandNumber(num) {
+export default function expandNumber(num) {
   const str = String(num);
   if (!/e/i.test(str)) {
     return str;

@@ -1,4 +1,3 @@
-import { expandNumber } from '../util';
 import bytesToSize from '../bytesToSize';
 import fenToYuan from '../fenToYuan';
 import yuanToFen from '../yuanToFen';
@@ -6,36 +5,7 @@ import numberToCn from '../numberToCn';
 import currencyToCn from '../currencyToCn';
 import combination from '../combination';
 import toThousands from '../toThousands';
-
-describe('科学计数法展开', () => {
-  const testMap = [{
-    input: 1.5,
-    output: '1.5', // 非科学计数法原样返回
-  }, {
-    input: 1e-7,
-    output: '0.0000001', // 小数点前移到数字串开头之前
-  }, {
-    input: -1e-7,
-    output: '-0.0000001',
-  }, {
-    input: 1e21,
-    output: '1000000000000000000000', // 小数点后移到数字串末尾之后
-  }, {
-    input: -1.5e21,
-    output: '-1500000000000000000000',
-  }];
-  testMap.forEach((el) => {
-    test(`${el.input} => ${el.output}`, () => {
-      expect(expandNumber(el.input)).toBe(el.output);
-    });
-  });
-  test('小数点落在数字串中间', () => {
-    // JS 对 Number 只在 >=1e21 或 <1e-6 时才输出科学计数法，小数点必然移出数字串，
-    // 中间分支只能直接传入科学计数法字面量覆盖
-    expect(expandNumber('12.34e1')).toBe('123.4');
-    expect(expandNumber('-12.34e-1')).toBe('-1.234');
-  });
-});
+import expandNumber from '../expandNumber';
 
 describe('数据容量单位换算', () => {
   const testMap = [{
@@ -603,8 +573,20 @@ describe('数字千位符分隔', () => {
     input: '-1234.5678',
     output: '-1,234.5678',
   }, {
-    input: '1e+21',
-    output: '1e+21',
+    input: '1e+21', // 字符串科学计数法先展开再分隔
+    output: '1,000,000,000,000,000,000,000',
+  }, {
+    input: 1e21, // Number 科学计数法先展开再分隔
+    output: '1,000,000,000,000,000,000,000',
+  }, {
+    input: 1e-7,
+    output: '0.0000001',
+  }, {
+    input: '+2000', // 前导 + 号规范化
+    output: '2,000',
+  }, {
+    input: '+1e3', // 前导 + 号与科学计数法同时存在
+    output: '1,000',
   }];
   testMap.forEach((el) => {
     test(`${el.input} => ${el.output}`, () => {
@@ -622,5 +604,38 @@ describe('数字千位符分隔', () => {
     expect(toThousands('1.2.')).toBe('');
     expect(toThousands(NaN)).toBe(''); // 非有限数字，此前会原样返回 'NaN'
     expect(toThousands(Infinity)).toBe('');
+  });
+});
+
+describe('科学计数法展开', () => {
+  const testMap = [{
+    input: 1.5,
+    output: '1.5', // 非科学计数法原样返回
+  }, {
+    input: 1e-7,
+    output: '0.0000001', // 小数点前移到数字串开头之前
+  }, {
+    input: -1e-7,
+    output: '-0.0000001',
+  }, {
+    input: -1e-7,
+    output: '-0.0000001',
+  }, {
+    input: '1e+21',
+    output: '1000000000000000000000',
+  }, {
+    input: -1.5e21,
+    output: '-1500000000000000000000',
+  }];
+  testMap.forEach((el) => {
+    test(`${el.input} => ${el.output}`, () => {
+      expect(expandNumber(el.input)).toBe(el.output);
+    });
+  });
+  test('小数点落在数字串中间', () => {
+    // JS 对 Number 只在 >=1e21 或 <1e-6 时才输出科学计数法，小数点必然移出数字串，
+    // 中间分支只能直接传入科学计数法字面量覆盖
+    expect(expandNumber('12.34e1')).toBe('123.4');
+    expect(expandNumber('-12.34e-1')).toBe('-1.234');
   });
 });

@@ -8,6 +8,7 @@
  * postcode - 邮编校验
  * isNull - 空校验
  * isNumber - 数字校验
+ * isDecimalNumber - 十进制数字校验【不兼容科学计数法】
  * isInteger - 整数校验
  * isDecimal - 小数校验
  * money - 金额【元】判断
@@ -28,6 +29,7 @@ import postcode from './postcode';
 import isNull from './isNull';
 import {
   isNumber,
+  isDecimalNumber,
   isInteger,
   isDecimal,
 } from './number';
@@ -47,6 +49,7 @@ export default {
   postcode,
   isNull,
   isNumber,
+  isDecimalNumber,
   isInteger,
   isDecimal,
   money,

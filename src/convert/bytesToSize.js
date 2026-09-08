@@ -23,7 +23,7 @@
  * // => 0B
  */
 import { isNumber } from '../check/number';
-import { expandNumber } from './util';
+import expandNumber from './expandNumber';
 
 export default function bytesToSize(bytes, digit = 1, format = '0B') {
   if (!isNumber(bytes)) {

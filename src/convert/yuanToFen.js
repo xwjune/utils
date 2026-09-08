@@ -31,7 +31,8 @@
  * yuanToFen('num'); // 错误数据
  * // => ''
  */
-import { expandNumber } from './util';
+import { isDecimalNumber } from '../check/number';
+import expandNumber from './expandNumber';
 
 export default function yuanToFen(value, format = '0') {
   if (
@@ -43,7 +44,7 @@ export default function yuanToFen(value, format = '0') {
   }
   // Number 先展开为十进制字符串，避免科学计数法【如 String(1e-7) === '1e-7'】被误判为数据错误
   const str = typeof value === 'number' ? expandNumber(value) : value.toString();
-  if (!/^-?(0|[1-9][0-9]*)(\.[0-9]+)?$/.test(str)) {
+  if (!isDecimalNumber(str)) {
     return '';
   }
 

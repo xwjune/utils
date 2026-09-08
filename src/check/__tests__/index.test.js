@@ -97,6 +97,28 @@ describe('数字校验', () => {
   });
 });
 
+describe('十进制数字校验', () => {
+  test('correct', () => {
+    ['20', '-20', '0.2', '-20.5', 20.5, 0].forEach((el) => {
+      expect(check.isDecimalNumber(el)).toBeTruthy();
+    });
+  });
+  test('error', () => {
+    ['', undefined, null, 'null', '.2', '-.2', '020', ' 20 ', '+20'].forEach((el) => {
+      expect(check.isDecimalNumber(el)).toBeFalsy();
+    });
+    expect(check.isDecimalNumber()).toBeFalsy();
+  });
+  test('不兼容科学计数法', () => {
+    ['1e3', '1e+21', '1E-7'].forEach((el) => {
+      expect(check.isDecimalNumber(el)).toBeFalsy();
+    });
+    // String(1e+21) => '1e+21'、String(1e-7) => '1e-7'
+    expect(check.isDecimalNumber(1e+21)).toBeFalsy();
+    expect(check.isDecimalNumber(1e-7)).toBeFalsy();
+  });
+});
+
 describe('整数校验', () => {
   ['20', '-20'].forEach((el) => {
     test(el, () => {

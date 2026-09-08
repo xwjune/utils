@@ -119,7 +119,7 @@ check.isNull(''); // true
 ```
 
 ### isNumber(value)
-数字校验
+数字校验 `兼容科学计数法`
 
 ```JavaScript
 check.isNumber('20'); // true
@@ -137,6 +137,23 @@ check.isNumber(1e+21); // true
 check.isNumber(NaN); // false（非有限数字）
 
 check.isNumber('Infinity'); // false
+```
+
+### isDecimalNumber(value)
+十进制数字校验 `仅接受十进制字面量，不兼容科学计数法`
+
+```JavaScript
+check.isDecimalNumber('20'); // true
+
+check.isDecimalNumber('-20.5'); // true
+
+check.isDecimalNumber(20.5); // true
+
+check.isDecimalNumber('1e3'); // false（科学计数法视为非法）
+
+check.isDecimalNumber(1e+21); // false（String(1e+21) => '1e+21'）
+
+check.isDecimalNumber('020'); // false
 ```
 
 ### isInteger(value)
@@ -625,7 +642,26 @@ convert.toThousands(12345678); // 12,345,678
 
 convert.toThousands(12345678.90); // 12,345,678.90
 
+convert.toThousands(1e+21); // 1,000,000,000,000,000,000,000（科学计数法先展开）
+
+convert.toThousands('+2000'); // 2,000（前导 + 号规范化）
+
 convert.toThousands(); // ''
+```
+
+### expandNumber(value)
+数字转十进制字符串，展开科学计数法
+
+```JavaScript
+convert.expandNumber(1.5e-7); // '0.00000015'
+
+convert.expandNumber(-1.5e-7); // '-0.00000015'
+
+convert.expandNumber(1.5e21); // '1500000000000000000000'
+
+convert.expandNumber(1.5); // '1.5' 非科学计数法原样返回
+
+convert.expandNumber('12.34e1'); // '123.4' 字符串科学计数法同样支持
 ```
 
 ***

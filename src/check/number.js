@@ -57,10 +57,37 @@ export function isNumber(value) {
   }
   return false;
 }
-// 正则表达式
-// export function isNumber(value) {
-//   return !/^-?(0|[1-9][0-9]*)(\.[0-9]+)?$/.test(value);
-// }
+
+/**
+ * 十进制数字校验
+ * 仅接受十进制字面量，不兼容科学计数法数字
+ * 【如 String(1e-7) => '1e-7'、String(1e+21) => '1e+21' 均视为非法】
+ *
+ * @param {*} value - The value to check.
+ * @return {Boolean} Return `true` if validated, else `false`.
+ * @example
+ *
+ * isDecimalNumber('20');
+ * // => true
+ *
+ * isDecimalNumber('-20.5');
+ * // => true
+ *
+ * isDecimalNumber(20.5);
+ * // => true
+ *
+ * isDecimalNumber('1e3');
+ * // => false
+ *
+ * isDecimalNumber(1e+21); // String(1e+21) => '1e+21'
+ * // => false
+ *
+ * isDecimalNumber('020');
+ * // => false
+ */
+export function isDecimalNumber(value) {
+  return /^-?(0|[1-9][0-9]*)(\.[0-9]+)?$/.test(value);
+}
 
 /**
  * 整数校验
