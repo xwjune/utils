@@ -44,11 +44,27 @@ describe('邮箱校验', () => {
 });
 
 describe('邮编校验', () => {
-  test('310000', () => {
-    expect(check.postcode('310000')).toBeTruthy();
+  [
+    '310000',
+    '010000',
+  ].forEach((el) => {
+    test(el, () => {
+      expect(check.postcode(el)).toBeTruthy();
+    });
   });
-  test('3100000', () => {
-    expect(check.postcode('3100000')).toBeFalsy();
+  [
+    '3100000',
+    '31000',
+    '3100a0',
+  ].forEach((el) => {
+    test(el, () => {
+      expect(check.postcode(el)).toBeFalsy();
+    });
+  });
+  test('非字符串【单元素数组隐式转换】', () => {
+    expect(check.postcode(['310000'])).toBeFalsy();
+    expect(check.postcode(310000)).toBeFalsy();
+    expect(check.postcode(null)).toBeFalsy();
   });
 });
 

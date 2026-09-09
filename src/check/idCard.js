@@ -9,7 +9,7 @@
  * 出生日期 0[1-9]|[1-2]\d|3[0-1]【且须为真实日历日期，如 0231、平年 0229 均不通过】
  * 二代校验码按 ISO 7064 MOD 11-2 验算【X 不区分大小写，错码不通过】
  *
- * @param {*} value - The value to check. 非字符串视为非法
+ * @param {*} value - The value to check.
  * @return {Boolean} Return `true` if validated, else `false`.
  * @example
  *

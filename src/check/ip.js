@@ -2,7 +2,7 @@
  * ip地址校验（IPv4）
  * 四段 0-255 以点分隔【拒绝前导零，如 01.1.1.1 不通过】
  *
- * @param {*} value - The value to check. 非字符串视为非法
+ * @param {*} value - The value to check.
  * @return {Boolean} Return `true` if validated, else `false`.
  * @example
  *

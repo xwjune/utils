@@ -3,7 +3,7 @@
  * 命中汉字【基本区、扩展 A、扩展 B 起代理对区及各兼容区】或中文专属符号【。，、（）￥㎡ 等】即真；
  * 中西共用符号不算中文【弯引号、破折号、省略号、全角字母数字等】
  *
- * @param {*} value - The value to check. 非字符串视为不含中文
+ * @param {*} value - The value to check.
  * @return {Boolean} Return `true` if validated, else `false`.
  * @example
  *

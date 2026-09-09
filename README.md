@@ -101,10 +101,16 @@ check.email('te_st@sima.vip.com'); // true
 ```
 
 ### postcode(value)
-邮编校验 `6位数字`
+邮编校验 `6位数字`，前导零合法，非字符串判非法
 
 ```JavaScript
 check.postcode('310000'); // true
+
+check.postcode('010000'); // true（前导零合法，内蒙 010000、河北 050000）
+
+check.postcode('3100000'); // false
+
+check.postcode(['310000']); // false（非字符串不做隐式转换）
 ```
 
 ### isNull(value)
