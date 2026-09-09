@@ -221,14 +221,18 @@ check.hasChinese('。'); // true
 ```
 
 ### idCard(value)
-身份证校验：`一代身份证【15位】或二代身份证【18位】`
+身份证校验：`一代身份证【15位】或二代身份证【18位】`，二代校验码参与验算，日期须真实存在，非字符串判非法
 
 ```JavaScript
 check.idCard('330000199001017865'); // true
 
-check.idCard('33000019900101786X'); // true
+check.idCard('33000019900101746x'); // true（校验码 X 不区分大小写）
 
 check.idCard('330000900101786'); // true
+
+check.idCard('330000199001017866'); // false（校验码错误）
+
+check.idCard('330000199002311230'); // false（2月31日不存在）
 ```
 
 ### ip(value)
@@ -807,22 +811,28 @@ common.selectText(document.querySelector('input'));
 ## crypt
 **加密解密【用于暴露在url中的重要参数】**
 
+非标准 base64【索引表已重排，标准 base64 工具解不出，避免 url 参数被轻易识别解码】，仅本库 encode/decode 可互解；round-trip 无损
+
 ```JavaScript
 import { crypt } from 'jun-utils';
 ```
 
 ### encode(value)
-加密
+加密，非字符串抛 TypeError
 
 ```JavaScript
 crypt.encode('123456'); // CJ8pD3Ks
 ```
 
 ### decode(value)
-解密
+解密，非字符串抛 TypeError；残缺或填充符错位的密文抛 Error【非法字符自动剔除】
 
 ```JavaScript
 crypt.decode('CJ8pD3Ks'); // 123456
+
+crypt.decode(' CJ8+pD3Ks'); // 123456（非法字符自动剔除）
+
+crypt.decode('CJ8pD3K'); // 抛 Error（密文残缺）
 ```
 
 ## ws
