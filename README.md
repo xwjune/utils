@@ -212,12 +212,24 @@ check.money('002'); // false
 ```
 
 ### hasChinese(value)
-中文判断
+中文判断：命中汉字【基本区、扩展 A、扩展 B 起及各兼容区】或中文专属符号【。，、（）￥㎡ 等】；中西共用符号不算中文，非字符串判 false
 
 ```JavaScript
 check.hasChinese('中文'); // true
 
-check.hasChinese('。'); // true
+check.hasChinese('。'); // true（中文标点）
+
+check.hasChinese('𠮷'); // true（扩展 B 生僻字）
+
+check.hasChinese('ＡＢＣ'); // false（全角字母数字不算中文）
+
+check.hasChinese('—…“”'); // false（弯引号、破折号、省略号等中西共用标点不算）
+
+check.hasChinese('l’étude'); // false（西文弯撇号）
+
+check.hasChinese('ｱ'); // false（半角片假名）
+
+check.hasChinese(['中', '文']); // false（非字符串不做隐式转换）
 ```
 
 ### idCard(value)

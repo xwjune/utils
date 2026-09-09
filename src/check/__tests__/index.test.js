@@ -208,13 +208,45 @@ describe('金额【元】判断', () => {
 });
 
 describe('中文判断', () => {
-  ['中文', '。'].forEach((el) => {
+  [
+    '中文', // 基本区汉字
+    '。', // CJK 符号和标点
+    '，', // 全角标点
+    '￥', // 全角货币符
+    '鿕', // U+9FD5，Unicode 增补进基本区的汉字
+    '𠮷', // 扩展 B 代理对（人名用字）
+    '㎡', // CJK 兼容单位符号
+  ].forEach((el) => {
     test(el, () => {
       expect(check.hasChinese(el)).toBeTruthy();
     });
   });
-  test('chinese', () => {
-    expect(check.hasChinese('chinese')).toBeFalsy();
+  [
+    'chinese',
+    'ＡＢＣ', // 全角字母不算中文
+    '１２３', // 全角数字不算中文
+    '—…', // 中西共用标点不算中文
+    '“”‘’', // 弯引号不算中文
+    'l’étude', // 西文弯撇号
+    '￢', // U+FFE2 全角逻辑非，全角西文符号不算中文
+    'ｱ', // 半角片假名
+  ].forEach((el) => {
+    test(el, () => {
+      expect(check.hasChinese(el)).toBeFalsy();
+    });
+  });
+  test('零宽空格 U+200B', () => {
+    // 用码点构造，避免源码里混入不可见字符
+    expect(check.hasChinese(String.fromCharCode(0x200b))).toBeFalsy();
+  });
+  test('非字符串', () => {
+    expect(check.hasChinese()).toBeFalsy();
+    expect(check.hasChinese(null)).toBeFalsy();
+    expect(check.hasChinese(123)).toBeFalsy();
+    // 数组不再被隐式转成 "中,文"
+    expect(check.hasChinese(['中', '文'])).toBeFalsy();
+    // Symbol 不再抛 TypeError
+    expect(check.hasChinese(Symbol('s'))).toBeFalsy();
   });
 });
 
