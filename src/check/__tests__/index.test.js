@@ -248,13 +248,20 @@ describe('小数校验', () => {
 });
 
 describe('金额【元】判断', () => {
-  ['20', '20.00'].forEach((el) => {
-    test(el, () => {
+  ['20', '20.00', 20.5].forEach((el) => {
+    test(String(el), () => {
       expect(check.money(el)).toBeTruthy();
     });
   });
-  ['20.002', '002', '-20'].forEach((el) => {
-    test(el, () => {
+  ['20.002', '002', '-20', 1e-7, NaN, Infinity].forEach((el) => {
+    test(String(el), () => {
+      expect(check.money(el)).toBeFalsy();
+    });
+  });
+  test('非字符串/数字【单元素数组隐式转换】', () => {
+    // Symbol 之前会直接抛 TypeError
+    // eslint-disable-next-line no-new-wrappers
+    [['20'], new String('20'), null, Symbol('s')].forEach((el) => {
       expect(check.money(el)).toBeFalsy();
     });
   });

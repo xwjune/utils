@@ -221,16 +221,22 @@ check.isDecimal('1' + '0'.repeat(400) + '.5'); // false（超出双精度表示�
 ```
 
 ### money(value)
-金额【元】判断
+金额【元】判断，非负、最多两位小数，仅接受数字及十进制字面量
 
 ```JavaScript
-check.money('-20'); // false
-
 check.money('20.00'); // true
+
+check.money(20.5); // true
+
+check.money('-20'); // false
 
 check.money('20.002'); // false
 
 check.money('002'); // false
+
+check.money(1e-7); // false（String(1e-7) => '1e-7'，科学计数法视为非法）
+
+check.money(['20']); // false（非字符串/数字不做隐式转换）
 ```
 
 ### hasChinese(value)
