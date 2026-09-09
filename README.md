@@ -248,10 +248,12 @@ check.idCard('330000199002311230'); // false（2月31日不存在）
 ```
 
 ### ip(value)
-ip地址校验
+ip地址校验：IPv4 `四段 0-255`，拒绝前导零，非字符串判非法
 
 ```JavaScript
 check.ip('192.168.0.1'); // true
+
+check.ip('01.1.1.1'); // false（拒绝前导零）
 ```
 
 ### alipay(value)

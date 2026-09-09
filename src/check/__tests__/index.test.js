@@ -287,13 +287,26 @@ describe('ip地址校验', () => {
   [
     '192.168.0.1',
     '127.0.0.1',
+    '0.0.0.0',
+    '255.255.255.255',
   ].forEach((el) => {
     test(el, () => {
       expect(check.ip(el)).toBeTruthy();
     });
   });
-  test('127.256.27.1', () => {
-    expect(check.ip('127.256.27.1')).toBeFalsy();
+  [
+    '127.256.27.1',
+    '01.1.1.1',
+    '1.1.1',
+    '1.1.1.1.',
+  ].forEach((el) => {
+    test(el, () => {
+      expect(check.ip(el)).toBeFalsy();
+    });
+  });
+  test('非字符串【单元素数组隐式转换】', () => {
+    expect(check.ip(['192.168.0.1'])).toBeFalsy();
+    expect(check.ip(null)).toBeFalsy();
   });
 });
 
