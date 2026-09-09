@@ -114,6 +114,13 @@ describe('空校验', () => {
     expect(check.isNull('null')).toBeFalsy();
     expect(check.isNull('undefined')).toBeFalsy();
   });
+  test('假值但非空【严等判断，不误杀】', () => {
+    expect(check.isNull(0)).toBeFalsy();
+    expect(check.isNull(false)).toBeFalsy();
+    expect(check.isNull(NaN)).toBeFalsy();
+    expect(check.isNull([])).toBeFalsy();
+    expect(check.isNull(' ')).toBeFalsy();
+  });
 });
 
 describe('数字校验', () => {
@@ -378,6 +385,20 @@ describe('支付宝账号校验', () => {
     test(el, () => {
       expect(check.alipay(el)).toBeTruthy();
     });
+  });
+  [
+    'test@163', // 邮箱缺 TLD
+    '1345678901', // 手机号 10 位
+    '23456789012', // 首位非 1
+  ].forEach((el) => {
+    test(el, () => {
+      expect(check.alipay(el)).toBeFalsy();
+    });
+  });
+  test('非字符串【单元素数组隐式转换】', () => {
+    expect(check.alipay(13456789012)).toBeFalsy();
+    expect(check.alipay(['13456789012'])).toBeFalsy();
+    expect(check.alipay(null)).toBeFalsy();
   });
 });
 

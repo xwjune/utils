@@ -16,12 +16,7 @@
  * // => true
  */
 export default function isNull(value) {
-  if (
-    value === undefined
+  return value === undefined
     || value === null
-    || value === ''
-  ) {
-    return true;
-  }
-  return false;
+    || value === '';
 }
