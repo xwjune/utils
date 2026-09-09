@@ -36,10 +36,31 @@ describe('邮箱校验', () => {
   [
     'test@163.com',
     'te_st@sima.vip.com',
+    'te.st@163.com', // 登录名以点分段
+    'test+tag@163.com', // Gmail 式 + 别名
+    'test@x.technology', // 长顶级域
   ].forEach((el) => {
     test(el, () => {
       expect(check.email(el)).toBeTruthy();
     });
+  });
+  [
+    'test@163..com', // 域名连续点
+    'test@.163.com', // 域名以点开头
+    '.test@163.com', // 登录名以点开头
+    'te..st@163.com', // 登录名连续点
+    'test.@163.com', // 登录名以点结尾
+    'test@-163.com', // 域名标签以连字符开头
+    'test@163-.com', // 域名标签以连字符结尾
+    'test@163.com.', // 结尾多点
+  ].forEach((el) => {
+    test(el, () => {
+      expect(check.email(el)).toBeFalsy();
+    });
+  });
+  test('非字符串【单元素数组隐式转换】', () => {
+    expect(check.email(['test@163.com'])).toBeFalsy();
+    expect(check.email(null)).toBeFalsy();
   });
 });
 

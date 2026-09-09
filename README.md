@@ -92,12 +92,20 @@ check.phone('13456789012'); // true
 ```
 
 ### email(value)
-邮箱校验 `登录名@主机名.域名`
+邮箱校验 `登录名@主机名.域名`，非字符串判非法。登录名的点仅作分段符（不可在首尾或连续）；域名标签不可连字符开头/结尾；顶级域至少 2 位字母（放行 `.technology` 等新顶级域）
 
 ```JavaScript
 check.email('test@163.com'); // true
 
 check.email('te_st@sima.vip.com'); // true
+
+check.email('test+tag@163.com'); // true（+ 别名合法）
+
+check.email('test@163..com'); // false（域名连续点）
+
+check.email('test@163-.com'); // false（域名标签连字符收尾）
+
+check.email(['test@163.com']); // false（非字符串不做隐式转换）
 ```
 
 ### postcode(value)
