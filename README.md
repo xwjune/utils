@@ -65,14 +65,18 @@ import { check } from 'jun-utils';
 ```
 
 ### cellphone(value)
-手机校验 `11位数字，首位1`
+手机校验 `11位数字，首位1`，非字符串判非法
 
 ```JavaScript
 check.cellphone('13456789012'); // true
+
+check.cellphone(13456789012); // false（非字符串不做隐式转换）
+
+check.cellphone(['13456789012']); // false（非字符串不做隐式转换）
 ```
 
 ### telphone(value)
-固定电话校验 `3-4位区号，7-8位直拨号码`
+固定电话校验 `3-4位区号，7-8位直拨号码`，非字符串判非法
 
 ```JavaScript
 check.telphone('0571-85735888'); // true
@@ -80,15 +84,19 @@ check.telphone('0571-85735888'); // true
 check.telphone('057185735888'); // true
 
 check.telphone('85735888'); // true
+
+check.telphone(['0571-85735888']); // false（非字符串不做隐式转换）
 ```
 
 ### phone(value)
-电话【手机和固定电话】校验
+电话【手机和固定电话】校验，非字符串判非法
 
 ```JavaScript
 check.phone('057185735888'); // true
 
 check.phone('13456789012'); // true
+
+check.phone([13456789012]); // false（非字符串不做隐式转换）
 ```
 
 ### email(value)

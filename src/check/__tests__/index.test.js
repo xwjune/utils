@@ -7,6 +7,13 @@ describe('手机校验', () => {
   test('123456789', () => {
     expect(check.cellphone('123456789')).toBeFalsy();
   });
+  test('非字符串【单元素数组隐式转换】', () => {
+    expect(check.cellphone(13456789012)).toBeFalsy();
+    expect(check.cellphone(['13456789012'])).toBeFalsy();
+    expect(check.cellphone(null)).toBeFalsy();
+    // Symbol 不再抛 TypeError
+    expect(check.cellphone(Symbol('s'))).toBeFalsy();
+  });
 });
 
 describe('固定电话校验', () => {
@@ -19,6 +26,11 @@ describe('固定电话校验', () => {
       expect(check.telphone(el)).toBeTruthy();
     });
   });
+  test('非字符串【单元素数组隐式转换】', () => {
+    expect(check.telphone(85735888)).toBeFalsy();
+    expect(check.telphone(['0571-85735888'])).toBeFalsy();
+    expect(check.telphone(null)).toBeFalsy();
+  });
 });
 
 describe('电话【手机和固定电话】校验', () => {
@@ -29,6 +41,10 @@ describe('电话【手机和固定电话】校验', () => {
     test(el, () => {
       expect(check.phone(el)).toBeTruthy();
     });
+  });
+  test('非字符串【单元素数组隐式转换】', () => {
+    expect(check.phone([13456789012])).toBeFalsy();
+    expect(check.phone(null)).toBeFalsy();
   });
 });
 
