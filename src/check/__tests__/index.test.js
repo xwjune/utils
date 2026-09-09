@@ -419,6 +419,12 @@ describe('弱密码校验', () => {
       '123\\123',
       '123\t123',
       '123\v123',
+      '123\r123',
+      '123\f123',
+      // \x00 即 \0：裸 \0 后跟数字在严格模式是语法错误、sloppy 模式成八进制转义，故用 \x00
+      '123\x00123',
+      '123\x01123',
+      '123\x7f123',
       '123"123',
     ].forEach((el) => {
       test(el, () => {
@@ -427,6 +433,13 @@ describe('弱密码校验', () => {
     });
     test('123', () => {
       expect(check.illegalChar('123')).toBeFalsy();
+    });
+    test('123 123【空格合法，0x20 不在控制字符区间】', () => {
+      expect(check.illegalChar('123 123')).toBeFalsy();
+    });
+    test('非字符串【单元素数组隐式转换】', () => {
+      expect(check.illegalChar(['123"123'])).toBeFalsy();
+      expect(check.illegalChar(null)).toBeFalsy();
     });
   });
 });

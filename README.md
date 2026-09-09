@@ -303,15 +303,18 @@ check.pwdIntensity(' abc123ABC'); // 1，含空格
 ```
 
 ### illegalChar(value)
-非法字符校验 `",\,\n`
+非法字符校验：双引号（`"`）、反斜杠（`\`）、回车（`\r`）、换行（`\n`）、制表（`\t`）、垂直制表（`\v`）、换页（`\f`）、空字符（`\0`）以及其余控制字符（0x00-0x1F 与 0x7F）；空格合法。非字符串一律返回 `false`（视为未检出）
 
 ```JavaScript
 check.illegalChar('123\n123'); // true
 check.illegalChar('123\t123'); // true
 check.illegalChar('123\v123'); // true
+check.illegalChar('123\r123'); // true
 check.illegalChar('123\\123'); // true
 check.illegalChar('123"123'); // true
 check.illegalChar('123'); // false
+check.illegalChar('123 123'); // false（空格合法）
+check.illegalChar(['123"123']); // false（非字符串不做隐式转换）
 ```
 
 ***
