@@ -14,6 +14,13 @@ Install with yarn:
 yarn add jun-utils --dev
 ```
 
+## 浏览器支持
+
+面向现代浏览器（Chrome 69+ / Safari 12+ / Firefox 62+ / Edge 79+，2018-09 起的全量版本），不支持 IE。
+
+- `dist`【UMD】：`Number.isFinite` 等内建已由构建链内置 core-js@2 兜底
+- `lib`【ESM】：不做 polyfill，需运行环境或消费方 polyfill 方案支持 ES2019 内建【如 `Array.prototype.flatMap`】
+
 ## Usage
 
 ES6 module:
@@ -329,6 +336,40 @@ check.illegalChar('123"123'); // true
 check.illegalChar('123'); // false
 check.illegalChar('123 123'); // false（空格合法）
 check.illegalChar(['123"123']); // false（非字符串不做隐式转换）
+```
+
+### date(value)
+日期校验：`YYYY-MM-DD 或 YYYY/MM/DD`，年 4 位、月日各 2 位补零、分隔符前后一致，日历日期须真实存在【闰年 2 月 29 日、大小月 31 日】，非字符串判非法
+
+```JavaScript
+check.date('2024-02-29'); // true（闰年）
+
+check.date('2024/02/29'); // true（斜杠分隔）
+
+check.date('2023-02-29'); // false（平年无 2 月 29 日）
+
+check.date('2024-04-31'); // false（4 月只有 30 天）
+
+check.date('2024-2-29'); // false（月不足两位）
+
+check.date('2024-02/29'); // false（分隔符前后不一致）
+
+check.date(['2024-02-29']); // false（非字符串不做隐式转换）
+```
+
+### commonDate(value)
+常用日期校验：规则同 `date`，但年限定 `1000-9999`【年 1000 前的 ISO 日期不收】，其余一致（`YYYY-MM-DD 或 YYYY/MM/DD`、月日各 2 位补零、分隔符前后一致、日历日期须真实存在）
+
+```JavaScript
+check.commonDate('2024-02-29'); // true（闰年）
+
+check.commonDate('1000-01-01'); // true（年下界）
+
+check.commonDate('0999-12-31'); // false（年 1000 前，date 放行、commonDate 不收）
+
+check.commonDate('2024-04-31'); // false（4 月只有 30 天）
+
+check.commonDate(['2024-02-29']); // false（非字符串不做隐式转换）
 ```
 
 ***

@@ -1,6 +1,6 @@
 {
   "name": "jun-utils",
-  "version": "1.18.1",
+  "version": "1.19.0",
   "description": "utils, public library",
   "main": "index.js",
   "scripts": {
@@ -89,5 +89,12 @@
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",
     "webpack-merge": "^4.2.1"
-  }
+  },
+  "browserslist": [
+    "chrome >= 69",
+    "edge >= 79",
+    "firefox >= 62",
+    "ios_saf >= 12",
+    "safari >= 12"
+  ]
 }

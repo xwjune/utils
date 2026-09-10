@@ -18,6 +18,8 @@
  * alipay - 支付宝账号校验
  * pwdIntensity - 弱密码校验
  * illegalChar - 非法字符校验
+ * date - 日期校验
+ * commonDate - 常用日期校验【年 1000-9999】
  */
 import {
   cellphone,
@@ -40,6 +42,10 @@ import ip from './ip';
 import alipay from './alipay';
 import pwdIntensity from './pwdIntensity';
 import illegalChar from './illegalChar';
+import {
+  date,
+  commonDate,
+} from './date';
 
 export default {
   cellphone,
@@ -59,7 +65,6 @@ export default {
   alipay,
   pwdIntensity,
   illegalChar,
+  date,
+  commonDate,
 };
-
-// todo
-// 日期是否正确判断
