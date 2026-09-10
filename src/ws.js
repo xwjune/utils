@@ -12,9 +12,13 @@
  */
 const createWebSocket = (url, options = {}) => {
   const {
-    timeout = 3000,
-    limitConnect = 3,
-  } = options;
+    timeout = 3000, // 重连频率【毫秒】
+    limitConnect = 3, // 断线重连次数
+    onopen, // 连接建立回调
+    onclose, // 连接关闭回调
+    onmessage, // 接收数据回调
+    reconnect: onReconnect, // 重连回调【避免与内部 reconnect 函数重名】
+  } = options || {}; // options 显式传 null 时解构或属性访问会抛 TypeError，兜底为空对象
   if (typeof WebSocket === 'undefined') {
     console.warn('Sorry, Your Browser Does Not Support WebSocket.');
     return null;
@@ -31,18 +35,18 @@ const createWebSocket = (url, options = {}) => {
       console.log(`'${url}' WebSocket Open.`);
       if (retry) {
         _limitConnect = limitConnect; // 重连次数重置
-        if (options.reconnect) {
-          options.reconnect(ws); // 重连回调
+        if (onReconnect) {
+          onReconnect(ws); // 重连回调
         }
       }
-      if (options.onopen) {
-        options.onopen(ws); // 连接建立回调
+      if (onopen) {
+        onopen(ws); // 连接建立回调
       }
     };
 
     ws.onmessage = (event) => {
-      if (options.onmessage) {
-        options.onmessage(event.data); // 接收数据回调
+      if (onmessage) {
+        onmessage(event.data); // 接收数据回调
       }
     };
 
@@ -67,8 +71,8 @@ const createWebSocket = (url, options = {}) => {
           console.log(`WebSocket Reconnect ${limitConnect - _limitConnect} Times.`);
           connect(true);
         }, timeout);
-      } else if (options.onclose) {
-        options.onclose(); // 连接关闭回调
+      } else if (onclose) {
+        onclose(); // 连接关闭回调
       }
     }
   }

@@ -6,6 +6,7 @@ import currencyToCn from '../currencyToCn';
 import combination from '../combination';
 import toThousands from '../toThousands';
 import expandNumber from '../expandNumber';
+import toFixed from '../toFixed';
 
 describe('数据容量单位换算', () => {
   const testMap = [{
@@ -198,6 +199,9 @@ describe('分转化成元', () => {
     expect(fenToYuan(null)).toBe('0.00');
     expect(fenToYuan('')).toBe('0.00');
     expect(fenToYuan(undefined, { format: '--' })).toBe('--');
+  });
+  test('options 显式传 null 兜底为默认配置', () => {
+    expect(fenToYuan(2000, null)).toBe('20.00');
   });
 });
 
@@ -587,6 +591,9 @@ describe('数字千位符分隔', () => {
   }, {
     input: '+1e3', // 前导 + 号与科学计数法同时存在
     output: '1,000',
+  }, {
+    input: '0.5e5', // 前导零规范化后再分隔
+    output: '50,000',
   }];
   testMap.forEach((el) => {
     test(`${el.input} => ${el.output}`, () => {
@@ -626,6 +633,15 @@ describe('科学计数法展开', () => {
   }, {
     input: -1.5e21,
     output: '-1500000000000000000000',
+  }, {
+    input: '0.123e2',
+    output: '12.3', // 纯小数尾数右移小数点产生前导零，规范化【'012.3'】
+  }, {
+    input: '0.5e5',
+    output: '50000', // 规范化【'050000'】
+  }, {
+    input: '-0.5e5',
+    output: '-50000',
   }];
   testMap.forEach((el) => {
     test(`${el.input} => ${el.output}`, () => {
@@ -637,5 +653,138 @@ describe('科学计数法展开', () => {
     // 中间分支只能直接传入科学计数法字面量覆盖
     expect(expandNumber('12.34e1')).toBe('123.4');
     expect(expandNumber('-12.34e-1')).toBe('-1.234');
+  });
+});
+
+describe('格式化数字保留N位小数', () => {
+  const testMap = [{
+    input: 3.14159,
+    output: '3.14', // 被舍弃首位 < 5 直接舍去
+  }, {
+    input: 3.14159,
+    digit: 3,
+    output: '3.142',
+  }, {
+    input: 3,
+    output: '3.00', // 不足位数补零
+  }, {
+    input: 3.1,
+    output: '3.10',
+  }, {
+    input: 3.14,
+    output: '3.14', // 小数位恰好等于保留位数
+  }, {
+    input: 1.005,
+    output: '1.01', // 基于字面量四舍五入，此前 (1.005).toFixed(2) => '1.00'
+  }, {
+    input: 1.255,
+    output: '1.26', // 被舍弃首位 === 5 进一
+  }, {
+    input: 1.2549,
+    output: '1.25',
+  }, {
+    input: 9.999,
+    output: '10.00', // 连锁进位
+  }, {
+    input: 0.999,
+    output: '1.00',
+  }, {
+    input: 99.999,
+    output: '100.00',
+  }, {
+    input: 1e-7,
+    output: '0.00', // Number 科学计数法先展开再转换
+  }, {
+    input: '1e-7',
+    output: '0.00', // 字符串科学计数法同样展开
+  }, {
+    input: 1e+21,
+    output: '1000000000000000000000.00',
+  }, {
+    input: '+2000',
+    output: '2000.00', // 前导 + 号规范化
+  }, {
+    input: -3.14159,
+    output: '-3.14',
+  }, {
+    input: -1.005,
+    output: '-1.01', // 负数按绝对值四舍五入
+  }, {
+    input: '-0.004',
+    output: '0.00', // 负零归一化
+  }, {
+    input: '0.123e2',
+    output: '12.30', // 前导零规范化【展开后 '012.3'】
+  }, {
+    input: '0.5e5',
+    output: '50000.00',
+  }];
+  testMap.forEach((el) => {
+    test(`${el.input}${el.digit !== undefined ? `, ${el.digit}` : ''} => ${el.output}`, () => {
+      expect(toFixed(el.input, { digit: el.digit })).toBe(el.output);
+    });
+  });
+  test('保留 0 位小数', () => {
+    expect(toFixed(3.7, { digit: 0 })).toBe('4');
+    expect(toFixed(3.2, { digit: 0 })).toBe('3');
+    expect(toFixed(9.9, { digit: 0 })).toBe('10');
+    expect(toFixed(-0.4, { digit: 0 })).toBe('0'); // 负零归一化
+  });
+  test('去掉小数末尾多余的零', () => {
+    expect(toFixed('3.10', { cutZero: true })).toBe('3.1');
+    expect(toFixed(3.1, { cutZero: true })).toBe('3.1');
+    expect(toFixed(3, { cutZero: true })).toBe('3'); // 小数全为零时连小数点一并去掉
+    expect(toFixed(1.01, { cutZero: true })).toBe('1.01'); // 末尾无零原样返回
+    expect(toFixed(9.999, { cutZero: true })).toBe('10'); // 先四舍五入再去零
+    expect(toFixed(-1.01, { cutZero: true })).toBe('-1.01');
+    expect(toFixed('-0.004', { cutZero: true })).toBe('0'); // 负零归一化
+    expect(toFixed(3.7, { digit: 0, cutZero: true })).toBe('4'); // 无小数部分原样返回
+  });
+  test('数字千位符分隔', () => {
+    expect(toFixed(1234567.89, { toThousands: true })).toBe('1,234,567.89');
+    expect(toFixed(1234567, { toThousands: true })).toBe('1,234,567.00');
+    expect(toFixed(1234567, { toThousands: true, cutZero: true })).toBe('1,234,567');
+    expect(toFixed(-1234567.89, { toThousands: true })).toBe('-1,234,567.89');
+    expect(toFixed(1234.005, { toThousands: true })).toBe('1,234.01'); // 先四舍五入再分隔
+    expect(toFixed(1234.56789, { digit: 3, toThousands: true })).toBe('1,234.568');
+    expect(toFixed(100, { toThousands: true })).toBe('100.00'); // 不足四位不加分隔符
+    expect(toFixed(1e+21, { toThousands: true })).toBe('1,000,000,000,000,000,000,000.00');
+  });
+  test('digit 非法值回退默认 2', () => {
+    expect(toFixed(3.14159, { digit: -1 })).toBe('3.14');
+    expect(toFixed(3.14159, { digit: 101 })).toBe('3.14');
+    expect(toFixed(3.14159, { digit: 'x' })).toBe('3.14');
+    expect(toFixed(3.14159, { digit: null })).toBe('3.14'); // Number(null) => 0，隐式转换值同样回退
+    expect(toFixed(3.14159, { digit: '' })).toBe('3.14'); // Number('') => 0
+    expect(toFixed(3.14159, { digit: true })).toBe('3.14'); // Number(true) => 1
+  });
+  test('digit 字符串数字同样接受', () => {
+    expect(toFixed(3.14159, { digit: '3' })).toBe('3.142');
+  });
+  test('options 显式传 null 兜底为默认配置', () => {
+    expect(toFixed(3.14159, null)).toBe('3.14');
+  });
+  test('错误数据返回空字符串', () => {
+    expect(toFixed()).toBe('');
+    expect(toFixed(null)).toBe('');
+    expect(toFixed('')).toBe('');
+    expect(toFixed('num')).toBe('');
+    expect(toFixed(NaN)).toBe('');
+    expect(toFixed(Infinity)).toBe('');
+    expect(toFixed([20])).toBe(''); // 隐式转换字符串的类数组不纳入
+  });
+  test('错误数据返回 format 占位符', () => {
+    expect(toFixed('num', { format: '--' })).toBe('--');
+    expect(toFixed(null, { format: '--' })).toBe('--');
+    expect(toFixed(undefined, { format: '--' })).toBe('--');
+  });
+  test('超大数与精度边界', () => {
+    // 超出双精度表示范围【Number => Infinity】视为错误数据
+    expect(toFixed('1e309')).toBe('');
+    expect(toFixed(`1${'0'.repeat(400)}`)).toBe('');
+    // 纯字符串管线，不受 Number.MAX_SAFE_INTEGER【2^53】限制，整数位精确保留
+    expect(toFixed('9007199254740993')).toBe('9007199254740993.00');
+    // 接近表示上限，展开为 309 位十进制
+    expect(toFixed(1e308)).toBe(`1${'0'.repeat(308)}.00`);
   });
 });

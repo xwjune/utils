@@ -46,31 +46,33 @@ export function getCookie(name) {
  */
 export function setCookie(name, value, options = {}) {
   if (!name) return;
+  // options 显式传 null 时属性访问会抛 TypeError，兜底为空对象
+  const opts = options || {};
   let str = `${name}=${encodeURIComponent(value)}`;
 
-  if (options.maxAge) {
+  if (opts.maxAge) {
     const exp = new Date();
-    exp.setTime(exp.getTime() + options.maxAge * 1000);
-    options.expires = exp;
+    exp.setTime(exp.getTime() + opts.maxAge * 1000);
+    opts.expires = exp;
   }
 
-  if (options.domain) {
-    str += `; Domain=${options.domain}`;
+  if (opts.domain) {
+    str += `; Domain=${opts.domain}`;
   }
-  if (options.path) {
-    str += `; Path=${options.path}`;
+  if (opts.path) {
+    str += `; Path=${opts.path}`;
   }
-  if (options.expires) {
-    str += `; Expires=${options.expires.toUTCString()}`;
+  if (opts.expires) {
+    str += `; Expires=${opts.expires.toUTCString()}`;
   }
-  if (options.httpOnly) {
+  if (opts.httpOnly) {
     str += '; HttpOnly';
   }
-  if (options.secure) {
+  if (opts.secure) {
     str += '; Secure';
   }
-  if (options.sameSite) {
-    str += `; SameSite=${options.sameSite}`;
+  if (opts.sameSite) {
+    str += `; SameSite=${opts.sameSite}`;
   }
 
   document.cookie = str;

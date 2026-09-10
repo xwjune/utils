@@ -9,6 +9,7 @@
  * combination - 列出n个数组所有组合
  * toThousands - 数字千位符分隔
  * expandNumber - 科学计数法展开为十进制字符串
+ * toFixed - 格式化数字保留N位小数
  */
 import bytesToSize from './bytesToSize';
 import fenToYuan from './fenToYuan';
@@ -18,6 +19,7 @@ import currencyToCn from './currencyToCn';
 import combination from './combination';
 import toThousands from './toThousands';
 import expandNumber from './expandNumber';
+import toFixed from './toFixed';
 
 export default {
   bytesToSize,
@@ -28,4 +30,5 @@ export default {
   combination,
   toThousands,
   expandNumber,
+  toFixed,
 };

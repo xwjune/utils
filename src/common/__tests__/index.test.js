@@ -6,6 +6,17 @@ describe('生成uuid', () => {
   });
 });
 
+describe('cookie操作', () => {
+  test('setCookie/getCookie 基本读写', () => {
+    common.setCookie('jun-utils-test', 'value1');
+    expect(common.getCookie('jun-utils-test')).toBe('value1');
+  });
+  test('options 显式传 null 兜底为空配置', () => {
+    common.setCookie('jun-utils-null', 'value2', null);
+    expect(common.getCookie('jun-utils-null')).toBe('value2');
+  });
+});
+
 describe('获取url中的参数', () => {
   const t1 = 'http://www.w3school.com?name=';
   test(`提取name参数：${t1}`, () => {

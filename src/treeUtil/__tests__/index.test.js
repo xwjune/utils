@@ -203,6 +203,9 @@ describe('数据转换', () => {
   test('空值输入', () => {
     expect(treeUtil.dataConvert()).toEqual([]);
   });
+  test('options 显式传 null 不抛错', () => {
+    expect(() => treeUtil.dataConvert(source, null)).not.toThrow();
+  });
 });
 
 describe('数据提取', () => {
@@ -232,6 +235,7 @@ describe('数据提取', () => {
     expect(treeUtil.dataPick(treeData, ['340000'])).toEqual([]);
     expect(treeUtil.dataPick()).toEqual([]);
     expect(treeUtil.dataPick([])).toEqual([]);
+    expect(treeUtil.dataPick(treeData, ['330000', '330100'], null)).toEqual(['浙江省', '杭州市']); // options 显式传 null 兜底为默认配置
   });
   test('dataPick【主键类型不一致】', () => {
     const numTree = [{
@@ -265,6 +269,7 @@ describe('数据查找', () => {
     expect(treeUtil.dataFind(treeData, '330100')).toEqual({ id: '330100', name: '杭州市' });
     expect(treeUtil.dataFind(treeData, '330300')).toBeUndefined();
     expect(treeUtil.dataFind()).toBeUndefined();
+    expect(treeUtil.dataFind(treeData, '330100', null)).toEqual({ id: '330100', name: '杭州市' }); // options 显式传 null 兜底为默认配置
   });
   test('dataFind【返回原节点引用】', () => {
     expect(treeUtil.dataFind(treeData, '330100')).toBe(treeData[1].children[0]);

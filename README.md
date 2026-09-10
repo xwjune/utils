@@ -759,6 +759,8 @@ convert.toThousands(1e+21); // 1,000,000,000,000,000,000,000（科学计数法�
 
 convert.toThousands('+2000'); // 2,000（前导 + 号规范化）
 
+convert.toThousands('0.5e5'); // 50,000（前导零规范化）
+
 convert.toThousands(); // ''
 ```
 
@@ -775,6 +777,47 @@ convert.expandNumber(1.5e21); // '1500000000000000000000'
 convert.expandNumber(1.5); // '1.5' 非科学计数法原样返回
 
 convert.expandNumber('12.34e1'); // '123.4' 字符串科学计数法同样支持
+
+convert.expandNumber('0.123e2'); // '12.3' 前导零规范化
+```
+
+### toFixed(value, [options])
+格式化数字，四舍五入保留 N 位小数
+
+#### API
+| Property | Description | Type | Default |
+| :------- | :---------- | :--- | :------ |
+| value | 数字 | string \| number | - |
+| options | 配置参数 | object | {} |
+| options.digit | 保留小数位数 | number | 2 |
+| options.cutZero | 是否去掉小数末尾多余的零 | boolean  | false |
+| options.toThousands | 是否使用千位分隔符 | boolean | false |
+| options.format | 数据错误时返回的占位符 | string | '' |
+
+```JavaScript
+convert.toFixed(3.14159); // '3.14'
+
+convert.toFixed(3.14159, { digit: 3 }); // '3.142'
+
+convert.toFixed(3); // '3.00' 不足位数补零
+
+convert.toFixed('3.10', { cutZero: true }); // '3.1' 去掉小数末尾多余的零
+
+convert.toFixed(3, { cutZero: true }); // '3' 小数全为零时连小数点一并去掉
+
+convert.toFixed(1234567.89, { toThousands: true }); // '1,234,567.89' 数字千位符分隔
+
+convert.toFixed(1.005); // '1.01' 基于字面量四舍五入
+
+convert.toFixed(9.999); // '10.00' 连锁进位
+
+convert.toFixed(-1.005); // '-1.01' 负数按绝对值四舍五入
+
+convert.toFixed('-0.004'); // '0.00' 负零归一化
+
+convert.toFixed('num'); // '' 错误数据
+
+convert.toFixed('num', { format: '--' }); // '--' 错误数据返回占位符
 ```
 
 ***

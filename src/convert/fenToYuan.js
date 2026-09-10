@@ -45,7 +45,7 @@ export default function fenToYuan(value, options = {}) {
     format = '0.00', // 空数据格式化
     cutZero = false, // 是否去掉小数末尾多余的零
     toThousands = false, // 数字千位符分隔
-  } = options;
+  } = options || {}; // options 显式传 null 时解构会抛 TypeError，兜底为空对象
   if (
     value === undefined
     || value === null

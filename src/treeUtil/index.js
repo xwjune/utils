@@ -63,7 +63,7 @@ function dataConvert(source = [], options = {}) {
     children = 'children', // 树节点子集合key
     raw = false, // 是否保留所有属性
     otherKeys = [], // 其他需要保留的属性
-  } = options;
+  } = options || {}; // options 显式传 null 时解构会抛 TypeError，兜底为空对象
   const dataObj = Object.create(null); // 缓存数据（无原型链，避免主键为 'constructor' 等时误命中原型属性）
   const delPid = !raw && !otherKeys.includes(pId); // 是否删除数据父主键key
 
@@ -157,7 +157,7 @@ function dataPick(treeData = [], values = [], options = {}) {
     origin = 'id', // 原始key
     key = 'name', // 提取key
     children = 'children', // 子集合key
-  } = options;
+  } = options || {}; // options 显式传 null 时解构会抛 TypeError，兜底为空对象
   const newValues = [];
   const pick = (source, index = 0) => {
     source.some((item) => {
@@ -212,7 +212,7 @@ function dataFind(treeData = [], value, options = {}) {
   const {
     key = 'id', // key
     children = 'children', // 子集合key
-  } = options;
+  } = options || {}; // options 显式传 null 时解构会抛 TypeError，兜底为空对象
   let result;
   const find = (data) => {
     return data.find((item) => {

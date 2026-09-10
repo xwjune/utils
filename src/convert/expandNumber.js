@@ -13,6 +13,9 @@
  *
  * expandNumber('1e+21')
  * // => 1000000000000000000000
+ *
+ * expandNumber('0.123e2')
+ * // => 12.3 前导零规范化
  */
 export default function expandNumber(num) {
   const str = String(num);
@@ -32,5 +35,6 @@ export default function expandNumber(num) {
   } else {
     plainStr = `${digits.slice(0, pointPos)}.${digits.slice(pointPos)}`;
   }
-  return negative ? `-${plainStr}` : plainStr;
+  // 纯小数尾数右移小数点会产生前导零，去掉多余的 0【'0.123e2' => '012.3' => '12.3'】
+  return (negative ? `-${plainStr}` : plainStr).replace(/^(-?)0+(?=\d)/, '$1');
 }
