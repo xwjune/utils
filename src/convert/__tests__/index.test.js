@@ -104,7 +104,14 @@ describe('数据容量单位换算', () => {
   test('digit 非法值回退默认 1，不抛 RangeError', () => {
     expect(bytesToSize(10000, -1)).toBe('9.8KB');
     expect(bytesToSize(10000, 101)).toBe('9.8KB');
+    expect(bytesToSize(10000, 3.5)).toBe('9.8KB'); // 非整数
+    expect(bytesToSize(10000, '2')).toBe('9.8KB'); // 字符串数字不纳入
     expect(bytesToSize(10000, 'x')).toBe('9.8KB');
+    expect(bytesToSize(10000, null)).toBe('9.8KB');
+    expect(bytesToSize(10000, true)).toBe('9.8KB');
+  });
+  test('digit 0 同样接受', () => {
+    expect(bytesToSize(10240, 0)).toBe('10KB'); // 0 是合法保留位数
   });
 });
 
@@ -753,13 +760,11 @@ describe('格式化数字保留N位小数', () => {
   test('digit 非法值回退默认 2', () => {
     expect(toFixed(3.14159, { digit: -1 })).toBe('3.14');
     expect(toFixed(3.14159, { digit: 101 })).toBe('3.14');
+    expect(toFixed(3.14159, { digit: 3.5 })).toBe('3.14'); // 非整数
+    expect(toFixed(3.14159, { digit: '3' })).toBe('3.14'); // 字符串数字不纳入
     expect(toFixed(3.14159, { digit: 'x' })).toBe('3.14');
-    expect(toFixed(3.14159, { digit: null })).toBe('3.14'); // Number(null) => 0，隐式转换值同样回退
-    expect(toFixed(3.14159, { digit: '' })).toBe('3.14'); // Number('') => 0
-    expect(toFixed(3.14159, { digit: true })).toBe('3.14'); // Number(true) => 1
-  });
-  test('digit 字符串数字同样接受', () => {
-    expect(toFixed(3.14159, { digit: '3' })).toBe('3.142');
+    expect(toFixed(3.14159, { digit: null })).toBe('3.14');
+    expect(toFixed(3.14159, { digit: true })).toBe('3.14');
   });
   test('options 显式传 null 兜底为默认配置', () => {
     expect(toFixed(3.14159, null)).toBe('3.14');

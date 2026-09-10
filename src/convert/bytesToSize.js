@@ -41,9 +41,8 @@ export default function bytesToSize(bytes, digit = 1, format = '0B') {
   const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB', 'BB', 'NB', 'DB', 'CB'];
   const uLen = units.length;
   const i = Math.floor(Math.log(bytes) / Math.log(k));
-  // toFixed 仅接受 0-100 的整数，非法值回退默认 1【如 bytesToSize(10240, -1) 直接抛 RangeError】
-  const d = Number(digit);
-  const decimal = Number.isInteger(d) && d >= 0 && d <= 100 ? d : 1;
+  // 保留位数仅接受 0-100 的整数【原生 toFixed 合法区间，越界其抛 RangeError】，非法值回退默认 1
+  const decimal = Number.isInteger(digit) && digit >= 0 && digit <= 100 ? digit : 1;
 
   if (i < uLen) {
     return `${(bytes / (k ** i)).toFixed(decimal)}${units[i]}`;

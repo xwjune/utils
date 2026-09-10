@@ -64,11 +64,8 @@ export default function toFixed(value, options = {}) {
   if (!isNumber(value)) {
     return format;
   }
-  // 保留位数仅接受 0-100 的整数或整数字符串，null、''、true 等隐式转换出 0/1 的值视为非法回退默认 2
-  const d = typeof digit === 'number' || (typeof digit === 'string' && digit !== '')
-    ? Number(digit)
-    : NaN;
-  const decimal = Number.isInteger(d) && d >= 0 && d <= 100 ? d : 2;
+  // 保留位数仅接受 0-100 的整数【同原生 toFixed 合法区间，越界其抛 RangeError】，非法值回退默认 2
+  const decimal = Number.isInteger(digit) && digit >= 0 && digit <= 100 ? digit : 2;
 
   // 先展开科学计数法【如 String(1e-7) => '1e-7'，展开后 => '0.0000001'】，再规范化前导 + 号【如 '+2000' => '2000'】
   let str = expandNumber(value).replace(/^\+/, '');
