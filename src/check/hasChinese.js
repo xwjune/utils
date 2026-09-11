@@ -40,7 +40,7 @@ const RANGES = [
 const REGEXP = new RegExp(`(?:[${RANGES.join('')}]|[\uD840-\uD87E][\uDC00-\uDFFF])`);
 
 export default function hasChinese(value) {
-  // test 会将参数隐式转成字符串【数组、对象能误中，Symbol 直接抛错】，故仅接受字符串
+  // 正则 test 会将参数隐式转成字符串【非锚定匹配，数组、对象能误中，Symbol 直接抛错】，故仅接受字符串
   if (typeof value !== 'string') return false;
   return REGEXP.test(value);
 }

@@ -94,7 +94,7 @@ export function isNumber(value) {
  * // => false
  */
 export function isDecimalNumber(value) {
-  // test 会先将参数隐式转成字符串【[20] => '20' 亦能匹配正则】，故仅接受数字与字符串
+  // 正则 test 会将参数隐式转成字符串【[20] 能转成 '20' 误中】，故仅接受数字与字符串
   if (typeof value !== 'number' && typeof value !== 'string') {
     return false;
   }
@@ -133,7 +133,7 @@ export function isDecimalNumber(value) {
  * // => false
  */
 export function isInteger(value) {
-  // test 会先将参数隐式转成字符串【[20] => '20' 亦能匹配正则】，故仅接受数字与字符串
+  // 正则 test 会将参数隐式转成字符串【[20] 能转成 '20' 误中】，故仅接受数字与字符串
   if (typeof value !== 'number' && typeof value !== 'string') {
     return false;
   }
@@ -172,7 +172,7 @@ export function isInteger(value) {
  * // => false
  */
 export function isDecimal(value) {
-  // test 会先将参数隐式转成字符串【[0.2] => '0.2' 亦能匹配正则】，故仅接受数字与字符串
+  // 正则 test 会将参数隐式转成字符串【[0.2] 能转成 '0.2' 误中】，故仅接受数字与字符串
   if (typeof value !== 'number' && typeof value !== 'string') {
     return false;
   }

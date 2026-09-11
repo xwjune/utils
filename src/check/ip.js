@@ -24,7 +24,7 @@ const OCTET = '(25[0-5]|2[0-4]\\d|(1\\d{2}|[1-9]?\\d))';
 const REGEXP = new RegExp(`^(${OCTET}\\.){3}${OCTET}$`);
 
 export default function ip(value) {
-  // test 会将参数隐式转成字符串【单元素数组能误中，Symbol 直接抛错】，故仅接受字符串
+  // 正则 test 会将参数隐式转成字符串【单元素数组能误中，Symbol 直接抛错】，故仅接受字符串
   if (typeof value !== 'string') return false;
   return REGEXP.test(value);
 }

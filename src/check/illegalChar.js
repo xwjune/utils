@@ -22,7 +22,7 @@
 const REGEXP = /["\\\x00-\x1f\x7f]/;
 
 export default function illegalChar(value) {
-  // test 会将参数隐式转成字符串【单元素数组能误中，Symbol 直接抛错】，故仅接受字符串
+  // 正则 test 会将参数隐式转成字符串【非锚定匹配，数组、对象能误中，Symbol 直接抛错】，故仅接受字符串
   if (typeof value !== 'string') return false;
   return REGEXP.test(value);
 }

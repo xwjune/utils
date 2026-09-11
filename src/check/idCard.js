@@ -41,7 +41,7 @@ function isValidDate(year, month, day) {
 }
 
 export default function idCard(value) {
-  // test 会将参数隐式转成字符串【数组、数字均能匹配】，故仅接受字符串
+  // 正则 test 会将参数隐式转成字符串【数字、单元素数组能误中，Symbol 直接抛错】，故仅接受字符串
   if (typeof value !== 'string') return false;
 
   if (PATTERN_18.test(value)) {

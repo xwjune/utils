@@ -14,7 +14,7 @@
 const CELLPHONE_REGEXP = /^1\d{10}$/;
 
 export function cellphone(value) {
-  // test 会将参数隐式转成字符串【数字、单元素数组能误中，Symbol 直接抛错】，故仅接受字符串
+  // 正则 test 会将参数隐式转成字符串【数字、单元素数组能误中，Symbol 直接抛错】，故仅接受字符串
   if (typeof value !== 'string') return false;
   return CELLPHONE_REGEXP.test(value);
 }
@@ -41,7 +41,7 @@ export function cellphone(value) {
 const TELPHONE_REGEXP = /^(\d{3,4}-?)?\d{7,8}$/;
 
 export function telphone(value) {
-  // test 会将参数隐式转成字符串【数字、单元素数组能误中，Symbol 直接抛错】，故仅接受字符串
+  // 正则 test 会将参数隐式转成字符串【数字、单元素数组能误中，Symbol 直接抛错】，故仅接受字符串
   if (typeof value !== 'string') return false;
   return TELPHONE_REGEXP.test(value);
 }

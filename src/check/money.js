@@ -30,7 +30,7 @@
 const REGEXP = /^(0|[1-9][0-9]*)(\.[0-9]{1,2})?$/;
 
 export default function money(value) {
-  // test 会先将参数隐式转成字符串【[20] => '20' 亦能匹配正则】，故仅接受数字与字符串
+  // 正则 test 会将参数隐式转成字符串【[20] 能转成 '20' 误中】，故仅接受数字与字符串
   if (typeof value !== 'number' && typeof value !== 'string') {
     return false;
   }
