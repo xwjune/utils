@@ -576,49 +576,87 @@ describe('选中文本', () => {
 
 describe('文档操作', () => {
   // jsdom 各视口属性默认 0/768，用 defineProperty 造值覆盖「取到值」与「回退」两条分支
+  // 备份描述符恢复而非 delete——jsdom 的 pageYOffset/innerHeight 等是自有 getter，delete 会把 getter 弄丢
   const withProp = (obj, prop, value, fn) => {
+    const desc = Object.getOwnPropertyDescriptor(obj, prop);
     Object.defineProperty(obj, prop, { value, configurable: true });
     try {
       fn();
     } finally {
-      delete obj[prop];
+      if (desc) {
+        Object.defineProperty(obj, prop, desc);
+      } else {
+        delete obj[prop];
+      }
     }
   };
   test('getWinHeight 优先 innerHeight，回退 documentElement/body', () => {
     withProp(window, 'innerHeight', 400, () => {
       expect(common.getWinHeight()).toBe(400);
     });
-    expect(common.getWinHeight()).toBe(0);
+    // innerHeight 显式取 0 才是回退分支；jsdom 的 innerHeight getter 恢复后默认 768
+    withProp(window, 'innerHeight', 0, () => {
+      expect(common.getWinHeight()).toBe(0);
+    });
   });
   test('getWinWidth 优先 innerWidth，回退 documentElement/body', () => {
     withProp(window, 'innerWidth', 800, () => {
       expect(common.getWinWidth()).toBe(800);
     });
-    expect(common.getWinWidth()).toBe(0);
+    withProp(window, 'innerWidth', 0, () => {
+      expect(common.getWinWidth()).toBe(0);
+    });
   });
-  test('getWinScrollHeight 优先 documentElement，回退 body', () => {
+  test('getWinScrollHeight 优先 documentElement，body 仅在取值为 0 时兜底', () => {
     withProp(document.documentElement, 'scrollHeight', 100, () => {
-      expect(common.getWinScrollHeight()).toBe(100);
+      withProp(document.body, 'scrollHeight', 300, () => {
+        expect(common.getWinScrollHeight()).toBe(100); // documentElement 有值即取，不与 body 比大小
+      });
     });
-    expect(common.getWinScrollHeight()).toBe(0);
+    withProp(document.body, 'scrollHeight', 300, () => {
+      expect(common.getWinScrollHeight()).toBe(300); // documentElement 取值为 0（老引擎）时兜底 body
+    });
   });
-  test('getWinScrollWidth 优先 documentElement，回退 body', () => {
+  test('getWinScrollWidth 优先 documentElement，body 仅在取值为 0 时兜底', () => {
     withProp(document.documentElement, 'scrollWidth', 200, () => {
-      expect(common.getWinScrollWidth()).toBe(200);
+      withProp(document.body, 'scrollWidth', 500, () => {
+        expect(common.getWinScrollWidth()).toBe(200);
+      });
     });
-    expect(common.getWinScrollWidth()).toBe(0);
+    withProp(document.body, 'scrollWidth', 500, () => {
+      expect(common.getWinScrollWidth()).toBe(500);
+    });
   });
-  test('getWinScrollTop 优先 documentElement，回退 body', () => {
-    withProp(document.documentElement, 'scrollTop', 42, () => {
+  test('getWinScrollTop 优先 pageYOffset，缺失时回退 scrollTop 链', () => {
+    withProp(window, 'pageYOffset', 42, () => {
       expect(common.getWinScrollTop()).toBe(42);
+      withProp(document.documentElement, 'scrollTop', 7, () => {
+        expect(common.getWinScrollTop()).toBe(42); // pageYOffset 优先级更高
+      });
     });
-    expect(common.getWinScrollTop()).toBe(0);
+    withProp(window, 'pageYOffset', undefined, () => {
+      withProp(document.documentElement, 'scrollTop', 33, () => {
+        expect(common.getWinScrollTop()).toBe(33);
+      });
+      // 怪异模式：documentElement 恒 0，滚动值挂 body，选择链须取 body 侧
+      withProp(document.body, 'scrollTop', 55, () => {
+        expect(common.getWinScrollTop()).toBe(55);
+      });
+    });
   });
-  test('getWinScrollLeft 优先 documentElement，回退 body', () => {
-    withProp(document.documentElement, 'scrollLeft', 24, () => {
+  test('getWinScrollLeft 优先 pageXOffset，缺失时回退 scrollLeft 链', () => {
+    withProp(window, 'pageXOffset', 24, () => {
       expect(common.getWinScrollLeft()).toBe(24);
     });
-    expect(common.getWinScrollLeft()).toBe(0);
+    withProp(window, 'pageXOffset', undefined, () => {
+      withProp(document.documentElement, 'scrollLeft', 15, () => {
+        expect(common.getWinScrollLeft()).toBe(15);
+      });
+      // 怪异模式：documentElement 恒 0，滚动值挂 body，选择链须取 body 侧
+      withProp(document.body, 'scrollLeft', 35, () => {
+        expect(common.getWinScrollLeft()).toBe(35);
+      });
+    });
   });
   test('getElementOffset 叠加页面滚动偏移', () => {
     const el = { getBoundingClientRect: () => ({ top: 10, left: 20 }) };
@@ -626,6 +664,28 @@ describe('文档操作', () => {
       withProp(window, 'pageXOffset', 50, () => {
         expect(common.getElementOffset(el)).toEqual({ top: 110, left: 70 });
       });
+    });
+  });
+  test('getElementOffset 空值/非元素入参返回原点', () => {
+    expect(common.getElementOffset(null)).toEqual({ top: 0, left: 0 });
+    expect(common.getElementOffset(undefined)).toEqual({ top: 0, left: 0 });
+    expect(common.getElementOffset('div')).toEqual({ top: 0, left: 0 });
+  });
+  test('document.body 为 null（脚本先于 body 解析）时的行为', () => {
+    withProp(document, 'body', null, () => {
+      // 真实浏览器 head 期 innerHeight/innerWidth 已有窗口尺寸，视口尺寸正常返回
+      withProp(window, 'innerHeight', 768, () => {
+        withProp(window, 'innerWidth', 1024, () => {
+          expect(common.getWinHeight()).toBe(768);
+          expect(common.getWinWidth()).toBe(1024);
+        });
+      });
+      // 滚动偏移走 pageYOffset 分支，不受 body 影响
+      expect(common.getWinScrollTop()).toBe(0);
+      expect(common.getWinScrollLeft()).toBe(0);
+      // scroll 系列此时在 null 上取属性抛错——fail-fast 暴露错误时机的调用，不返回 0 掩盖
+      expect(() => common.getWinScrollHeight()).toThrow(TypeError);
+      expect(() => common.getWinScrollWidth()).toThrow(TypeError);
     });
   });
 });

@@ -151,6 +151,8 @@ common.delCookie('name', { domain: '.example.com', path: '/app' });
 ## getWinHeight()
 **获取窗口可视区的高度**
 
+innerHeight 口径含滚动条，回退的 clientHeight 口径不含【桌面端有可见滚动条时两者有差】
+
 ```JavaScript
 common.getWinHeight(); // 可视区高度【像素，随窗口大小变化】
 // => 667
@@ -203,6 +205,11 @@ common.getWinScrollLeft(); // 页面未滚动时
 **获取元素相对于文档的位置**
 
 相对整份文档的坐标【getBoundingClientRect 是相对视口，不含页面滚动偏移】
+
+element 为空值或无 getBoundingClientRect 时返回 { top: 0, left: 0 }
+
+返回的是视觉坐标：display:none 元素 rect 全 0，叠加滚动偏移后可能得到非 0；  
+position:fixed / transform 元素的坐标随变换与滚动变化，可能与布局位置不符
 
 ```JavaScript
 const offset = common.getElementOffset(element);
