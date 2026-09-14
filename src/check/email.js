@@ -1,24 +1,31 @@
 /**
  * 邮箱校验
+ *
  * 规则：登录名@主机名.域名
- * 登录名可用字母、数字、_、-、+，点仅作分段符【不可在首尾或连续】；
- * 域名标签不可以连字符开头或结尾，点同样仅作分段符；
- * 顶级域为纯字母且至少 2 位【放行 .technology 等新顶级域】
+ * - 登录名可用字母、数字、_、-、+，点仅作分段符【不可在首尾或连续】
+ * - 域名标签不可以连字符开头或结尾，点同样仅作分段符
+ * - 顶级域为纯字母且至少 2 位【放行 .technology 等新顶级域】
  *
  * @param {*} value - The value to check.
  * @return {Boolean} Return `true` if validated, else `false`.
  * @example
  *
- * email('test@163.com');
+ * email('test@163.com'); // 常规邮箱
  * // => true
  *
- * email('te_st@sima.vip.com');
+ * email('te_st@sima.vip.com'); // 登录名含下划线，多级域名
  * // => true
  *
- * email('test+tag@163.com');
+ * email('test+tag@163.com'); // + 别名合法
  * // => true
  *
- * email('test@163..com');
+ * email('test@163..com'); // 域名连续点
+ * // => false
+ *
+ * email('test@163-.com'); // 域名标签连字符收尾
+ * // => false
+ *
+ * email(['test@163.com']); // 数组非字符串
  * // => false
  */
 

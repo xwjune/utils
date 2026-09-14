@@ -12,6 +12,8 @@
     "lint:fix": "eslint . --fix --ext .js",
     "test": "jest",
     "test:coverage": "jest --coverage",
+    "docs:gen": "node scripts/gen-docs.js",
+    "docs:check": "node scripts/gen-docs.js --check",
     "clean": "rimraf lib dist",
     "prebuild": "npm run clean",
     "prepare": "npm run build"
@@ -51,12 +53,14 @@
   "lint-staged": {
     "src/**/*.js": [
       "eslint --fix",
+      "node scripts/gen-docs.js",
       "git add ."
     ]
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.0.0",
+    "@babel/parser": "^7.8.4",
     "@babel/plugin-proposal-class-properties": "^7.0.0",
     "@babel/plugin-proposal-decorators": "^7.0.0",
     "@babel/plugin-proposal-do-expressions": "^7.0.0",

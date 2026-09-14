@@ -54,16 +54,18 @@ Script:
 
 ## API
 
-| 模块 | 说明 |
-| :--- | :--- |
-| [check](docs/api/check.md) | 校验库：手机/固话/邮箱/身份证/金额/日期/IP 等 18 个校验 |
-| [stringUtil](docs/api/stringUtil.md) | 字符串处理 |
-| [floatUtil](docs/api/floatUtil.md) | 浮点数运算【解决精度问题】 |
-| [treeUtil](docs/api/treeUtil.md) | 树结构数据操作：平铺转树、提取、查找 |
-| [appUtil](docs/api/appUtil.md) | app 交互：环境判断、支付宝容器 API |
-| [convert](docs/api/convert.md) | 数据转换：金额/容量/千位符/中文大写等 9 个函数 |
-| [common](docs/api/common.md) | 通用方法：cookie、事件、窗口尺寸等 18 个函数 |
-| [crypt](docs/api/crypt.md) | 加密解密【用于暴露在url中的重要参数】 |
-| [ws](docs/api/ws.md) | webSocket【断线重连】 |
+<!-- gen-docs:start -->
+| 模块 | 说明 | 函数 |
+| :--- | :--- | :--- |
+| [check](docs/api/check.md) | 校验库 | 19 |
+| [stringUtil](docs/api/stringUtil.md) | 字符串处理 | 1 |
+| [floatUtil](docs/api/floatUtil.md) | 浮点数运算【解决精度问题】 | 4 |
+| [treeUtil](docs/api/treeUtil.md) | 树结构数据操作 | 3 |
+| [appUtil](docs/api/appUtil.md) | app 交互 | 10 |
+| [convert](docs/api/convert.md) | 数据转换 | 9 |
+| [common](docs/api/common.md) | 通用方法 | 19 |
+| [crypt](docs/api/crypt.md) | 加密解密【用于暴露在 url 中的重要参数】 | 2 |
+| [ws](docs/api/ws.md) | webSocket【断线重连】 | 1 |
+<!-- gen-docs:end -->
 
-> 各函数的参数、返回值与示例见对应模块文档；安装后在 IDE 中悬停函数名可查看同样内容的 JSDoc。改函数行为时以 `src/` 内 JSDoc 为契约来源，文档同步更新。
+> 各函数的参数、返回值与示例见对应模块文档；安装后在 IDE 中悬停函数名可查看同样内容的 JSDoc。docs/api 与本索引表由源码 JSDoc 自动生成（`npm run docs:gen`），改函数请改 JSDoc，勿手改生成文件。

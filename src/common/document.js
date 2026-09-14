@@ -7,13 +7,17 @@
  * getWinScrollWidth - 获取窗口可视区内容的总宽度
  * getWinScrollTop - 获取窗口可视区滚动条垂直偏移
  * getWinScrollLeft - 获取窗口可视区滚动条水平偏移
- * getElementOffset - 获取元素相对于窗口可视区的位置
+ * getElementOffset - 获取元素相对于文档的位置
  */
 
 /**
  * 获取窗口可视区的高度
  *
  * @returns {Number}
+ * @example
+ *
+ * getWinHeight(); // 可视区高度【像素，随窗口大小变化】
+ * // => 667
  */
 export function getWinHeight() {
   return window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
@@ -23,6 +27,10 @@ export function getWinHeight() {
  * 获取窗口可视区的宽度
  *
  * @returns {Number}
+ * @example
+ *
+ * getWinWidth(); // 可视区宽度【像素，随窗口大小变化】
+ * // => 375
  */
 export function getWinWidth() {
   return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
@@ -32,6 +40,10 @@ export function getWinWidth() {
  * 获取窗口可视区内容的总高度
  *
  * @returns {Number}
+ * @example
+ *
+ * getWinScrollHeight(); // 内容总高度，长页面大于可视区高度
+ * // => 2589
  */
 export function getWinScrollHeight() {
   return document.documentElement.scrollHeight || document.body.scrollHeight;
@@ -41,6 +53,10 @@ export function getWinScrollHeight() {
  * 获取窗口可视区内容的总宽度
  *
  * @returns {Number}
+ * @example
+ *
+ * getWinScrollWidth(); // 内容总宽度，无横向溢出时等于可视区宽度
+ * // => 375
  */
 export function getWinScrollWidth() {
   return document.documentElement.scrollWidth || document.body.scrollWidth;
@@ -50,6 +66,13 @@ export function getWinScrollWidth() {
  * 获取窗口可视区滚动条垂直偏移
  *
  * @returns {Number}
+ * @example
+ *
+ * getWinScrollTop(); // 页面未滚动时
+ * // => 0
+ *
+ * getWinScrollTop(); // 向下滚动 100px 后
+ * // => 100
  */
 export function getWinScrollTop() {
   return document.documentElement.scrollTop || document.body.scrollTop;
@@ -59,17 +82,22 @@ export function getWinScrollTop() {
  * 获取窗口可视区滚动条水平偏移
  *
  * @returns {Number}
+ * @example
+ *
+ * getWinScrollLeft(); // 页面未滚动时
+ * // => 0
  */
 export function getWinScrollLeft() {
   return document.documentElement.scrollLeft || document.body.scrollLeft;
 }
 
 /**
- * Finds element's position relative to the whole document,
- * rather than to the viewport as it is the case with .getBoundingClientRect().
+ * 获取元素相对于文档的位置
  *
- * @param {Element} element - DOM元素
- * @returns {Object}
+ * 相对整份文档的坐标【getBoundingClientRect 是相对视口，不含页面滚动偏移】
+ *
+ * @param {Element} element - DOM 元素
+ * @returns {Object} { top, left }
  * @example
  *
  * const offset = getElementOffset(element);

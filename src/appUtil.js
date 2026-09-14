@@ -1,29 +1,43 @@
 /**
- * app交互
+ * app 交互
  *
- * isIos - IOS环境判断
- * isAndroid - Android环境判断
+ * isIos - IOS 环境判断
+ * isAndroid - Android 环境判断
  * isMobile - 移动端【手机、平板设备】环境判断
  * isWeChat - 微信客户端判断
  * isAliPay - 支付宝客户端判断
  * isTaobao - 淘宝客户端判断
- * alipayJSBridgeReady - 监听alipay容器初始化
+ * alipayJSBridgeReady - 监听 alipay 容器初始化
  * alipayTitle - 支付宝设置标题
  * alipayPopWindow - 支付宝关闭当前页面
  * alipayExitApp - 支付宝退出当前应用
  */
 class App {
   /**
-   * IOS环境判断
+   * IOS 环境判断
    *
    * @return {Boolean} true-是，false-否
+   * @example
+   *
+   * isIos(); // iPhone Safari
+   * // => true
+   *
+   * isIos(); // Android Chrome
+   * // => false
    */
   isIos = () => /CPU.+Mac OS X/i.test(navigator.userAgent);
 
   /**
-   * Android环境判断
+   * Android 环境判断
    *
    * @return {Boolean} true-是，false-否
+   * @example
+   *
+   * isAndroid(); // Android Chrome
+   * // => true
+   *
+   * isAndroid(); // iPhone Safari
+   * // => false
    */
   isAndroid = () => /Android|Adr/i.test(navigator.userAgent);
 
@@ -31,6 +45,13 @@ class App {
    * 移动端【手机、平板设备】环境判断
    *
    * @return {Boolean} true-是，false-否
+   * @example
+   *
+   * isMobile(); // iPhone Safari
+   * // => true
+   *
+   * isMobile(); // 桌面 Chrome
+   * // => false
    */
   isMobile = () => /iPhone|iPad|iPod|Android|Mobile|SymbianOS|Windows Phone|BlackBerry|webOS/i.test(navigator.userAgent);
 
@@ -38,6 +59,13 @@ class App {
    * 微信客户端判断
    *
    * @return {Boolean} true-是，false-否
+   * @example
+   *
+   * isWeChat(); // 微信内置浏览器
+   * // => true
+   *
+   * isWeChat(); // 系统浏览器
+   * // => false
    */
   isWeChat = () => /MicroMessenger/i.test(navigator.userAgent);
 
@@ -45,6 +73,13 @@ class App {
    * 支付宝客户端判断
    *
    * @return {Boolean} true-是，false-否
+   * @example
+   *
+   * isAliPay(); // 支付宝内置浏览器
+   * // => true
+   *
+   * isAliPay(); // 系统浏览器
+   * // => false
    */
   isAliPay = () => /AlipayClient/i.test(navigator.userAgent);
 
@@ -52,17 +87,29 @@ class App {
    * 淘宝客户端判断
    *
    * @return {Boolean} true-是，false-否
+   * @example
+   *
+   * isTaobao(); // 淘宝内置浏览器
+   * // => true
+   *
+   * isTaobao(); // 系统浏览器
+   * // => false
    */
   isTaobao = () => /AliApp\(TB/i.test(navigator.userAgent);
 
   /**
-   * 监听alipay容器初始化
+   * 监听 alipay 容器初始化
    *
    * @param {Function} [callback] - 回调
+   * @example
+   *
+   * alipayJSBridgeReady(() => {
+   *   alipayTitle('标题'); // 容器就绪后再调用容器 API
+   * });
    */
   alipayJSBridgeReady = (callback) => {
     if (window.AlipayJSBridge) {
-    // 如果jsbridge已经注入则直接调用
+    // 如果 jsbridge 已经注入则直接调用
       if (callback) {
         callback();
       }
@@ -77,6 +124,9 @@ class App {
    *
    * @param {String} title - 标题
    * @param {String} [subtitle] - 副标题
+   * @example
+   *
+   * alipayTitle('标题', '副标题');
    */
   alipayTitle = (title, subtitle) => {
     this.alipayJSBridgeReady(() => {
@@ -89,6 +139,10 @@ class App {
 
   /**
    * 支付宝关闭当前页面
+   *
+   * @example
+   *
+   * alipayPopWindow(); // 关闭当前页面
    */
   alipayPopWindow = () => {
     this.alipayJSBridgeReady(() => {
@@ -98,6 +152,10 @@ class App {
 
   /**
    * 支付宝退出当前应用
+   *
+   * @example
+   *
+   * alipayExitApp(); // 退出当前应用
    */
   alipayExitApp = () => {
     this.alipayJSBridgeReady(() => {

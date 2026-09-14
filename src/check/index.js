@@ -14,7 +14,7 @@
  * money - 金额【元】判断
  * hasChinese - 中文判断
  * idCard - 身份证校验
- * ip - ip地址校验
+ * ip - ip 地址校验
  * alipay - 支付宝账号校验
  * pwdIntensity - 弱密码校验
  * illegalChar - 非法字符校验

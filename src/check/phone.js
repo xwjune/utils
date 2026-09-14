@@ -1,13 +1,20 @@
 /**
  * 手机校验
- * 规则：11位数字，首位1
+ *
+ * 规则：11 位数字，首位 1
  *
  * @param {*} value - The value to check.
  * @return {Boolean} Return `true` if validated, else `false`.
  * @example
  *
- * cellphone('13456789012');
+ * cellphone('13456789012'); // 11 位手机号
  * // => true
+ *
+ * cellphone(13456789012); // 数字非字符串
+ * // => false
+ *
+ * cellphone(['13456789012']); // 数组非字符串
+ * // => false
  */
 
 // 手机号：首位 1，后接 10 位数字
@@ -21,20 +28,24 @@ export function cellphone(value) {
 
 /**
  * 固定电话校验
- * 规则：3-4位区号，7-8位直拨号码
+ *
+ * 规则：3-4 位区号，7-8 位直拨号码
  *
  * @param {*} value - The value to check.
  * @return {Boolean} Return `true` if validated, else `false`.
  * @example
  *
- * telphone('0571-85735888');
+ * telphone('0571-85735888'); // 区号带连字符
  * // => true
  *
- * telphone('057185735888');
+ * telphone('057185735888'); // 区号不带连字符
  * // => true
  *
- * telphone('85735888');
+ * telphone('85735888'); // 省略区号
  * // => true
+ *
+ * telphone(['0571-85735888']); // 数组非字符串
+ * // => false
  */
 
 // 固定电话：区号 3-4 位，可带一个连字符；区号整体可省，直拨号码 7-8 位
@@ -53,11 +64,14 @@ export function telphone(value) {
  * @return {Boolean} Return `true` if validated, else `false`.
  * @example
  *
- * phone('057185735888');
+ * phone('057185735888'); // 固定电话
  * // => true
  *
- * phone('13456789012');
+ * phone('13456789012'); // 手机号
  * // => true
+ *
+ * phone([13456789012]); // 数组非字符串
+ * // => false
  */
 export function phone(value) {
   return cellphone(value) || telphone(value);

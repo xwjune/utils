@@ -1,5 +1,6 @@
 /**
  * 日期校验
+ *
  * 规则：YYYY-MM-DD 或 YYYY/MM/DD【年 4 位，月日各 2 位且补零，分隔符须前后一致】
  * 且日历日期须真实存在【闰年 2 月 29 日、大小月 31 日等月日联合规则】
  *
@@ -7,13 +8,25 @@
  * @return {Boolean} Return `true` if validated, else `false`.
  * @example
  *
- * date('2024-02-29');
+ * date('2024-02-29'); // 闰年
  * // => true
  *
- * date('2024/02/29');
+ * date('2024/02/29'); // 斜杠分隔
  * // => true
  *
- * date('2023-02-29');
+ * date('2023-02-29'); // 平年无 2 月 29 日
+ * // => false
+ *
+ * date('2024-04-31'); // 4 月只有 30 天
+ * // => false
+ *
+ * date('2024-2-29'); // 月不足两位
+ * // => false
+ *
+ * date('2024-02/29'); // 分隔符前后不一致
+ * // => false
+ *
+ * date(['2024-02-29']); // 数组非字符串
  * // => false
  */
 // 结构：年 4 位，月 01-12，日 01-31，分隔符用反向引用锁定前后一致【2024-02/29 不通过】
@@ -40,6 +53,7 @@ export function date(value) {
 
 /**
  * 常用日期校验
+ *
  * 规则：YYYY-MM-DD 或 YYYY/MM/DD【年 1000-9999，月日各 2 位且补零，分隔符须前后一致】
  * 且日历日期须真实存在【闰年 2 月 29 日、大小月 31 日等月日联合规则】
  * 全量 0000-9999 年请用 date【本方法下界 1000，年 1000 前的 ISO 日期不收】
@@ -48,10 +62,19 @@ export function date(value) {
  * @return {Boolean} Return `true` if validated, else `false`.
  * @example
  *
- * commonDate('2024-02-29');
+ * commonDate('2024-02-29'); // 闰年
  * // => true
  *
- * commonDate('0999-12-31');
+ * commonDate('1000-01-01'); // 年下界
+ * // => true
+ *
+ * commonDate('0999-12-31'); // 年 1000 前，date 放行、commonDate 不收
+ * // => false
+ *
+ * commonDate('2024-04-31'); // 4 月只有 30 天
+ * // => false
+ *
+ * commonDate(['2024-02-29']); // 数组非字符串
  * // => false
  */
 // 结构同 REGEXP，仅年限首位非 0【即 1000-9999】

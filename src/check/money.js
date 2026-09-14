@@ -1,28 +1,32 @@
 /**
  * 金额【元】判断
- * 规则：非负、最多两位小数
+ *
+ * 规则：非负、最多两位小数；
  * 仅接受数字及十进制字面量【如 '-20'、'002'、[20]、1e-7、NaN 均视为非法】
  *
  * @param {*} value - The value to check.
  * @return {Boolean} Return `true` if validated, else `false`.
  * @example
  *
- * money('20.00');
+ * money('20.00'); // 两位小数
  * // => true
  *
- * money(20.5);
+ * money(20.5); // 数字一位小数
  * // => true
  *
- * money('-20');
+ * money('-20'); // 负数
  * // => false
  *
- * money('20.002');
+ * money('20.002'); // 三位小数
  * // => false
  *
- * money('002');
+ * money('002'); // 前导零
  * // => false
  *
- * money(1e-7); // String(1e-7) => '1e-7'
+ * money(1e-7); // 科学计数法字符串
+ * // => false
+ *
+ * money(['20']); // 数组非字符串/数字
  * // => false
  */
 

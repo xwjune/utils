@@ -8,20 +8,21 @@
 
 /**
  * 数据转换
+ *
  * 将具有层级关系的数组转化为树结构数组
  *
  * @param {Object[]} source - 源数据【有层级关系】
  * @param {Object} options - 配置参数
- * @param {String} options.pId - 源数据父主键key
+ * @param {String} options.pId - 源数据父主键 key
  * @param {String} [options.rootId] - 源数据根节点主键值，将父主键值与之相等的数据视为顶层树节点
  *   【缺省此参数，将父主键值为 undefined/null 的数据视为顶层树节点】
- * @param {String} [options.id='id'] - 源数据主键key
- * @param {String} [options.name='name'] - 源数据名称key
- * @param {String} [options.tId='id'] - 树节点主键key
- * @param {String} [options.tName='name'] - 树节点名称key
- * @param {String} [options.children='children'] - 树节点子集合key
+ * @param {String} [options.id='id'] - 源数据主键 key
+ * @param {String} [options.name='name'] - 源数据名称 key
+ * @param {String} [options.tId='id'] - 树节点主键 key
+ * @param {String} [options.tName='name'] - 树节点名称 key
+ * @param {String} [options.children='children'] - 树节点子集合 key
  * @param {Boolean} [options.raw=false] - 是否保留所有属性
- * @param {Array} [options.otherKeys=[]] - 其他需要保留的属性【raw=true时无效】
+ * @param {Array} [options.otherKeys=[]] - 其他需要保留的属性【raw=true 时无效】
  * @return {Object[]} 树结构数据
  * @example
  *
@@ -34,9 +35,9 @@
  *   { id: '320200', value: '无锡市', parentId: '320000' },
  * ];
  * const options = { rootId: '100000', pId: 'parentId', name: 'value' };
- *
  * dataConvert(source, options);
- * // => [{
+ * // 输出结果
+ * [{
  *   id: '320000',
  *   name: '江苏省',
  *   children: [
@@ -121,15 +122,16 @@ function dataConvert(source = [], options = {}) {
 
 /**
  * 数据提取
- * 根据某一属性的值提取出另一属性的值
+ *
+ * 根据某一属性的值提取出另一属性的值。
  * 路径中途失配时返回已命中的部分结果
  *
  * @param {Object[]} treeData - 源数据
  * @param {Array} values - 原始值
  * @param {Object} [options] - 配置参数
- * @param {String} [options.origin='id'] - 原始key
- * @param {String} [options.key='name'] - 提取key
- * @param {String} [options.children='children'] - 子集合key
+ * @param {String} [options.origin='id'] - 原始 key
+ * @param {String} [options.key='name'] - 提取 key
+ * @param {String} [options.children='children'] - 子集合 key
  * @return {Array} 提取的数据
  * @example
  *
@@ -185,7 +187,7 @@ function dataPick(treeData = [], values = [], options = {}) {
  * @param {String} value - 属性值
  * @param {Object} [options] - 配置参数
  * @param {String} [options.key='id'] - key
- * @param {String} [options.children='children'] - 子集合key
+ * @param {String} [options.children='children'] - 子集合 key
  * @return {Object|undefined} 命中的原树节点（修改会影响原树）
  * @example
  *

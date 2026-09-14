@@ -1,23 +1,23 @@
 /**
  * 通用方法
  *
- * generateUUID - 生成uuid
- * getParameter - 获取url中的参数
- * loadScript - 动态加载js
+ * generateUUID - 生成 uuid
+ * getParameter - 获取 url 中的参数
+ * loadScript - 动态加载 js
  * stopPropagation - 阻止事件冒泡
  * preventDefault - 阻止事件默认行为
  * addEvent - 添加事件监听
  * removeEvent - 移除事件监听
- * getCookie - 读取cookie
- * setCookie - 创建cookie
- * delCookie - 删除cookie
+ * getCookie - 读取 cookie
+ * setCookie - 创建 cookie
+ * delCookie - 删除 cookie
  * getWinHeight - 获取窗口可视区的高度
  * getWinWidth - 获取窗口可视区的宽度
  * getWinScrollHeight - 获取窗口可视区内容的总高度
  * getWinScrollWidth - 获取窗口可视区内容的总宽度
  * getWinScrollTop - 获取窗口可视区滚动条垂直偏移
  * getWinScrollLeft - 获取窗口可视区滚动条水平偏移
- * getBoundingClientRect - 获取元素相对于窗口可视区的位置
+ * getElementOffset - 获取元素相对于文档的位置
  * selectText - 选中文本
  * getStyle - 获取元素样式
  */
@@ -43,9 +43,9 @@ import selectText from './selectText';
 import getStyle from './getStyle';
 
 /**
- * 生成uuid
+ * 生成 uuid
  *
- * @return uuid
+ * @return {String} uuid
  * @example
  *
  * generateUUID();
@@ -64,7 +64,7 @@ function generateUUID() {
 }
 
 /**
- * 获取url中的参数
+ * 获取 url 中的参数
  *
  * @param {String} name - 参数名
  * @param {String} [url=window.location.search] - 链接
@@ -87,9 +87,9 @@ function getParameter(name, url = window.location.search) {
 }
 
 /**
- * 动态加载js
+ * 动态加载 js
  *
- * @param {String} url - js链接地址
+ * @param {String} url - js 链接地址
  * @param {Function} [callback] - 回调
  * @example
  *
@@ -127,6 +127,11 @@ function loadScript(url, callback) {
  * 阻止事件冒泡
  *
  * @param {Object} evt - event
+ * @example
+ *
+ * addEvent(button, 'click', (evt) => {
+ *   stopPropagation(evt); // 只响应本层，不再冒泡到父级
+ * });
  */
 function stopPropagation(evt) {
   if (!evt) return;
@@ -142,6 +147,11 @@ function stopPropagation(evt) {
  * 阻止事件默认行为
  *
  * @param {Object} evt - event
+ * @example
+ *
+ * addEvent(form, 'submit', (evt) => {
+ *   preventDefault(evt); // 拦截默认提交，改走自定义逻辑
+ * });
  */
 function preventDefault(evt) {
   if (!evt) return;

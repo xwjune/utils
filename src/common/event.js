@@ -8,7 +8,7 @@
 /**
  * 添加事件监听
  *
- * @param {Element} target - DOM元素
+ * @param {Element} target - DOM 元素
  * @param {String} type - 事件类型
  * @param {Function} handler - 事件触发时执行的函数
  * @param {Boolean} [useCapture=false] - 指定事件是否在捕获或冒泡阶段执行【true-捕获，false-冒泡】
@@ -35,7 +35,7 @@ export function addEvent(target, type, handler, useCapture = false) {
 /**
  * 移除事件监听
  *
- * @param {Element} target - DOM元素
+ * @param {Element} target - DOM 元素
  * @param {String} type - 事件类型
  * @param {Function} handler - 事件触发时执行的函数
  * @param {Boolean} [useCapture=false] - 指定事件是否在捕获或冒泡阶段执行【true-捕获，false-冒泡】

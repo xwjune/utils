@@ -14,10 +14,11 @@ import { isDecimalNumber } from '../check/number';
 
 /**
  * 通用运算
+ *
  * 思路：按小数位数把两数放大为整数运算，再将结果缩回，规避浮点数的表示误差
  *
- * @param {Number} arg1 - 运算数1
- * @param {Number} arg2 - 运算数2
+ * @param {Number} arg1 - 运算数 1
+ * @param {Number} arg2 - 运算数 2
  * @param {String} type - 运算类型【add-加法、subtract-减法、divide-除法】
  * @returns {Number} 运算结果
  */
@@ -85,8 +86,8 @@ function operation(arg1, arg2, type) {
 /**
  * 乘法
  *
- * @param {Number} arg1 - 运算数1
- * @param {Number} arg2 - 运算数2
+ * @param {Number} arg1 - 运算数 1
+ * @param {Number} arg2 - 运算数 2
  * @returns {Number} 运算结果
  */
 function multiply(arg1, arg2) {
@@ -128,10 +129,23 @@ export default {
   /**
    * 加法
    *
-   * @param {Number} arg1 - 运算数1
-   * @param {Number} arg2 - 运算数2
+   * @param {Number} arg1 - 运算数 1
+   * @param {Number} arg2 - 运算数 2
    * @param {String} [format=''] - 非法输入或超出安全整数范围时的兜底返回值
    * @returns {Number|String} 运算结果
+   * @example
+   *
+   * add(0.1, 0.2);
+   * // => 0.3
+   *
+   * add(2.22, 0.1);
+   * // => 2.32
+   *
+   * add(2.22, 'xx', '--');
+   * // => '--'
+   *
+   * add(999999999999999, 0.1, '--'); // 放大后的整数超出安全整数范围
+   * // => '--'
    */
   add(arg1, arg2, format = '') {
     if (isDecimalNumber(arg1) && isDecimalNumber(arg2)) {
@@ -142,10 +156,17 @@ export default {
   /**
    * 减法
    *
-   * @param {Number} arg1 - 运算数1
-   * @param {Number} arg2 - 运算数2
+   * @param {Number} arg1 - 运算数 1
+   * @param {Number} arg2 - 运算数 2
    * @param {String} [format=''] - 非法输入或超出安全整数范围时的兜底返回值
    * @returns {Number|String} 运算结果
+   * @example
+   *
+   * subtract(1.5, 1.2);
+   * // => 0.3
+   *
+   * subtract(0.3, 0.2);
+   * // => 0.1
    */
   subtract(arg1, arg2, format = '') {
     if (isDecimalNumber(arg1) && isDecimalNumber(arg2)) {
@@ -156,10 +177,17 @@ export default {
   /**
    * 乘法
    *
-   * @param {Number} arg1 - 运算数1
-   * @param {Number} arg2 - 运算数2
+   * @param {Number} arg1 - 运算数 1
+   * @param {Number} arg2 - 运算数 2
    * @param {String} [format=''] - 非法输入或超出安全整数范围时的兜底返回值
    * @returns {Number|String} 运算结果
+   * @example
+   *
+   * multiply(19.9, 100);
+   * // => 1990
+   *
+   * multiply(0.7, 180);
+   * // => 126
    */
   multiply(arg1, arg2, format = '') {
     if (isDecimalNumber(arg1) && isDecimalNumber(arg2)) {
@@ -170,10 +198,17 @@ export default {
   /**
    * 除法
    *
-   * @param {Number} arg1 - 运算数1
-   * @param {Number} arg2 - 运算数2
+   * @param {Number} arg1 - 运算数 1
+   * @param {Number} arg2 - 运算数 2
    * @param {String} [format=''] - 非法输入、除数为 0 或超出安全整数范围时的兜底返回值
    * @returns {Number|String} 运算结果
+   * @example
+   *
+   * divide(0.3, 0.1);
+   * // => 3
+   *
+   * divide(0.69, 10);
+   * // => 0.069
    */
   divide(arg1, arg2, format = '') {
     // 除数为 0【结果为 Infinity/NaN】时同样走兜底

@@ -5,17 +5,26 @@
  * @returns {String} 十进制字符串
  * @example
  *
- * expandNumber(1.5e-7)
+ * expandNumber(1.5e-7);
  * // => 0.00000015
  *
- * expandNumber(-1.5e21)
+ * expandNumber(-1.5e-7);
+ * // => -0.00000015
+ *
+ * expandNumber(1.5e21);
+ * // => 1500000000000000000000
+ *
+ * expandNumber(-1.5e21);
  * // => -1500000000000000000000
  *
- * expandNumber('1e+21')
- * // => 1000000000000000000000
+ * expandNumber(1.5); // 非科学计数法原样返回
+ * // => 1.5
  *
- * expandNumber('0.123e2')
- * // => 12.3 前导零规范化
+ * expandNumber('12.34e1'); // 字符串科学计数法同样支持
+ * // => 123.4
+ *
+ * expandNumber('0.123e2'); // 前导零规范化
+ * // => 12.3
  */
 export default function expandNumber(num) {
   const str = String(num);

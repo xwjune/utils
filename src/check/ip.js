@@ -1,15 +1,19 @@
 /**
- * ip地址校验（IPv4）
+ * ip 地址校验（IPv4）
+ *
  * 四段 0-255 以点分隔【拒绝前导零，如 01.1.1.1 不通过】
  *
  * @param {*} value - The value to check.
  * @return {Boolean} Return `true` if validated, else `false`.
  * @example
  *
- * ip('192.168.0.1');
+ * ip('192.168.0.1'); // 常规 IPv4
  * // => true
  *
- * ip('127.256.27.1');
+ * ip('01.1.1.1'); // 前导零
+ * // => false
+ *
+ * ip('127.256.27.1'); // 段超 255
  * // => false
  */
 

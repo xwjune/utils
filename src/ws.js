@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 /**
  * webSocket【断线重连】
+ *
  * @param {string} url - 服务器网址
  * @param {object} [options={}] - 配置参数
  * @param {number} [options.timeout=3000] - 重连频率【毫秒】
@@ -9,6 +10,13 @@
  * @param {function} [options.onclose] - 连接关闭回调
  * @param {function} [options.onmessage] - 接收数据回调
  * @param {function} [options.reconnect] - 重连回调
+ * @returns {WebSocket|null} 连接实例；环境不支持 WebSocket 时告警并返回 null
+ * @example
+ *
+ * const socket = ws('wss://example.com/socket', {
+ *   onopen() { console.log('opened'); },
+ *   onmessage(data) { console.log(data); },
+ * });
  */
 const createWebSocket = (url, options = {}) => {
   const {

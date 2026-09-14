@@ -1,19 +1,35 @@
 /**
  * 中文判断
- * 命中汉字【基本区、扩展 A、扩展 B 起代理对区及各兼容区】或中文专属符号【。，、（）￥㎡ 等】即真；
+ *
+ * 命中汉字【基本区、扩展 A、扩展 B 起代理对区及各兼容区】或中文专属符号【。，、（）￥㎡ 等】即真。
  * 中西共用符号不算中文【弯引号、破折号、省略号、全角字母数字等】
  *
  * @param {*} value - The value to check.
  * @return {Boolean} Return `true` if validated, else `false`.
  * @example
  *
- * hasChinese('中文');
+ * hasChinese('中文'); // 常用汉字
  * // => true
  *
- * hasChinese('。');
+ * hasChinese('。'); // 中文标点
  * // => true
  *
- * hasChinese('ＡＢＣ');
+ * hasChinese('𠮷'); // 扩展 B 生僻字
+ * // => true
+ *
+ * hasChinese('ＡＢＣ'); // 全角字母数字不算中文
+ * // => false
+ *
+ * hasChinese('—…“”'); // 弯引号、破折号、省略号等中西共用标点不算
+ * // => false
+ *
+ * hasChinese('l’étude'); // 西文弯撇号
+ * // => false
+ *
+ * hasChinese('ｱ'); // 半角片假名不算
+ * // => false
+ *
+ * hasChinese(['中', '文']); // 数组非字符串
  * // => false
  */
 

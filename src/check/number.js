@@ -1,5 +1,6 @@
 /**
  * 数字校验
+ *
  * 字符串仅接受十进制及科学计数法字面量【如 '0x10'、' 20 '、'020' 均视为非法】
  * NaN、Infinity 等非有限数字视为非法【如 Number('Infinity') === Infinity】
  *
@@ -7,40 +8,40 @@
  * @return {Boolean} Return `true` if validated, else `false`.
  * @example
  *
- * isNumber('20');
+ * isNumber('20'); // 十进制字符串
  * // => true
  *
- * isNumber('-20');
+ * isNumber('-20'); // 负号
  * // => true
  *
- * isNumber('+20');
+ * isNumber('+20'); // 正号
  * // => true
  *
- * isNumber('.2');
+ * isNumber('.2'); // 字符串缺整数位
  * // => false
  *
- * isNumber(.2);
+ * isNumber(.2); // 数字类型
  * // => true
  *
- * isNumber(1e+21); // 1000000000000000000000
+ * isNumber(1e+21); // 科学计数法字符串 1000000000000000000000
  * // => true
  *
- * isNumber('1e3');
+ * isNumber('1e3'); // 科学计数法字符串 1000
  * // => true
  *
- * isNumber('0x10');
+ * isNumber('0x10'); // 十六进制字面量
  * // => false
  *
- * isNumber(' 20 ');
+ * isNumber(' 20 '); // 带空白
  * // => false
  *
- * isNumber(NaN);
+ * isNumber(NaN); // NaN 非有限数字
  * // => false
  *
- * isNumber(Infinity);
+ * isNumber(Infinity); // Infinity 非有限数字
  * // => false
  *
- * isNumber('Infinity');
+ * isNumber('Infinity'); // Infinity 非有限数字
  * // => false
  */
 export function isNumber(value) {
@@ -62,6 +63,7 @@ export function isNumber(value) {
 
 /**
  * 十进制数字校验
+ *
  * 仅接受数字及十进制字面量，不兼容科学计数法数字【如 '1e+21'、1e+21、[20] 均视为非法】
  * 超出双精度表示范围的字面量视为非法【Number('1' + '0'.repeat(400)) => Infinity】
  *
@@ -69,25 +71,25 @@ export function isNumber(value) {
  * @return {Boolean} Return `true` if validated, else `false`.
  * @example
  *
- * isDecimalNumber('20');
+ * isDecimalNumber('20'); // 整数字符串
  * // => true
  *
- * isDecimalNumber('-20.5');
+ * isDecimalNumber('-20.5'); // 负小数
  * // => true
  *
- * isDecimalNumber(20.5);
+ * isDecimalNumber(20.5); // 数字类型
  * // => true
  *
- * isDecimalNumber('1e3');
+ * isDecimalNumber('1e3'); // 科学计数法字符串 1000
  * // => false
  *
- * isDecimalNumber(1e+21); // String(1e+21) => '1e+21'
+ * isDecimalNumber(1e+21); // 科学计数法字符串 1000000000000000000000
  * // => false
  *
- * isDecimalNumber('020');
+ * isDecimalNumber('020'); // 前导零
  * // => false
  *
- * isDecimalNumber([20]);
+ * isDecimalNumber([20]); // 数组非字符串/数字
  * // => false
  *
  * isDecimalNumber('1' + '0'.repeat(400)); // Infinity
@@ -107,6 +109,7 @@ export function isDecimalNumber(value) {
 
 /**
  * 整数校验
+ *
  * 仅接受数字及十进制整数字面量，不兼容科学计数法数字【如 '1e+21'、1e+21、[20] 均视为非法】
  * 超出双精度表示范围的字面量视为非法【Number('1' + '0'.repeat(400)) => Infinity】
  *
@@ -114,19 +117,22 @@ export function isDecimalNumber(value) {
  * @return {Boolean} Return `true` if validated, else `false`.
  * @example
  *
- * isInteger('20');
+ * isInteger('20'); // 整数字符串
  * // => true
  *
- * isInteger('-20');
+ * isInteger('-20'); // 负整数
  * // => true
  *
- * isInteger('0.2');
+ * isInteger(20); // 数字类型
+ * // => true
+ *
+ * isInteger('0.2'); // 小数非整数
  * // => false
  *
- * isInteger('020');
+ * isInteger('020'); // 前导零
  * // => false
  *
- * isInteger([20]);
+ * isInteger([20]); // 数组非字符串/数字
  * // => false
  *
  * isInteger('1' + '0'.repeat(400)); // Infinity
@@ -146,6 +152,7 @@ export function isInteger(value) {
 
 /**
  * 小数校验
+ *
  * 仅接受数字及十进制小数字面量，不兼容科学计数法数字【如 '1e-7'、1e-7、[20] 均视为非法】
  * 超出双精度表示范围的字面量视为非法【Number('1' + '0'.repeat(400) + '.5') => Infinity】
  *
@@ -153,19 +160,22 @@ export function isInteger(value) {
  * @return {Boolean} Return `true` if validated, else `false`.
  * @example
  *
- * isDecimal('0.2');
+ * isDecimal('0.2'); // 小数字符串
  * // => true
  *
- * isDecimal('-0.2');
+ * isDecimal('-0.2'); // 负小数
  * // => true
  *
- * isDecimal('20');
+ * isDecimal(0.2); // 数字类型
+ * // => true
+ *
+ * isDecimal('20'); // 无小数位
  * // => false
  *
- * isDecimal('00.2');
+ * isDecimal('00.2'); // 前导零
  * // => false
  *
- * isDecimal([0.2]);
+ * isDecimal([0.2]); // 数组非字符串/数字
  * // => false
  *
  * isDecimal('1' + '0'.repeat(400) + '.5'); // Infinity

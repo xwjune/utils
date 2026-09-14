@@ -19,7 +19,7 @@ export default function selectText(textNode, start = 0, length) {
     length = textNode.value.length;
   }
   if (textNode.setSelectionRange) {
-  // 非IE
+  // 非 IE
     textNode.setSelectionRange(start, start + length);
   } else if (textNode.createTextRange) {
   // IE
