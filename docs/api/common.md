@@ -222,11 +222,13 @@ common.selectText(document.querySelector('input'));
 ## getStyle(element, name)
 **获取元素样式**
 
-currentStyle：IE、Opera getComputedStyle：FireFox、Chrome、Safari
+currentStyle：IE、Opera（返回未经计算的相对值，如 50%、1em、auto）  
+getComputedStyle：FireFox、Chrome、Safari
 
 ```JavaScript
 common.getStyle(element, 'font-size'); // 读最终样式【含内联、嵌入、外部样式】
 // => '14px'
+common.getStyle(element, 'fontSize'); // 驼峰入参，与连字符等价
 ```
 
 ---

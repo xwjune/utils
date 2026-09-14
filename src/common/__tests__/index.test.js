@@ -413,6 +413,38 @@ describe('获取元素样式', () => {
     expect(common.getStyle({ style: { color: 'blue' } }, 'color')).toBe('blue');
     delete document.defaultView;
   });
+  test('getStyle currentStyle 分支驼峰与连字符等价', () => {
+    const el = { currentStyle: { fontSize: '14px' } };
+    expect(common.getStyle(el, 'fontSize')).toBe('14px');
+    expect(common.getStyle(el, 'font-size')).toBe('14px');
+  });
+  test('getStyle getComputedStyle 分支驼峰入参转连字符', () => {
+    const el = document.createElement('div');
+    el.style.fontSize = '12px';
+    document.body.appendChild(el);
+    expect(common.getStyle(el, 'fontSize')).toBe('12px');
+    expect(common.getStyle(el, 'font-size')).toBe('12px');
+    document.body.removeChild(el);
+  });
+  test('getStyle currentStyle 分支相对值（em/%）原样返回，不做解析', () => {
+    // 对齐 JSDoc：IE currentStyle 返回未经计算的相对值，如 50%、1em、auto
+    const el = { currentStyle: { fontSize: '1em', width: '50%' } };
+    expect(common.getStyle(el, 'fontSize')).toBe('1em');
+    expect(common.getStyle(el, 'width')).toBe('50%');
+  });
+  test('getStyle getComputedStyle 分支 em 值经归一化链路不被破坏', () => {
+    // jsdom 无布局引擎不解析相对值，此处原样返回 '2em'；真实浏览器该断言值为解析后的 px 计算值
+    const el = document.createElement('div');
+    el.style.fontSize = '2em';
+    document.body.appendChild(el);
+    expect(common.getStyle(el, 'fontSize')).toBe('2em');
+    expect(common.getStyle(el, 'font-size')).toBe('2em');
+    document.body.removeChild(el);
+  });
+  test('getStyle 空元素或空样式名返回空串', () => {
+    expect(common.getStyle(null, 'color')).toBe('');
+    expect(common.getStyle(document.createElement('div'), '')).toBe('');
+  });
 });
 
 describe('选中文本', () => {
