@@ -419,12 +419,54 @@ describe('选中文本', () => {
   test('selectText 走 setSelectionRange，默认选中全部', () => {
     const input = document.createElement('input');
     input.value = '123456';
-    common.selectText(input);
+    expect(common.selectText(input)).toBe(true);
     expect(input.selectionStart).toBe(0);
     expect(input.selectionEnd).toBe(6);
     common.selectText(input, 2, 0);
     expect(input.selectionStart).toBe(2);
     expect(input.selectionEnd).toBe(2);
+  });
+  test('selectText 缺省 length 从 start 选中至末尾，参数规范化', () => {
+    const input = document.createElement('input');
+    input.value = '123456';
+    common.selectText(input, 2);
+    expect(input.selectionStart).toBe(2);
+    expect(input.selectionEnd).toBe(6);
+    // 字符串拼接回归：1 + '0' 不能变成 '10'
+    common.selectText(input, 1, '0');
+    expect(input.selectionStart).toBe(1);
+    expect(input.selectionEnd).toBe(1);
+    // 非数字与负数兜底为 0
+    common.selectText(input, 'abc');
+    expect(input.selectionStart).toBe(0);
+    expect(input.selectionEnd).toBe(6);
+    common.selectText(input, -1, 2);
+    expect(input.selectionStart).toBe(0);
+    expect(input.selectionEnd).toBe(2);
+    common.selectText(input, 0, -3);
+    expect(input.selectionEnd).toBe(0);
+  });
+  test('selectText 空参与非 input/textarea 元素返回 false，不触发 focus', () => {
+    expect(common.selectText(null)).toBe(false);
+    const div = { tagName: 'DIV', focus: jest.fn() };
+    expect(common.selectText(div)).toBe(false);
+    expect(div.focus).not.toHaveBeenCalled();
+  });
+  test('selectText disabled 返回 false', () => {
+    const input = document.createElement('input');
+    input.value = '123';
+    input.disabled = true;
+    expect(common.selectText(input)).toBe(false);
+  });
+  test('selectText start 超出末尾时缺省长度兜底为 0', () => {
+    const input = {
+      tagName: 'INPUT',
+      value: '123',
+      focus: jest.fn(),
+      setSelectionRange: jest.fn(),
+    };
+    common.selectText(input, 10);
+    expect(input.setSelectionRange).toHaveBeenCalledWith(10, 10);
   });
   test('selectText IE createTextRange 分支', () => {
     const range = {
@@ -433,8 +475,8 @@ describe('选中文本', () => {
       moveEnd: jest.fn(),
       select: jest.fn(),
     };
-    const input = { createTextRange: jest.fn(() => range), focus: jest.fn() };
-    common.selectText(input, 2, 3);
+    const input = { tagName: 'INPUT', createTextRange: jest.fn(() => range), focus: jest.fn() };
+    expect(common.selectText(input, 2, 3)).toBe(true);
     expect(range.collapse).toHaveBeenCalledWith(true);
     expect(range.moveStart).toHaveBeenCalledWith('character', 2);
     expect(range.moveEnd).toHaveBeenCalledWith('character', 3);
@@ -442,9 +484,9 @@ describe('选中文本', () => {
     expect(input.focus).toHaveBeenCalled();
   });
   test('selectText 无 setSelectionRange/createTextRange 时只 focus', () => {
-    // 显式传 start/length，绕过默认 length 分支对 textNode.value 的访问
-    const input = { focus: jest.fn() };
-    common.selectText(input, 0, 0);
+    // 显式传 start/length，绕过缺省 length 分支对 input.value 的访问
+    const input = { tagName: 'INPUT', focus: jest.fn() };
+    expect(common.selectText(input, 0, 0)).toBe(true);
     expect(input.focus).toHaveBeenCalled();
   });
 });

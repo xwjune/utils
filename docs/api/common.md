@@ -204,8 +204,10 @@ const left = offset.left;
 const top = offset.top;
 ```
 
-## selectText(textNode, [start=0], [length])
+## selectText(input, [start=0], [length])
 **选中文本**
+
+仅支持 input、textarea；type=number 等无可选文本的 input 类型会抛 InvalidStateError
 
 ```JavaScript
 鼠标停留在‘元’前面
