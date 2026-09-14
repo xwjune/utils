@@ -373,26 +373,53 @@ describe('事件监听', () => {
   const handler = () => {};
   test('addEvent/removeEvent DOM2 addEventListener 分支', () => {
     const target = { addEventListener: jest.fn(), removeEventListener: jest.fn() };
-    common.addEvent(target, 'click', handler);
+    expect(common.addEvent(target, 'click', handler)).toBe(true);
     expect(target.addEventListener).toHaveBeenCalledWith('click', handler, false);
     common.addEvent(target, 'click', handler, true);
     expect(target.addEventListener).toHaveBeenLastCalledWith('click', handler, true);
-    common.removeEvent(target, 'click', handler);
+    expect(common.removeEvent(target, 'click', handler)).toBe(true);
     expect(target.removeEventListener).toHaveBeenCalledWith('click', handler, false);
   });
   test('addEvent/removeEvent IE attachEvent 分支', () => {
     const target = { attachEvent: jest.fn(), detachEvent: jest.fn() };
-    common.addEvent(target, 'click', handler);
+    expect(common.addEvent(target, 'click', handler)).toBe(true);
     expect(target.attachEvent).toHaveBeenCalledWith('onclick', handler);
     common.removeEvent(target, 'click', handler);
     expect(target.detachEvent).toHaveBeenCalledWith('onclick', handler);
   });
   test('addEvent/removeEvent DOM0 onxxx 分支', () => {
     const target = {};
-    common.addEvent(target, 'click', handler);
+    expect(common.addEvent(target, 'click', handler)).toBe(true);
     expect(target.onclick).toBe(handler);
     common.removeEvent(target, 'click', handler);
     expect(target.onclick).toBeNull();
+  });
+  test('addEventListener 属性存在但非函数时回退 DOM0 不抛错', () => {
+    const target = { addEventListener: 'oops' };
+    expect(common.addEvent(target, 'click', handler)).toBe(true);
+    expect(target.onclick).toBe(handler);
+  });
+  test('addEvent/removeEvent 事件名首尾空白自动截去', () => {
+    const target = { addEventListener: jest.fn(), removeEventListener: jest.fn() };
+    common.addEvent(target, ' click ', handler);
+    expect(target.addEventListener).toHaveBeenCalledWith('click', handler, false);
+    common.removeEvent(target, 'click ', handler);
+    expect(target.removeEventListener).toHaveBeenCalledWith('click', handler, false);
+  });
+  test('addEvent/removeEvent 空参与非法入参不抛错返回 false', () => {
+    const target = { addEventListener: jest.fn(), removeEventListener: jest.fn() };
+    // target 为空或原始类型：原始类型上挂属性会抛 TypeError，直接拦
+    expect(common.addEvent(null, 'click', handler)).toBe(false);
+    expect(common.removeEvent(123, 'click', handler)).toBe(false);
+    // type 非字符串或纯空白：现代浏览器会隐式转成永不触发的事件名，直接拦
+    expect(common.addEvent(target, 123, handler)).toBe(false);
+    expect(common.addEvent(target, '  ', handler)).toBe(false);
+    expect(common.removeEvent(target, ['click'], handler)).toBe(false);
+    // handler 非函数：null/undefined 原生为静默 no-op，字符串等形式抛 TypeError，统一拦
+    expect(common.addEvent(target, 'click')).toBe(false);
+    expect(common.removeEvent(target, 'click', null)).toBe(false);
+    expect(target.addEventListener).not.toHaveBeenCalled();
+    expect(target.removeEventListener).not.toHaveBeenCalled();
   });
 });
 
@@ -413,6 +440,25 @@ describe('获取元素样式', () => {
     expect(common.getStyle({ style: { color: 'blue' } }, 'color')).toBe('blue');
     delete document.defaultView;
   });
+  test('getStyle defaultView 无 getComputedStyle 时回退内联 style', () => {
+    Object.defineProperty(document, 'defaultView', { get: () => ({}), configurable: true });
+    expect(common.getStyle({ style: { color: 'blue' } }, 'color')).toBe('blue');
+    // style 未命中与元素无 style 属性时返回空串
+    expect(common.getStyle({ style: {} }, 'color')).toBe('');
+    expect(common.getStyle({}, 'color')).toBe('');
+    delete document.defaultView;
+  });
+  test('getStyle SSR 无 document 时回退内联 style', () => {
+    const doc = global.document;
+    delete global.document;
+    try {
+      // 连字符入参同样走驼峰转换
+      expect(common.getStyle({ style: { fontSize: '16px' } }, 'font-size')).toBe('16px');
+      expect(common.getStyle({}, 'color')).toBe('');
+    } finally {
+      global.document = doc;
+    }
+  });
   test('getStyle currentStyle 分支驼峰与连字符等价', () => {
     const el = { currentStyle: { fontSize: '14px' } };
     expect(common.getStyle(el, 'fontSize')).toBe('14px');
@@ -432,6 +478,9 @@ describe('获取元素样式', () => {
     expect(common.getStyle(el, 'fontSize')).toBe('1em');
     expect(common.getStyle(el, 'width')).toBe('50%');
   });
+  test('getStyle currentStyle 未命中返回空串', () => {
+    expect(common.getStyle({ currentStyle: {} }, 'color')).toBe('');
+  });
   test('getStyle getComputedStyle 分支 em 值经归一化链路不被破坏', () => {
     // jsdom 无布局引擎不解析相对值，此处原样返回 '2em'；真实浏览器该断言值为解析后的 px 计算值
     const el = document.createElement('div');
@@ -441,9 +490,11 @@ describe('获取元素样式', () => {
     expect(common.getStyle(el, 'font-size')).toBe('2em');
     document.body.removeChild(el);
   });
-  test('getStyle 空元素或空样式名返回空串', () => {
+  test('getStyle 空元素、空或非字符串样式名返回空串', () => {
     expect(common.getStyle(null, 'color')).toBe('');
     expect(common.getStyle(document.createElement('div'), '')).toBe('');
+    expect(common.getStyle(document.createElement('div'), 123)).toBe('');
+    expect(common.getStyle(document.createElement('div'), ['color'])).toBe('');
   });
 });
 

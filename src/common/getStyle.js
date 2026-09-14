@@ -5,7 +5,7 @@
  * getComputedStyle：FireFox、Chrome、Safari
  *
  * @param {Element} element - DOM 元素，空值时返回空串
- * @param {String} name - 样式名称，驼峰（fontSize）与连字符（font-size）均支持
+ * @param {String} name - 样式名称，驼峰（fontSize）与连字符（font-size）均支持，非字符串时返回空串
  * @return {String} 样式值【最终样式优先，都不支持时回退内联 style】
  * @example
  *
@@ -14,7 +14,8 @@
  * getStyle(element, 'fontSize'); // 驼峰入参，与连字符等价
  */
 export default function getStyle(element, name) {
-  if (!element || !name) {
+  // 非字符串 name（如 123、['color']）会在下方 replace 抛 TypeError，统一拦
+  if (!element || typeof name !== 'string' || !name) {
     return '';
   }
   // 连字符转驼峰：currentStyle 与内联 style 仅认驼峰

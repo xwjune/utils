@@ -58,6 +58,9 @@ common.addEvent(form, 'submit', (evt) => {
 ## addEvent(target, type, handler, [useCapture=false])
 **添加事件监听**
 
+非法入参（target 非对象、type 非字符串或纯空白、handler 非函数）时不动作并返回 false；  
+返回 true 仅代表入参合法并完成了挂载调用，不保证监听实际生效（DOM0 分支会覆盖已有监听）
+
 ```JavaScript
 const handler = () => {
   console.log('onload');
@@ -67,6 +70,9 @@ common.addEvent(window, 'load', handler);
 
 ## removeEvent(target, type, handler, [useCapture=false])
 **移除事件监听**
+
+非法入参（target 非对象、type 非字符串或纯空白、handler 非函数）时不动作并返回 false；  
+返回 true 仅代表入参合法并调用了移除 API，不感知是否命中已挂监听（如 capture 标志不一致时原生为静默 no-op）
 
 ```JavaScript
 const handler = () => {
