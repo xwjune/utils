@@ -6,7 +6,7 @@
 import { convert } from 'jun-utils';
 ```
 
-## bytesToSize(bytes, [digit=1], [format='0B'])
+## bytesToSize(bytes, [fractionDigits=1], [format='0B'])
 **数据容量单位换算**
 
 ```JavaScript
@@ -37,14 +37,14 @@ convert.bytesToSize(NaN); // 非有限数字
 | value | 分 | number | - |
 | options | 配置参数 | Object | - |
 | options.format | 空数据格式化 | string | '0.00' |
-| options.cutZero | 是否去掉小数末尾多余的零 | boolean | false |
+| options.trimZeros | 是否去掉小数末尾多余的零 | boolean | false |
 | options.toThousands | 是否使用千位分隔符 | boolean | false |
 
 ```JavaScript
 convert.fenToYuan(2000);
 // => 20.00
 
-convert.fenToYuan(2000, { cutZero: true }); // 去掉小数末尾多余的零
+convert.fenToYuan(2000, { trimZeros: true }); // 去掉小数末尾多余的零
 // => 20
 
 convert.fenToYuan(2000.45); // 非正确格式，舍去小数部分
@@ -271,8 +271,8 @@ convert.expandNumber('0.123e2'); // 前导零规范化
 | :------- | :---------- | :--- | :------ |
 | value | 数字 | number \| string | - |
 | options | 配置参数 | Object | - |
-| options.digit | 保留小数位数 | number | 2 |
-| options.cutZero | 是否去掉小数末尾多余的零 | boolean | false |
+| options.fractionDigits | 保留小数位数 | number | 2 |
+| options.trimZeros | 是否去掉小数末尾多余的零 | boolean | false |
 | options.toThousands | 是否使用千位分隔符 | boolean | false |
 | options.format | 数据错误时返回的占位符 | string | '' |
 
@@ -280,16 +280,16 @@ convert.expandNumber('0.123e2'); // 前导零规范化
 convert.toFixed(3.14159);
 // => 3.14
 
-convert.toFixed(3.14159, { digit: 3 });
+convert.toFixed(3.14159, { fractionDigits: 3 });
 // => 3.142
 
 convert.toFixed(3);
 // => 3.00
 
-convert.toFixed('3.10', { cutZero: true }); // 去掉小数末尾多余的零
+convert.toFixed('3.10', { trimZeros: true }); // 去掉小数末尾多余的零
 // => 3.1
 
-convert.toFixed(3, { cutZero: true }); // 小数全为零时连小数点一并去掉
+convert.toFixed(3, { trimZeros: true }); // 小数全为零时连小数点一并去掉
 // => 3
 
 convert.toFixed(1234567.89, { toThousands: true }); // 数字千位符分隔

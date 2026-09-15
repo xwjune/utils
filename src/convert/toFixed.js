@@ -5,8 +5,8 @@
  *
  * @param {number|string} value - 数字
  * @param {Object} options - 配置参数
- * @param {number} [options.digit=2] - 保留小数位数
- * @param {boolean} [options.cutZero=false] - 是否去掉小数末尾多余的零
+ * @param {number} [options.fractionDigits=2] - 保留小数位数
+ * @param {boolean} [options.trimZeros=false] - 是否去掉小数末尾多余的零
  * @param {boolean} [options.toThousands=false] - 是否使用千位分隔符
  * @param {string} [options.format=''] - 数据错误时返回的占位符
  * @returns {string}
@@ -15,16 +15,16 @@
  * toFixed(3.14159);
  * // => 3.14
  *
- * toFixed(3.14159, { digit: 3 });
+ * toFixed(3.14159, { fractionDigits: 3 });
  * // => 3.142
  *
  * toFixed(3);
  * // => 3.00
  *
- * toFixed('3.10', { cutZero: true }); // 去掉小数末尾多余的零
+ * toFixed('3.10', { trimZeros: true }); // 去掉小数末尾多余的零
  * // => 3.1
  *
- * toFixed(3, { cutZero: true }); // 小数全为零时连小数点一并去掉
+ * toFixed(3, { trimZeros: true }); // 小数全为零时连小数点一并去掉
  * // => 3
  *
  * toFixed(1234567.89, { toThousands: true }); // 数字千位符分隔
@@ -58,11 +58,11 @@ import expandNumber from './expandNumber';
 // 1. isNumber 白名单校验，非法值返回 format 占位符
 // 2. 展开科学计数法、去前导 + 号、摘出负号，按绝对值四舍五入
 // 3. 字符串逐位进位完成四舍五入，保留位数不足则补零
-// 4. 依次去尾零【cutZero】、补回负号【归零不补，避免 -0.00】、千位分隔【toThousands】
+// 4. 依次去尾零【trimZeros】、补回负号【归零不补，避免 -0.00】、千位分隔【toThousands】
 export default function toFixed(value, options = {}) {
   const {
-    digit = 2, // 保留小数位数
-    cutZero = false, // 是否去掉小数末尾多余的零
+    fractionDigits = 2, // 保留小数位数
+    trimZeros = false, // 是否去掉小数末尾多余的零
     toThousands = false, // 是否使用千位分隔符
     format = '', // 数据错误时返回的占位符
   } = options || {}; // options 显式传 null 时解构会抛 TypeError，兜底为空对象
@@ -70,7 +70,8 @@ export default function toFixed(value, options = {}) {
     return format;
   }
   // 保留位数仅接受 0-100 的整数【同原生 toFixed 合法区间，越界其抛 RangeError】，非法值回退默认 2
-  const decimal = Number.isInteger(digit) && digit >= 0 && digit <= 100 ? digit : 2;
+  const decimal = Number.isInteger(fractionDigits)
+    && fractionDigits >= 0 && fractionDigits <= 100 ? fractionDigits : 2;
 
   // 先展开科学计数法【如 String(1e-7) => '1e-7'，展开后 => '0.0000001'】，再规范化前导 + 号【如 '+2000' => '2000'】
   let str = expandNumber(value).replace(/^\+/, '');
@@ -100,7 +101,7 @@ export default function toFixed(value, options = {}) {
       } else {
         digits.unshift('1'); // 全为 9，整体升一位【'999' + 1 => '1000'】
       }
-      // 尾部 decimal 位是保留的小数，其余是整数【digit 为 0 时整串都是整数】
+      // 尾部 decimal 位是保留的小数，其余是整数【fractionDigits 为 0 时整串都是整数】
       const result = digits.join('');
       int = decimal > 0 ? result.slice(0, -decimal) : result;
       dec = decimal > 0 ? result.slice(-decimal) : '';
@@ -113,7 +114,7 @@ export default function toFixed(value, options = {}) {
 
   let result = decimal > 0 ? `${int}.${dec}` : int;
   // 去掉小数末尾多余的零，小数全为零时连小数点一并去掉
-  if (cutZero) {
+  if (trimZeros) {
     result = result.match(/^[0-9]+(\.[0-9]*[1-9])?/)[0];
   }
   // 补回负号；四舍五入后归零时不补，避免出现 -0.00

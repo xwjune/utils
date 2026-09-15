@@ -2,7 +2,7 @@
  * 数据容量单位换算
  *
  * @param {number} bytes - 数据容量
- * @param {number} [digit=1] - 保留小数位数
+ * @param {number} [fractionDigits=1] - 保留小数位数
  * @param {string} [format='0B'] - 格式化
  * @returns {string}
  * @example
@@ -25,7 +25,7 @@
 import { isNumber } from '../check/number';
 import expandNumber from './expandNumber';
 
-export default function bytesToSize(bytes, digit = 1, format = '0B') {
+export default function bytesToSize(bytes, fractionDigits = 1, format = '0B') {
   if (!isNumber(bytes)) {
     return format;
   }
@@ -42,7 +42,8 @@ export default function bytesToSize(bytes, digit = 1, format = '0B') {
   const uLen = units.length;
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   // 保留位数仅接受 0-100 的整数【原生 toFixed 合法区间，越界其抛 RangeError】，非法值回退默认 1
-  const decimal = Number.isInteger(digit) && digit >= 0 && digit <= 100 ? digit : 1;
+  const decimal = Number.isInteger(fractionDigits)
+    && fractionDigits >= 0 && fractionDigits <= 100 ? fractionDigits : 1;
 
   if (i < uLen) {
     return `${(bytes / (k ** i)).toFixed(decimal)}${units[i]}`;

@@ -6,7 +6,7 @@
  * @param {number} value - 分
  * @param {Object} options - 配置参数
  * @param {string} [options.format='0.00'] - 空数据格式化
- * @param {boolean} [options.cutZero=false] - 是否去掉小数末尾多余的零
+ * @param {boolean} [options.trimZeros=false] - 是否去掉小数末尾多余的零
  * @param {boolean} [options.toThousands=false] - 是否使用千位分隔符
  * @returns {string} 元
  * @example
@@ -14,7 +14,7 @@
  * fenToYuan(2000);
  * // => 20.00
  *
- * fenToYuan(2000, { cutZero: true }); // 去掉小数末尾多余的零
+ * fenToYuan(2000, { trimZeros: true }); // 去掉小数末尾多余的零
  * // => 20
  *
  * fenToYuan(2000.45); // 非正确格式，舍去小数部分
@@ -44,7 +44,7 @@ import expandNumber from './expandNumber';
 export default function fenToYuan(value, options = {}) {
   const {
     format = '0.00', // 空数据格式化
-    cutZero = false, // 是否去掉小数末尾多余的零
+    trimZeros = false, // 是否去掉小数末尾多余的零
     toThousands = false, // 数字千位符分隔
   } = options || {}; // options 显式传 null 时解构会抛 TypeError，兜底为空对象
   if (
@@ -87,8 +87,8 @@ export default function fenToYuan(value, options = {}) {
     result = '0.00';
   }
 
-  // Cut zero at the ending.
-  if (cutZero) {
+  // Trim zeros at the ending.
+  if (trimZeros) {
     result = result.match(/-?[0-9]+(\.[0-9]*[1-9])?/)[0];
   }
 

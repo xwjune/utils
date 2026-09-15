@@ -101,7 +101,7 @@ describe('数据容量单位换算', () => {
     expect(bytesToSize(Infinity, 1, '--')).toBe('--');
     expect(bytesToSize('Infinity', 1, '--')).toBe('--');
   });
-  test('digit 非法值回退默认 1，不抛 RangeError', () => {
+  test('fractionDigits 非法值回退默认 1，不抛 RangeError', () => {
     expect(bytesToSize(10000, -1)).toBe('9.8KB');
     expect(bytesToSize(10000, 101)).toBe('9.8KB');
     expect(bytesToSize(10000, 3.5)).toBe('9.8KB'); // 非整数
@@ -110,7 +110,7 @@ describe('数据容量单位换算', () => {
     expect(bytesToSize(10000, null)).toBe('9.8KB');
     expect(bytesToSize(10000, true)).toBe('9.8KB');
   });
-  test('digit 0 同样接受', () => {
+  test('fractionDigits 0 同样接受', () => {
     expect(bytesToSize(10240, 0)).toBe('10KB'); // 0 是合法保留位数
   });
 });
@@ -186,11 +186,11 @@ describe('分转化成元', () => {
     });
   });
   test('去掉小数末尾多余的零', () => {
-    expect(fenToYuan(2000, { cutZero: true })).toBe('20');
+    expect(fenToYuan(2000, { trimZeros: true })).toBe('20');
   });
   test('数字千位符分隔', () => {
     expect(fenToYuan(200000, { toThousands: true })).toBe('2,000.00');
-    expect(fenToYuan(200000, { toThousands: true, cutZero: true })).toBe('2,000');
+    expect(fenToYuan(200000, { toThousands: true, trimZeros: true })).toBe('2,000');
     expect(fenToYuan(200022, { toThousands: true })).toBe('2,000.22');
   });
   test('error', () => {
@@ -669,7 +669,7 @@ describe('格式化数字保留N位小数', () => {
     output: '3.14', // 被舍弃首位 < 5 直接舍去
   }, {
     input: 3.14159,
-    digit: 3,
+    fractionDigits: 3,
     output: '3.142',
   }, {
     input: 3,
@@ -727,44 +727,44 @@ describe('格式化数字保留N位小数', () => {
     output: '50000.00',
   }];
   testMap.forEach((el) => {
-    test(`${el.input}${el.digit !== undefined ? `, ${el.digit}` : ''} => ${el.output}`, () => {
-      expect(toFixed(el.input, { digit: el.digit })).toBe(el.output);
+    test(`${el.input}${el.fractionDigits !== undefined ? `, ${el.fractionDigits}` : ''} => ${el.output}`, () => {
+      expect(toFixed(el.input, { fractionDigits: el.fractionDigits })).toBe(el.output);
     });
   });
   test('保留 0 位小数', () => {
-    expect(toFixed(3.7, { digit: 0 })).toBe('4');
-    expect(toFixed(3.2, { digit: 0 })).toBe('3');
-    expect(toFixed(9.9, { digit: 0 })).toBe('10');
-    expect(toFixed(-0.4, { digit: 0 })).toBe('0'); // 负零归一化
+    expect(toFixed(3.7, { fractionDigits: 0 })).toBe('4');
+    expect(toFixed(3.2, { fractionDigits: 0 })).toBe('3');
+    expect(toFixed(9.9, { fractionDigits: 0 })).toBe('10');
+    expect(toFixed(-0.4, { fractionDigits: 0 })).toBe('0'); // 负零归一化
   });
   test('去掉小数末尾多余的零', () => {
-    expect(toFixed('3.10', { cutZero: true })).toBe('3.1');
-    expect(toFixed(3.1, { cutZero: true })).toBe('3.1');
-    expect(toFixed(3, { cutZero: true })).toBe('3'); // 小数全为零时连小数点一并去掉
-    expect(toFixed(1.01, { cutZero: true })).toBe('1.01'); // 末尾无零原样返回
-    expect(toFixed(9.999, { cutZero: true })).toBe('10'); // 先四舍五入再去零
-    expect(toFixed(-1.01, { cutZero: true })).toBe('-1.01');
-    expect(toFixed('-0.004', { cutZero: true })).toBe('0'); // 负零归一化
-    expect(toFixed(3.7, { digit: 0, cutZero: true })).toBe('4'); // 无小数部分原样返回
+    expect(toFixed('3.10', { trimZeros: true })).toBe('3.1');
+    expect(toFixed(3.1, { trimZeros: true })).toBe('3.1');
+    expect(toFixed(3, { trimZeros: true })).toBe('3'); // 小数全为零时连小数点一并去掉
+    expect(toFixed(1.01, { trimZeros: true })).toBe('1.01'); // 末尾无零原样返回
+    expect(toFixed(9.999, { trimZeros: true })).toBe('10'); // 先四舍五入再去零
+    expect(toFixed(-1.01, { trimZeros: true })).toBe('-1.01');
+    expect(toFixed('-0.004', { trimZeros: true })).toBe('0'); // 负零归一化
+    expect(toFixed(3.7, { fractionDigits: 0, trimZeros: true })).toBe('4'); // 无小数部分原样返回
   });
   test('数字千位符分隔', () => {
     expect(toFixed(1234567.89, { toThousands: true })).toBe('1,234,567.89');
     expect(toFixed(1234567, { toThousands: true })).toBe('1,234,567.00');
-    expect(toFixed(1234567, { toThousands: true, cutZero: true })).toBe('1,234,567');
+    expect(toFixed(1234567, { toThousands: true, trimZeros: true })).toBe('1,234,567');
     expect(toFixed(-1234567.89, { toThousands: true })).toBe('-1,234,567.89');
     expect(toFixed(1234.005, { toThousands: true })).toBe('1,234.01'); // 先四舍五入再分隔
-    expect(toFixed(1234.56789, { digit: 3, toThousands: true })).toBe('1,234.568');
+    expect(toFixed(1234.56789, { fractionDigits: 3, toThousands: true })).toBe('1,234.568');
     expect(toFixed(100, { toThousands: true })).toBe('100.00'); // 不足四位不加分隔符
     expect(toFixed(1e+21, { toThousands: true })).toBe('1,000,000,000,000,000,000,000.00');
   });
-  test('digit 非法值回退默认 2', () => {
-    expect(toFixed(3.14159, { digit: -1 })).toBe('3.14');
-    expect(toFixed(3.14159, { digit: 101 })).toBe('3.14');
-    expect(toFixed(3.14159, { digit: 3.5 })).toBe('3.14'); // 非整数
-    expect(toFixed(3.14159, { digit: '3' })).toBe('3.14'); // 字符串数字不纳入
-    expect(toFixed(3.14159, { digit: 'x' })).toBe('3.14');
-    expect(toFixed(3.14159, { digit: null })).toBe('3.14');
-    expect(toFixed(3.14159, { digit: true })).toBe('3.14');
+  test('fractionDigits 非法值回退默认 2', () => {
+    expect(toFixed(3.14159, { fractionDigits: -1 })).toBe('3.14');
+    expect(toFixed(3.14159, { fractionDigits: 101 })).toBe('3.14');
+    expect(toFixed(3.14159, { fractionDigits: 3.5 })).toBe('3.14'); // 非整数
+    expect(toFixed(3.14159, { fractionDigits: '3' })).toBe('3.14'); // 字符串数字不纳入
+    expect(toFixed(3.14159, { fractionDigits: 'x' })).toBe('3.14');
+    expect(toFixed(3.14159, { fractionDigits: null })).toBe('3.14');
+    expect(toFixed(3.14159, { fractionDigits: true })).toBe('3.14');
   });
   test('options 显式传 null 兜底为默认配置', () => {
     expect(toFixed(3.14159, null)).toBe('3.14');
