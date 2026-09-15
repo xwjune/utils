@@ -1,6 +1,6 @@
 {
   "name": "jun-utils",
-  "version": "1.19.0",
+  "version": "2.0.0",
   "description": "utils, public library",
   "main": "index.js",
   "scripts": {

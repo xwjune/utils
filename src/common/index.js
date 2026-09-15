@@ -8,9 +8,6 @@
  * preventDefault - 阻止事件默认行为
  * addEvent - 添加事件监听
  * removeEvent - 移除事件监听
- * getCookie - 读取 cookie
- * setCookie - 创建 cookie
- * delCookie - 删除 cookie
  * getWinHeight - 获取窗口可视区的高度
  * getWinWidth - 获取窗口可视区的宽度
  * getWinScrollHeight - 获取窗口可视区内容的总高度
@@ -21,11 +18,6 @@
  * selectText - 选中文本
  * getStyle - 获取元素样式
  */
-import {
-  getCookie,
-  setCookie,
-  delCookie,
-} from './cookie';
 import {
   addEvent,
   removeEvent,
@@ -171,9 +163,6 @@ export default {
   preventDefault,
   addEvent,
   removeEvent,
-  getCookie,
-  setCookie,
-  delCookie,
   getWinHeight,
   getWinWidth,
   getWinScrollHeight,

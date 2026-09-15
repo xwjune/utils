@@ -52,8 +52,8 @@ function hasInvalidIdentityAttrs(options) {
  * 规范（RFC 6265 §5.4）建议浏览器按 path 长度降序返回（长的优先），但属 SHOULD 级建议，不可依赖。
  * 此时本函数返回 document.cookie 序列里的第一个命中，不保证是哪个 path/domain 的。
  *
- * @param {string} name - cookie 名称
- * @returns {string|null} 解码后的值；空串 '' 也算命中；值不是编码产物时原样返回；未命中返回 null
+ * @param {String} name - cookie 名称
+ * @returns {String|null} 解码后的值；空串 '' 也算命中；值不是编码产物时原样返回；未命中返回 null
  * @example
  *
  * // 判存在请用 != null 而非真值判断：空值 cookie 命中返回 ''（falsy），真值判断会把「存在但为空」误判成「不存在」
@@ -65,7 +65,7 @@ function hasInvalidIdentityAttrs(options) {
  * getCookie('absent');
  * // => null
  */
-export function getCookie(name) {
+function getCookie(name) {
   // name 校验：名字里含结构分隔符的 cookie 写不进来，也就没必要去读
   if (!canUseDOM || !isValidCookieName(name)) return null;
   // name 中的正则元字符需转义，否则 a.b 这类名字会误匹配到 axb
@@ -88,15 +88,15 @@ export function getCookie(name) {
  * name 用 __Host-/__Secure- 前缀时需自行满足浏览器的附加要求
  * （__Host- 需 Secure + Path=/ + 无 Domain；__Secure- 需 Secure），不满足时浏览器会拒绝写入，本库不额外校验
  *
- * @param {string} name - cookie 名称
- * @param {string|number|boolean} value - cookie 值（仅接受基本类型，对象请先 JSON.stringify）
+ * @param {String} name - cookie 名称
+ * @param {String|Number|Boolean} value - cookie 值（仅接受基本类型，对象请先 JSON.stringify）
  * @param {Object} [options={}] - 配置
- * @param {string} [options.domain] - 域名
- * @param {string} [options.path='/'] - 路径，默认根路径；显式传入时必须以 / 开头，否则整单拒绝
- * @param {number} [options.maxAge] - 相对过期时间【单位是秒，0 表示立即失效；与 expires 同时传时以 maxAge 为准，建议二选一】
+ * @param {String} [options.domain] - 域名
+ * @param {String} [options.path='/'] - 路径，默认根路径；显式传入时必须以 / 开头，否则整单拒绝
+ * @param {Number} [options.maxAge] - 相对过期时间【单位是秒，0 表示立即失效；与 expires 同时传时以 maxAge 为准，建议二选一】
  * @param {Date} [options.expires] - 绝对失效时间
- * @param {boolean} [options.secure] - 安全标志
- * @param {string} [options.sameSite] - 跨域安全机制，仅接受 Strict/Lax/None（大小写不敏感）
+ * @param {Boolean} [options.secure] - 安全标志
+ * @param {String} [options.sameSite] - 跨域安全机制，仅接受 Strict/Lax/None（大小写不敏感）
  * @example
  *
  * // 一天后过期
@@ -110,7 +110,7 @@ export function getCookie(name) {
  * // 会话 cookie + 跨域策略
  * setCookie('name', 'value', { sameSite: 'Lax' });
  */
-export function setCookie(name, value, options = {}) {
+function setCookie(name, value, options = {}) {
   // name 含 ; , = 空白或控制字符会把 cookie 串拆坏（如 'a;b' 实际写入的是空值 a），跳过
   // value 只接受基本类型，null/undefined/对象编码后是垃圾字面量，同样跳过
   // 非浏览器环境（SSR/Node）无 window/document，同样跳过
@@ -164,17 +164,17 @@ export function setCookie(name, value, options = {}) {
 /**
  * 删除 cookie
  *
- * @param {string} name - cookie 名称
+ * @param {String} name - cookie 名称
  * @param {Object} [options={}] - 配置，path/domain 需与写入时一致才能删掉
- * @param {string} [options.domain] - 域名
- * @param {string} [options.path] - 路径（以 / 开头），需与写入时一致才能删掉；不传时删根路径与当前页面目录两处
+ * @param {String} [options.domain] - 域名
+ * @param {String} [options.path] - 路径（以 / 开头），需与写入时一致才能删掉；不传时删根路径与当前页面目录两处
  * @example
  *
  * delCookie('name');
  *
  * delCookie('name', { domain: '.example.com', path: '/app' });
  */
-export function delCookie(name, options = {}) {
+function delCookie(name, options = {}) {
   // name 校验与 setCookie 同一份规则
   if (!canUseDOM || !isValidCookieName(name)) return;
   // 删除必须精确匹配目标，身份属性非法直接拒绝（与 setCookie 的写入侧规则对称，null 兜底同上）
@@ -194,3 +194,5 @@ export function delCookie(name, options = {}) {
     setCookie(name, '', { ...expired, path: dir });
   }
 }
+
+export default { getCookie, setCookie, delCookie };
