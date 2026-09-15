@@ -1,10 +1,10 @@
 /**
  * 数据容量单位换算
  *
- * @param {Number} bytes - 数据容量
- * @param {Number} [digit=1] - 保留小数位数
- * @param {String} [format='0B'] - 格式化
- * @returns {String}
+ * @param {number} bytes - 数据容量
+ * @param {number} [digit=1] - 保留小数位数
+ * @param {string} [format='0B'] - 格式化
+ * @returns {string}
  * @example
  *
  * bytesToSize(10240);

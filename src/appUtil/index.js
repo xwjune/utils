@@ -23,7 +23,7 @@ class App {
    *
    * iPadOS 13+ 默认请求的桌面 UA 同样识别为 IOS
    *
-   * @return {Boolean} true-是，false-否
+   * @return {boolean} true-是，false-否
    * @example
    *
    * isIos(); // iPhone Safari
@@ -40,7 +40,7 @@ class App {
   /**
    * Android 环境判断
    *
-   * @return {Boolean} true-是，false-否
+   * @return {boolean} true-是，false-否
    * @example
    *
    * isAndroid(); // Android Chrome
@@ -57,7 +57,7 @@ class App {
    *
    * iPadOS 13+ 默认请求的桌面 UA 同样识别为移动端
    *
-   * @return {Boolean} true-是，false-否
+   * @return {boolean} true-是，false-否
    * @example
    *
    * isMobile(); // iPhone Safari
@@ -76,7 +76,7 @@ class App {
    *
    * PC/Mac 微信内置浏览器同样返回 true，需限定移动端时配合 isMobile 使用
    *
-   * @return {Boolean} true-是，false-否
+   * @return {boolean} true-是，false-否
    * @example
    *
    * isWeChat(); // 微信内置浏览器
@@ -90,7 +90,7 @@ class App {
   /**
    * 支付宝客户端判断
    *
-   * @return {Boolean} true-是，false-否
+   * @return {boolean} true-是，false-否
    * @example
    *
    * isAliPay(); // 支付宝内置浏览器
@@ -104,7 +104,7 @@ class App {
   /**
    * 淘宝客户端判断
    *
-   * @return {Boolean} true-是，false-否
+   * @return {boolean} true-是，false-否
    * @example
    *
    * isTaobao(); // 淘宝内置浏览器
@@ -150,8 +150,8 @@ class App {
    *
    * title 非字符串不做隐式转换，直接抛 TypeError；subtitle 未传时不携带该键
    *
-   * @param {String} title - 标题；非字符串抛 TypeError
-   * @param {String} [subtitle] - 副标题；未传时不发送该字段
+   * @param {string} title - 标题；非字符串抛 TypeError
+   * @param {string} [subtitle] - 副标题；未传时不发送该字段
    * @example
    *
    * alipayTitle('标题', '副标题');

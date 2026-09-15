@@ -3,12 +3,12 @@
  *
  * 为防止浮点数运算精度丢失，故采用字符串形式解析
  *
- * @param {Number} value - 分
+ * @param {number} value - 分
  * @param {Object} options - 配置参数
- * @param {String} [options.format='0.00'] - 空数据格式化
- * @param {Boolean} [options.cutZero=false] - 是否去掉小数末尾多余的零
- * @param {Boolean} [options.toThousands=false] - 是否使用千位分隔符
- * @returns {String} 元
+ * @param {string} [options.format='0.00'] - 空数据格式化
+ * @param {boolean} [options.cutZero=false] - 是否去掉小数末尾多余的零
+ * @param {boolean} [options.toThousands=false] - 是否使用千位分隔符
+ * @returns {string} 元
  * @example
  *
  * fenToYuan(2000);

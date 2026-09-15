@@ -35,7 +35,7 @@ convert.bytesToSize(NaN); // 非有限数字
 | Property | Description | Type | Default |
 | :------- | :---------- | :--- | :------ |
 | value | 分 | number | - |
-| options | 配置参数 | object | - |
+| options | 配置参数 | Object | - |
 | options.format | 空数据格式化 | string | '0.00' |
 | options.cutZero | 是否去掉小数末尾多余的零 | boolean | false |
 | options.toThousands | 是否使用千位分隔符 | boolean | false |
@@ -270,7 +270,7 @@ convert.expandNumber('0.123e2'); // 前导零规范化
 | Property | Description | Type | Default |
 | :------- | :---------- | :--- | :------ |
 | value | 数字 | number \| string | - |
-| options | 配置参数 | object | - |
+| options | 配置参数 | Object | - |
 | options.digit | 保留小数位数 | number | 2 |
 | options.cutZero | 是否去掉小数末尾多余的零 | boolean | false |
 | options.toThousands | 是否使用千位分隔符 | boolean | false |

@@ -4,7 +4,7 @@
  * 四段 0-255 以点分隔【拒绝前导零，如 01.1.1.1 不通过】
  *
  * @param {*} value - The value to check.
- * @return {Boolean} Return `true` if validated, else `false`.
+ * @return {boolean} Return `true` if validated, else `false`.
  * @example
  *
  * ip('192.168.0.1'); // 常规 IPv4

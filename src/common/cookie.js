@@ -52,8 +52,8 @@ function hasInvalidIdentityAttrs(options) {
  * 规范（RFC 6265 §5.4）建议浏览器按 path 长度降序返回（长的优先），但属 SHOULD 级建议，不可依赖。
  * 此时本函数返回 document.cookie 序列里的第一个命中，不保证是哪个 path/domain 的。
  *
- * @param {String} name - cookie 名称
- * @returns {String|null} 解码后的值；空串 '' 也算命中；值不是编码产物时原样返回；未命中返回 null
+ * @param {string} name - cookie 名称
+ * @returns {string|null} 解码后的值；空串 '' 也算命中；值不是编码产物时原样返回；未命中返回 null
  * @example
  *
  * // 判存在请用 != null 而非真值判断：空值 cookie 命中返回 ''（falsy），真值判断会把「存在但为空」误判成「不存在」
@@ -88,15 +88,15 @@ export function getCookie(name) {
  * name 用 __Host-/__Secure- 前缀时需自行满足浏览器的附加要求
  * （__Host- 需 Secure + Path=/ + 无 Domain；__Secure- 需 Secure），不满足时浏览器会拒绝写入，本库不额外校验
  *
- * @param {String} name - cookie 名称
- * @param {String|Number|Boolean} value - cookie 值（仅接受基本类型，对象请先 JSON.stringify）
+ * @param {string} name - cookie 名称
+ * @param {string|number|boolean} value - cookie 值（仅接受基本类型，对象请先 JSON.stringify）
  * @param {Object} [options={}] - 配置
- * @param {String} [options.domain] - 域名
- * @param {String} [options.path='/'] - 路径，默认根路径；显式传入时必须以 / 开头，否则整单拒绝
- * @param {Number} [options.maxAge] - 相对过期时间【单位是秒，0 表示立即失效；与 expires 同时传时以 maxAge 为准，建议二选一】
+ * @param {string} [options.domain] - 域名
+ * @param {string} [options.path='/'] - 路径，默认根路径；显式传入时必须以 / 开头，否则整单拒绝
+ * @param {number} [options.maxAge] - 相对过期时间【单位是秒，0 表示立即失效；与 expires 同时传时以 maxAge 为准，建议二选一】
  * @param {Date} [options.expires] - 绝对失效时间
- * @param {Boolean} [options.secure] - 安全标志
- * @param {String} [options.sameSite] - 跨域安全机制，仅接受 Strict/Lax/None（大小写不敏感）
+ * @param {boolean} [options.secure] - 安全标志
+ * @param {string} [options.sameSite] - 跨域安全机制，仅接受 Strict/Lax/None（大小写不敏感）
  * @example
  *
  * // 一天后过期
@@ -164,10 +164,10 @@ export function setCookie(name, value, options = {}) {
 /**
  * 删除 cookie
  *
- * @param {String} name - cookie 名称
+ * @param {string} name - cookie 名称
  * @param {Object} [options={}] - 配置，path/domain 需与写入时一致才能删掉
- * @param {String} [options.domain] - 域名
- * @param {String} [options.path] - 路径（以 / 开头），需与写入时一致才能删掉；不传时删根路径与当前页面目录两处
+ * @param {string} [options.domain] - 域名
+ * @param {string} [options.path] - 路径（以 / 开头），需与写入时一致才能删掉；不传时删根路径与当前页面目录两处
  * @example
  *
  * delCookie('name');

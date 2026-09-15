@@ -11,7 +11,7 @@
  * @param {*} target - 待校验的事件目标
  * @param {*} type - 待校验的事件类型（应传入 trim 后的值）
  * @param {*} handler - 待校验的回调
- * @returns {Boolean} 三参均合法时为 true
+ * @returns {boolean} 三参均合法时为 true
  */
 function isValidEventArgs(target, type, handler) {
   // target 必须是对象：原始类型（数字/字符串等）上挂属性会抛 TypeError
@@ -33,10 +33,10 @@ function isValidEventArgs(target, type, handler) {
  * 返回 true 仅代表入参合法并完成了挂载调用，不保证监听实际生效（DOM0 分支会覆盖已有监听）
  *
  * @param {EventTarget} target - 事件目标（元素、document、window 等）
- * @param {String} type - 事件类型，不带 on 前缀且区分大小写（'click' 而非 'onclick'/'Click'），首尾空白自动截去
+ * @param {string} type - 事件类型，不带 on 前缀且区分大小写（'click' 而非 'onclick'/'Click'），首尾空白自动截去
  * @param {Function} handler - 事件触发时执行的函数，仅接受函数形式
- * @param {Boolean} [useCapture=false] - 指定事件是否在捕获或冒泡阶段执行【true-捕获，false-冒泡】，仅 DOM2 分支生效
- * @returns {Boolean} 是否执行了挂载调用
+ * @param {boolean} [useCapture=false] - 指定事件是否在捕获或冒泡阶段执行【true-捕获，false-冒泡】，仅 DOM2 分支生效
+ * @returns {boolean} 是否执行了挂载调用
  * @example
  *
  * const handler = () => {
@@ -70,10 +70,10 @@ export function addEvent(target, type, handler, useCapture = false) {
  * 返回 true 仅代表入参合法并调用了移除 API，不感知是否命中已挂监听（如 capture 标志不一致时原生为静默 no-op）
  *
  * @param {EventTarget} target - 事件目标（元素、document、window 等）
- * @param {String} type - 事件类型，不带 on 前缀且区分大小写（'click' 而非 'onclick'/'Click'），首尾空白自动截去
+ * @param {string} type - 事件类型，不带 on 前缀且区分大小写（'click' 而非 'onclick'/'Click'），首尾空白自动截去
  * @param {Function} handler - 事件触发时执行的函数，仅接受函数形式
- * @param {Boolean} [useCapture=false] - 指定事件是否在捕获或冒泡阶段执行【true-捕获，false-冒泡】，需与挂载时一致
- * @returns {Boolean} 是否执行了移除调用
+ * @param {boolean} [useCapture=false] - 指定事件是否在捕获或冒泡阶段执行【true-捕获，false-冒泡】，需与挂载时一致
+ * @returns {boolean} 是否执行了移除调用
  * @example
  *
  * const handler = () => {

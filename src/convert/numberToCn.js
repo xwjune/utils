@@ -10,8 +10,8 @@
  *    再在后面加上一个“亿”字；万级里的数，按照个级的数的读法来读，再在后面加上一个“万”字；
  * 3. 每级末尾不管有几个“0”，都不读；其他数位上有一个“0”或几个“0”，都只读一个零。
  *
- * @param {Number} value - 阿拉伯数字
- * @returns {String} 中文数字
+ * @param {number} value - 阿拉伯数字
+ * @returns {string} 中文数字
  * @example
  *
  * numberToCn(0.01);

@@ -5,7 +5,7 @@
  * NaN、Infinity 等非有限数字视为非法【如 Number('Infinity') === Infinity】
  *
  * @param {*} value - The value to check.
- * @return {Boolean} Return `true` if validated, else `false`.
+ * @return {boolean} Return `true` if validated, else `false`.
  * @example
  *
  * isNumber('20'); // 十进制字符串
@@ -68,7 +68,7 @@ export function isNumber(value) {
  * 超出双精度表示范围的字面量视为非法【Number('1' + '0'.repeat(400)) => Infinity】
  *
  * @param {*} value - The value to check.
- * @return {Boolean} Return `true` if validated, else `false`.
+ * @return {boolean} Return `true` if validated, else `false`.
  * @example
  *
  * isDecimalNumber('20'); // 整数字符串
@@ -114,7 +114,7 @@ export function isDecimalNumber(value) {
  * 超出双精度表示范围的字面量视为非法【Number('1' + '0'.repeat(400)) => Infinity】
  *
  * @param {*} value - The value to check.
- * @return {Boolean} Return `true` if validated, else `false`.
+ * @return {boolean} Return `true` if validated, else `false`.
  * @example
  *
  * isInteger('20'); // 整数字符串
@@ -157,7 +157,7 @@ export function isInteger(value) {
  * 超出双精度表示范围的字面量视为非法【Number('1' + '0'.repeat(400) + '.5') => Infinity】
  *
  * @param {*} value - The value to check.
- * @return {Boolean} Return `true` if validated, else `false`.
+ * @return {boolean} Return `true` if validated, else `false`.
  * @example
  *
  * isDecimal('0.2'); // 小数字符串

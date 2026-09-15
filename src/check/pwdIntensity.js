@@ -10,8 +10,8 @@
  *   - ③ 小写字母
  *   - ④ 符号【键盘上可以打出来的符号】
  *
- * @param {String} value - 密码
- * @return {Number} intensity - 密码强度 1-弱 | 2-中 | 3-强
+ * @param {string} value - 密码
+ * @return {number} intensity - 密码强度 1-弱 | 2-中 | 3-强
  * @example
  *
  * pwdIntensity('123456'); // 纯数字，1 种元素

@@ -4,7 +4,7 @@
  * 规则：11 位数字，首位 1
  *
  * @param {*} value - The value to check.
- * @return {Boolean} Return `true` if validated, else `false`.
+ * @return {boolean} Return `true` if validated, else `false`.
  * @example
  *
  * cellphone('13456789012'); // 11 位手机号
@@ -32,7 +32,7 @@ export function cellphone(value) {
  * 规则：3-4 位区号，7-8 位直拨号码
  *
  * @param {*} value - The value to check.
- * @return {Boolean} Return `true` if validated, else `false`.
+ * @return {boolean} Return `true` if validated, else `false`.
  * @example
  *
  * telphone('0571-85735888'); // 区号带连字符
@@ -61,7 +61,7 @@ export function telphone(value) {
  * 电话【手机和固定电话】校验
  *
  * @param {*} value - The value to check.
- * @return {Boolean} Return `true` if validated, else `false`.
+ * @return {boolean} Return `true` if validated, else `false`.
  * @example
  *
  * phone('057185735888'); // 固定电话

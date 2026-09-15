@@ -5,7 +5,7 @@
  * 仅接受数字及十进制字面量【如 '-20'、'002'、[20]、1e-7、NaN 均视为非法】
  *
  * @param {*} value - The value to check.
- * @return {Boolean} Return `true` if validated, else `false`.
+ * @return {boolean} Return `true` if validated, else `false`.
  * @example
  *
  * money('20.00'); // 两位小数

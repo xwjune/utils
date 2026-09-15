@@ -17,10 +17,10 @@ import { isDecimalNumber } from '../check/number';
  *
  * 思路：按小数位数把两数放大为整数运算，再将结果缩回，规避浮点数的表示误差
  *
- * @param {Number} arg1 - 运算数 1
- * @param {Number} arg2 - 运算数 2
- * @param {String} type - 运算类型【add-加法、subtract-减法、divide-除法】
- * @returns {Number} 运算结果
+ * @param {number} arg1 - 运算数 1
+ * @param {number} arg2 - 运算数 2
+ * @param {string} type - 运算类型【add-加法、subtract-减法、divide-除法】
+ * @returns {number} 运算结果
  */
 function operation(arg1, arg2, type) {
   let r1 = arg1.toString();
@@ -86,9 +86,9 @@ function operation(arg1, arg2, type) {
 /**
  * 乘法
  *
- * @param {Number} arg1 - 运算数 1
- * @param {Number} arg2 - 运算数 2
- * @returns {Number} 运算结果
+ * @param {number} arg1 - 运算数 1
+ * @param {number} arg2 - 运算数 2
+ * @returns {number} 运算结果
  */
 function multiply(arg1, arg2) {
   const r1 = arg1.toString();
@@ -129,10 +129,10 @@ export default {
   /**
    * 加法
    *
-   * @param {Number} arg1 - 运算数 1
-   * @param {Number} arg2 - 运算数 2
-   * @param {String} [format=''] - 非法输入或超出安全整数范围时的兜底返回值
-   * @returns {Number|String} 运算结果
+   * @param {number} arg1 - 运算数 1
+   * @param {number} arg2 - 运算数 2
+   * @param {string} [format=''] - 非法输入或超出安全整数范围时的兜底返回值
+   * @returns {number|string} 运算结果
    * @example
    *
    * add(0.1, 0.2);
@@ -156,10 +156,10 @@ export default {
   /**
    * 减法
    *
-   * @param {Number} arg1 - 运算数 1
-   * @param {Number} arg2 - 运算数 2
-   * @param {String} [format=''] - 非法输入或超出安全整数范围时的兜底返回值
-   * @returns {Number|String} 运算结果
+   * @param {number} arg1 - 运算数 1
+   * @param {number} arg2 - 运算数 2
+   * @param {string} [format=''] - 非法输入或超出安全整数范围时的兜底返回值
+   * @returns {number|string} 运算结果
    * @example
    *
    * subtract(1.5, 1.2);
@@ -177,10 +177,10 @@ export default {
   /**
    * 乘法
    *
-   * @param {Number} arg1 - 运算数 1
-   * @param {Number} arg2 - 运算数 2
-   * @param {String} [format=''] - 非法输入或超出安全整数范围时的兜底返回值
-   * @returns {Number|String} 运算结果
+   * @param {number} arg1 - 运算数 1
+   * @param {number} arg2 - 运算数 2
+   * @param {string} [format=''] - 非法输入或超出安全整数范围时的兜底返回值
+   * @returns {number|string} 运算结果
    * @example
    *
    * multiply(19.9, 100);
@@ -198,10 +198,10 @@ export default {
   /**
    * 除法
    *
-   * @param {Number} arg1 - 运算数 1
-   * @param {Number} arg2 - 运算数 2
-   * @param {String} [format=''] - 非法输入、除数为 0 或超出安全整数范围时的兜底返回值
-   * @returns {Number|String} 运算结果
+   * @param {number} arg1 - 运算数 1
+   * @param {number} arg2 - 运算数 2
+   * @param {string} [format=''] - 非法输入、除数为 0 或超出安全整数范围时的兜底返回值
+   * @returns {number|string} 运算结果
    * @example
    *
    * divide(0.3, 0.1);

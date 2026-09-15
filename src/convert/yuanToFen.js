@@ -3,9 +3,9 @@
  *
  * 为防止浮点数运算精度丢失，故采用字符串形式解析
  *
- * @param {Number} value - 元
- * @param {String} [format='0'] - 空数据格式化
- * @returns {String} 分
+ * @param {number} value - 元
+ * @param {string} [format='0'] - 空数据格式化
+ * @returns {string} 分
  * @example
  *
  * yuanToFen(20);

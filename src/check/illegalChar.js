@@ -6,7 +6,7 @@
  * - 以及其余控制字符（0x00-0x1F 与 0x7F 全集）
  *
  * @param {*} value - The value to check.
- * @return {Boolean} Return `true` if an illegal char is found, else `false`.
+ * @return {boolean} Return `true` if an illegal char is found, else `false`.
  * @example
  *
  * illegalChar('123\n123'); // 换行

@@ -14,8 +14,8 @@ import { treeUtil } from 'jun-utils';
 ### API
 | Property | Description | Type | Default |
 | :------- | :---------- | :--- | :------ |
-| source | 源数据【有层级关系】 | object[] | - |
-| options | 配置参数 | object | - |
+| source | 源数据【有层级关系】 | Object[] | - |
+| options | 配置参数 | Object | - |
 | options.pId | 源数据父主键 key | string | - |
 | options.rootId | 源数据根节点主键值，将父主键值与之相等的数据视为顶层树节点 【缺省此参数，将父主键值为 undefined/null 的数据视为顶层树节点】 | string | - |
 | options.id | 源数据主键 key | string | 'id' |
@@ -24,7 +24,7 @@ import { treeUtil } from 'jun-utils';
 | options.tName | 树节点名称 key | string | 'name' |
 | options.children | 树节点子集合 key | string | 'children' |
 | options.raw | 是否保留所有属性 | boolean | false |
-| options.otherKeys | 其他需要保留的属性【raw=true 时无效】 | array | [] |
+| options.otherKeys | 其他需要保留的属性【raw=true 时无效】 | string[] | [] |
 
 ```JavaScript
 const source = [
@@ -64,9 +64,9 @@ treeUtil.dataConvert(source, options);
 ### API
 | Property | Description | Type | Default |
 | :------- | :---------- | :--- | :------ |
-| treeData | 源数据 | object[] | - |
-| values | 原始值 | array | - |
-| options | 配置参数 | object | - |
+| treeData | 源数据 | Object[] | - |
+| values | 原始值 | string[] | - |
+| options | 配置参数 | Object | - |
 | options.origin | 原始 key | string | 'id' |
 | options.key | 提取 key | string | 'name' |
 | options.children | 子集合 key | string | 'children' |
@@ -98,9 +98,9 @@ treeUtil.dataPick(treeData, ['330000', '330100']);
 ### API
 | Property | Description | Type | Default |
 | :------- | :---------- | :--- | :------ |
-| treeData | 源数据 | object[] | - |
+| treeData | 源数据 | Object[] | - |
 | value | 属性值 | string | - |
-| options | 配置参数 | object | - |
+| options | 配置参数 | Object | - |
 | options.key | key | string | 'id' |
 | options.children | 子集合 key | string | 'children' |
 

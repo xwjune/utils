@@ -1,9 +1,9 @@
 /**
  * 空数据过滤
  *
- * @param {String} str - 字符串
- * @param {String} [format=''] - 格式化
- * @return {String} 过滤后的数据
+ * @param {string} str - 字符串
+ * @param {string} [format=''] - 格式化
+ * @return {string} 过滤后的数据
  * @example
  *
  * filterNull('xxx');

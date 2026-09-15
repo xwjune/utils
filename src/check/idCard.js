@@ -5,7 +5,7 @@
  * 二代身份证【18 位】：地址码【六位】出生日期码【八位】数字顺序码【三位】数字校验码【一位】
  *
  * @param {*} value - The value to check.
- * @return {Boolean} Return `true` if validated, else `false`.
+ * @return {boolean} Return `true` if validated, else `false`.
  * @example
  *
  * idCard('330000199001017865'); // 常规二代身份证

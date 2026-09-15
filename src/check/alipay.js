@@ -4,7 +4,7 @@
  * 规则：邮箱或手机号
  *
  * @param {*} value - The value to check.
- * @return {Boolean} Return `true` if validated, else `false`.
+ * @return {boolean} Return `true` if validated, else `false`.
  * @example
  *
  * alipay('test@163.com'); // 邮箱账号

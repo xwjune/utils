@@ -7,7 +7,7 @@
  * - 顶级域为纯字母且至少 2 位【放行 .technology 等新顶级域】
  *
  * @param {*} value - The value to check.
- * @return {Boolean} Return `true` if validated, else `false`.
+ * @return {boolean} Return `true` if validated, else `false`.
  * @example
  *
  * email('test@163.com'); // 常规邮箱

@@ -1,8 +1,8 @@
 /**
  * 数字转十进制字符串，展开科学计数法
  *
- * @param {Number} num - 数字
- * @returns {String} 十进制字符串
+ * @param {number} num - 数字
+ * @returns {string} 十进制字符串
  * @example
  *
  * expandNumber(1.5e-7);

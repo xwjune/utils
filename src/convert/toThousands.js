@@ -1,8 +1,8 @@
 /**
  * 数字千位符分隔
  *
- * @param {Number} value - 数字
- * @returns {String}
+ * @param {number} value - 数字
+ * @returns {string}
  * @example
  *
  * toThousands('12345678');

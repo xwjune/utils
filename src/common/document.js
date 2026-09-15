@@ -18,7 +18,7 @@
  *
  * innerHeight 口径含滚动条，回退的 clientHeight 口径不含【桌面端有可见滚动条时两者有差】
  *
- * @returns {Number}
+ * @returns {number}
  * @example
  *
  * getWinHeight(); // 可视区高度【像素，随窗口大小变化】
@@ -31,7 +31,7 @@ export function getWinHeight() {
 /**
  * 获取窗口可视区的宽度
  *
- * @returns {Number}
+ * @returns {number}
  * @example
  *
  * getWinWidth(); // 可视区宽度【像素，随窗口大小变化】
@@ -44,7 +44,7 @@ export function getWinWidth() {
 /**
  * 获取窗口可视区内容的总高度
  *
- * @returns {Number}
+ * @returns {number}
  * @example
  *
  * getWinScrollHeight(); // 内容总高度，长页面大于可视区高度
@@ -58,7 +58,7 @@ export function getWinScrollHeight() {
 /**
  * 获取窗口可视区内容的总宽度
  *
- * @returns {Number}
+ * @returns {number}
  * @example
  *
  * getWinScrollWidth(); // 内容总宽度，无横向溢出时等于可视区宽度
@@ -72,7 +72,7 @@ export function getWinScrollWidth() {
 /**
  * 获取窗口可视区滚动条垂直偏移
  *
- * @returns {Number}
+ * @returns {number}
  * @example
  *
  * getWinScrollTop(); // 页面未滚动时
@@ -93,7 +93,7 @@ export function getWinScrollTop() {
 /**
  * 获取窗口可视区滚动条水平偏移
  *
- * @returns {Number}
+ * @returns {number}
  * @example
  *
  * getWinScrollLeft(); // 页面未滚动时

@@ -14,9 +14,9 @@
  *   又如￥107000.53应写成人民币壹拾万柒仟元零伍角叁分，或者写成人民币壹拾万零柒仟元伍角叁分。
  * - 阿拉伯金额数字角位是“0”而分位不是“0”时，中文大写金额“元”后面应写“零”字。如￥16409.02应写成人民币壹万陆仟肆佰零玖元零贰分。
  *
- * @param {Number} value - 数字金额
- * @param {String} [format='零元整'] - 空数据格式化
- * @returns {String} 中文金额
+ * @param {number} value - 数字金额
+ * @param {string} [format='零元整'] - 空数据格式化
+ * @returns {string} 中文金额
  * @example
  *
  * currencyToCn(0);

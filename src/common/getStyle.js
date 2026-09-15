@@ -5,8 +5,8 @@
  * getComputedStyle：FireFox、Chrome、Safari
  *
  * @param {Element} element - DOM 元素，空值时返回空串
- * @param {String} name - 样式名称，驼峰（fontSize）与连字符（font-size）均支持，非字符串时返回空串
- * @return {String} 样式值【最终样式优先，都不支持时回退内联 style】
+ * @param {string} name - 样式名称，驼峰（fontSize）与连字符（font-size）均支持，非字符串时返回空串
+ * @return {string} 样式值【最终样式优先，都不支持时回退内联 style】
  * @example
  *
  * getStyle(element, 'font-size'); // 读最终样式【含内联、嵌入、外部样式】

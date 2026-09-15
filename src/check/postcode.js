@@ -4,7 +4,7 @@
  * 规则：6 位数字【前导零合法，如内蒙 010000、河北 050000】
  *
  * @param {*} value - The value to check.
- * @return {Boolean} Return `true` if validated, else `false`.
+ * @return {boolean} Return `true` if validated, else `false`.
  * @example
  *
  * postcode('310000'); // 常规 6 位

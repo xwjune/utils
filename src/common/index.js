@@ -45,7 +45,7 @@ import getStyle from './getStyle';
 /**
  * 生成 uuid
  *
- * @return {String} uuid
+ * @return {string} uuid
  * @example
  *
  * generateUUID();
@@ -66,9 +66,9 @@ function generateUUID() {
 /**
  * 获取 url 中的参数
  *
- * @param {String} name - 参数名
- * @param {String} [url=window.location.search] - 链接
- * @return {String} 参数值
+ * @param {string} name - 参数名
+ * @param {string} [url=window.location.search] - 链接
+ * @return {string} 参数值
  * @example
  *
  * getParameter('name', 'http://www.w3school.com?name=xxx');
@@ -89,7 +89,7 @@ function getParameter(name, url = window.location.search) {
 /**
  * 动态加载 js
  *
- * @param {String} url - js 链接地址
+ * @param {string} url - js 链接地址
  * @param {Function} [callback] - 回调
  * @example
  *

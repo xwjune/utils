@@ -391,12 +391,13 @@ function buildModule(spec) {
   };
 }
 
+// 类型按源码 JSDoc 原样渲染（原始类型小写、内置对象 Date/Object 等大写由源码规范保证），
+// 此处只归一联合类型的空格，不做大小写改写
 function normalizeType(type) {
   return type
     .split('|')
     .map((part) => part.trim())
     .filter(Boolean)
-    .map((part) => part.charAt(0).toLowerCase() + part.slice(1))
     .join(' \\| ');
 }
 

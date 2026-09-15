@@ -5,7 +5,7 @@
  * 且日历日期须真实存在【闰年 2 月 29 日、大小月 31 日等月日联合规则】
  *
  * @param {*} value - The value to check.
- * @return {Boolean} Return `true` if validated, else `false`.
+ * @return {boolean} Return `true` if validated, else `false`.
  * @example
  *
  * date('2024-02-29'); // 闰年
@@ -59,7 +59,7 @@ export function date(value) {
  * 全量 0000-9999 年请用 date【本方法下界 1000，年 1000 前的 ISO 日期不收】
  *
  * @param {*} value - The value to check.
- * @return {Boolean} Return `true` if validated, else `false`.
+ * @return {boolean} Return `true` if validated, else `false`.
  * @example
  *
  * commonDate('2024-02-29'); // 闰年

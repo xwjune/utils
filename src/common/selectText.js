@@ -4,9 +4,9 @@
  * 仅支持 input、textarea；type=number 等无可选文本的 input 类型会抛 InvalidStateError
  *
  * @param {HTMLInputElement|HTMLTextAreaElement} input - 输入框元素
- * @param {Number} [start=0] - 起始位置
- * @param {Number} [length] - 长度，缺省或传 null 时选中至末尾
- * @returns {Boolean} 是否执行了选区，元素非 input/textarea 或 disabled 时为 false
+ * @param {number} [start=0] - 起始位置
+ * @param {number} [length] - 长度，缺省或传 null 时选中至末尾
+ * @returns {boolean} 是否执行了选区，元素非 input/textarea 或 disabled 时为 false
  * @example
  *
  * 鼠标停留在‘元’前面

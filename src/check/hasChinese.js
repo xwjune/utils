@@ -5,7 +5,7 @@
  * 中西共用符号不算中文【弯引号、破折号、省略号、全角字母数字等】
  *
  * @param {*} value - The value to check.
- * @return {Boolean} Return `true` if validated, else `false`.
+ * @return {boolean} Return `true` if validated, else `false`.
  * @example
  *
  * hasChinese('中文'); // 常用汉字

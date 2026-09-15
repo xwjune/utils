@@ -3,13 +3,13 @@
  *
  * 四舍五入保留 N 位小数
  *
- * @param {Number|String} value - 数字
+ * @param {number|string} value - 数字
  * @param {Object} options - 配置参数
- * @param {Number} [options.digit=2] - 保留小数位数
- * @param {Boolean} [options.cutZero=false] - 是否去掉小数末尾多余的零
- * @param {Boolean} [options.toThousands=false] - 是否使用千位分隔符
- * @param {String} [options.format=''] - 数据错误时返回的占位符
- * @returns {String}
+ * @param {number} [options.digit=2] - 保留小数位数
+ * @param {boolean} [options.cutZero=false] - 是否去掉小数末尾多余的零
+ * @param {boolean} [options.toThousands=false] - 是否使用千位分隔符
+ * @param {string} [options.format=''] - 数据错误时返回的占位符
+ * @returns {string}
  * @example
  *
  * toFixed(3.14159);

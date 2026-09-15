@@ -110,11 +110,11 @@ name 用 __Host-/__Secure- 前缀时需自行满足浏览器的附加要求（__
 | :------- | :---------- | :--- | :------ |
 | name | cookie 名称 | string | - |
 | value | cookie 值（仅接受基本类型，对象请先 JSON.stringify） | string \| number \| boolean | - |
-| options | 配置 | object | {} |
+| options | 配置 | Object | {} |
 | options.domain | 域名 | string | - |
 | options.path | 路径，默认根路径；显式传入时必须以 / 开头，否则整单拒绝 | string | '/' |
 | options.maxAge | 相对过期时间【单位是秒，0 表示立即失效；与 expires 同时传时以 maxAge 为准，建议二选一】 | number | - |
-| options.expires | 绝对失效时间 | date | - |
+| options.expires | 绝对失效时间 | Date | - |
 | options.secure | 安全标志 | boolean | - |
 | options.sameSite | 跨域安全机制，仅接受 Strict/Lax/None（大小写不敏感） | string | - |
 
@@ -138,7 +138,7 @@ common.setCookie('name', 'value', { sameSite: 'Lax' });
 | Property | Description | Type | Default |
 | :------- | :---------- | :--- | :------ |
 | name | cookie 名称 | string | - |
-| options | 配置，path/domain 需与写入时一致才能删掉 | object | {} |
+| options | 配置，path/domain 需与写入时一致才能删掉 | Object | {} |
 | options.domain | 域名 | string | - |
 | options.path | 路径（以 / 开头），需与写入时一致才能删掉；不传时删根路径与当前页面目录两处 | string | - |
 

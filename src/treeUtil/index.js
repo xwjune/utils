@@ -13,16 +13,16 @@
  *
  * @param {Object[]} source - 源数据【有层级关系】
  * @param {Object} options - 配置参数
- * @param {String} options.pId - 源数据父主键 key
- * @param {String} [options.rootId] - 源数据根节点主键值，将父主键值与之相等的数据视为顶层树节点
+ * @param {string} options.pId - 源数据父主键 key
+ * @param {string} [options.rootId] - 源数据根节点主键值，将父主键值与之相等的数据视为顶层树节点
  *   【缺省此参数，将父主键值为 undefined/null 的数据视为顶层树节点】
- * @param {String} [options.id='id'] - 源数据主键 key
- * @param {String} [options.name='name'] - 源数据名称 key
- * @param {String} [options.tId='id'] - 树节点主键 key
- * @param {String} [options.tName='name'] - 树节点名称 key
- * @param {String} [options.children='children'] - 树节点子集合 key
- * @param {Boolean} [options.raw=false] - 是否保留所有属性
- * @param {Array} [options.otherKeys=[]] - 其他需要保留的属性【raw=true 时无效】
+ * @param {string} [options.id='id'] - 源数据主键 key
+ * @param {string} [options.name='name'] - 源数据名称 key
+ * @param {string} [options.tId='id'] - 树节点主键 key
+ * @param {string} [options.tName='name'] - 树节点名称 key
+ * @param {string} [options.children='children'] - 树节点子集合 key
+ * @param {boolean} [options.raw=false] - 是否保留所有属性
+ * @param {string[]} [options.otherKeys=[]] - 其他需要保留的属性【raw=true 时无效】
  * @return {Object[]} 树结构数据
  * @example
  *
@@ -127,12 +127,12 @@ function dataConvert(source = [], options = {}) {
  * 路径中途失配时返回已命中的部分结果
  *
  * @param {Object[]} treeData - 源数据
- * @param {Array} values - 原始值
+ * @param {string[]} values - 原始值
  * @param {Object} [options] - 配置参数
- * @param {String} [options.origin='id'] - 原始 key
- * @param {String} [options.key='name'] - 提取 key
- * @param {String} [options.children='children'] - 子集合 key
- * @return {Array} 提取的数据
+ * @param {string} [options.origin='id'] - 原始 key
+ * @param {string} [options.key='name'] - 提取 key
+ * @param {string} [options.children='children'] - 子集合 key
+ * @return {*[]} 提取的数据
  * @example
  *
  * const treeData = [{
@@ -184,10 +184,10 @@ function dataPick(treeData = [], values = [], options = {}) {
  * 数据查找
  *
  * @param {Object[]} treeData - 源数据
- * @param {String} value - 属性值
+ * @param {string} value - 属性值
  * @param {Object} [options] - 配置参数
- * @param {String} [options.key='id'] - key
- * @param {String} [options.children='children'] - 子集合 key
+ * @param {string} [options.key='id'] - key
+ * @param {string} [options.children='children'] - 子集合 key
  * @return {Object|undefined} 命中的原树节点（修改会影响原树）
  * @example
  *
