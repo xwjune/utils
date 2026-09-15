@@ -374,10 +374,11 @@ function buildModule(spec) {
     return { name, doclet, astParams, fnNode, sourceFile };
   });
 
-  // 模块描述：ws 这类单函数模块的文件头兼任函数 doclet，回退取函数描述首行
+  // 模块描述：ws 这类单函数模块的文件头兼任函数 doclet，回退取函数描述首行；
+  // 详细描述只在函数块渲染，整段回退会与函数块重复
   let descLines = moduleDescriptionLines(entry.moduleDoc);
   if (descLines.length === 0 && callable && fns[0] && fns[0].doclet) {
-    descLines = fns[0].doclet.descriptionLines.filter((line) => line);
+    descLines = fns[0].doclet.descriptionLines.filter((line) => line).slice(0, 1);
   }
 
   return {
@@ -447,12 +448,25 @@ function isCjkChar(ch) {
     || (code >= 0x3000 && code <= 0x303f) // CJK 标点（含全角空格）
     || (code >= 0xff00 && code <= 0xffef); // 全角字母数字、全角符号
 }
+// 盘古之白例外：全角标点两侧不加空格，即使另一侧是 ASCII；
+// 全角字母数字（Ａｂｃ０１９）不算标点，仍按混排规则补空格
+function isFullwidthPunct(ch) {
+  const code = ch.charCodeAt(0);
+  return (code >= 0x2018 && code <= 0x201f) // 弯引号 “”‘’
+    || (code >= 0x3001 && code <= 0x303f) // CJK 标点 ，。：；？！、《》「」【】…
+    || (code >= 0xff01 && code <= 0xff0f) // 全角符号 ！＂＃＄％＆＇（）＊＋，－．／
+    || (code >= 0xff1a && code <= 0xff20) // 全角符号 ：；＜＝＞？＠
+    || (code >= 0xff3b && code <= 0xff40) // 全角符号 ［＼］＾＿｀
+    || (code >= 0xff5b && code <= 0xff65); // 全角符号 ｛｜｝～
+}
 const LIST_MARKER_RE = /^([-*+]|\d+\.)\s+(.*)$/;
 
 function joinWrapped(prev, next) {
   const tail = prev.charAt(prev.length - 1);
   const head = next.charAt(0);
-  return isCjkChar(tail) && isCjkChar(head) ? prev + next : `${prev} ${next}`;
+  const tight = (isCjkChar(tail) && isCjkChar(head)) // CJK 交界紧贴
+    || isFullwidthPunct(tail) || isFullwidthPunct(head); // 全角标点旁紧贴
+  return tight ? prev + next : `${prev} ${next}`;
 }
 
 /**

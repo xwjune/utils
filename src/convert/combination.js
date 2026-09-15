@@ -1,8 +1,8 @@
 /**
  * 列出 N 个数组所有组合
  *
- * @param {array} arr - 原始数组
- * @returns {array}
+ * @param {Array} arr - 原始数组
+ * @returns {Array}
  * @example
  *
  * const arr = [
