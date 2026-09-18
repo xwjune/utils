@@ -105,7 +105,10 @@ function removeEvent(target, type, handler, useCapture = false) {
 /**
  * 阻止事件冒泡
  *
- * @param {Object} evt - event
+ * IE8- 下 attachEvent 挂载的回调不接收 event 参数，可不传，未传时自动取 window.event；
+ * 两者均取不到时抛 TypeError（如非事件分发期调用），不静默吞掉
+ *
+ * @param {Event} evt - 事件对象
  * @example
  *
  * addEvent(button, 'click', (evt) => {
@@ -113,32 +116,45 @@ function removeEvent(target, type, handler, useCapture = false) {
  * });
  */
 function stopPropagation(evt) {
-  if (!evt) return;
-  if (evt.stopPropagation) {
-    evt.stopPropagation();
+  // 参数归一化：IE8- attachEvent 回调无参，事件对象挂在 window.event 上
+  const e = evt || window.event;
+  if (e.stopPropagation) {
+    e.stopPropagation();
   } else {
-  // IE
-    window.event.cancelBubble = true;
+    // IE8- 事件对象无 stopPropagation，置 cancelBubble 等效阻止冒泡
+    e.cancelBubble = true;
   }
 }
 
 /**
  * 阻止事件默认行为
  *
- * @param {Object} evt - event
+ * IE8- 下 attachEvent 挂载的回调不接收 event 参数，可不传，未传时自动取 window.event；
+ * 两者均取不到时抛 TypeError（如非事件分发期调用），不静默吞掉
+ *
+ * Chrome 等对 window/document 上的 touchstart/touchmove/wheel 默认按 passive
+ * 处理：此函数无法取消其滚动等默认行为，仅 console 出现一条警告
+ *
+ * @param {Event} evt - 事件对象
  * @example
  *
  * addEvent(form, 'submit', (evt) => {
  *   preventDefault(evt); // 拦截默认提交，改走自定义逻辑
  * });
+ *
+ * // 反例：window 上的 touchmove 被 Chrome 默认按 passive 处理，无法取消滚动
+ * addEvent(window, 'touchmove', (evt) => {
+ *   preventDefault(evt); // 不生效，仅 console 一条警告；需原生 { passive: false } 挂载才可取消
+ * });
  */
 function preventDefault(evt) {
-  if (!evt) return;
-  if (evt.preventDefault) {
-    evt.preventDefault();
+  // 参数归一化：IE8- attachEvent 回调无参，事件对象挂在 window.event 上
+  const e = evt || window.event;
+  if (e.preventDefault) {
+    e.preventDefault();
   } else {
-  // IE
-    window.event.returnValue = false;
+    // IE8- 事件对象无 preventDefault，置 returnValue 为 false 等效取消默认行为
+    e.returnValue = false;
   }
 }
 

@@ -6,13 +6,22 @@ describe('阻止事件冒泡/默认行为', () => {
     event.stopPropagation(evt);
     expect(evt.stopPropagation).toHaveBeenCalled();
   });
-  test('stopPropagation evt 为空时直接返回', () => {
-    expect(() => event.stopPropagation()).not.toThrow();
+  test('stopPropagation evt 与 window.event 均缺失时抛 TypeError', () => {
+    delete window.event;
+    expect(() => event.stopPropagation()).toThrow(TypeError);
   });
-  test('stopPropagation IE 分支写 window.event.cancelBubble', () => {
+  test('stopPropagation 无参调用回退 window.event 置 cancelBubble（IE8- attachEvent 回调无参）', () => {
     window.event = {};
-    event.stopPropagation({});
+    event.stopPropagation();
     expect(window.event.cancelBubble).toBe(true);
+    delete window.event;
+  });
+  test('stopPropagation IE 分支写到传入的 evt 而非 window.event', () => {
+    window.event = {};
+    const evt = {};
+    event.stopPropagation(evt);
+    expect(evt.cancelBubble).toBe(true);
+    expect(window.event.cancelBubble).toBeUndefined();
     delete window.event;
   });
   test('preventDefault 优先原生方法', () => {
@@ -20,13 +29,22 @@ describe('阻止事件冒泡/默认行为', () => {
     event.preventDefault(evt);
     expect(evt.preventDefault).toHaveBeenCalled();
   });
-  test('preventDefault evt 为空时直接返回', () => {
-    expect(() => event.preventDefault()).not.toThrow();
+  test('preventDefault evt 与 window.event 均缺失时抛 TypeError', () => {
+    delete window.event;
+    expect(() => event.preventDefault()).toThrow(TypeError);
   });
-  test('preventDefault IE 分支写 window.event.returnValue', () => {
+  test('preventDefault 无参调用回退 window.event 置 returnValue（IE8- attachEvent 回调无参）', () => {
     window.event = {};
-    event.preventDefault({});
+    event.preventDefault();
     expect(window.event.returnValue).toBe(false);
+    delete window.event;
+  });
+  test('preventDefault IE 分支写到传入的 evt 而非 window.event', () => {
+    window.event = {};
+    const evt = {};
+    event.preventDefault(evt);
+    expect(evt.returnValue).toBe(false);
+    expect(window.event.returnValue).toBeUndefined();
     delete window.event;
   });
 });
