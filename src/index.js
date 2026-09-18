@@ -6,5 +6,7 @@ export { default as appUtil } from './appUtil';
 export { default as convert } from './convert';
 export { default as common } from './common';
 export { default as cookie } from './cookie';
+export { default as dom } from './dom';
+export { default as event } from './event';
 export { default as crypt } from './crypt';
 export { default as ws } from './ws';

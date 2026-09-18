@@ -1,8 +1,10 @@
 /**
- * 事件监听
+ * 事件操作
  *
  * addEvent - 添加事件监听
  * removeEvent - 移除事件监听
+ * stopPropagation - 阻止事件冒泡
+ * preventDefault - 阻止事件默认行为
  */
 
 /**
@@ -44,7 +46,7 @@ function isValidEventArgs(target, type, handler) {
  * };
  * addEvent(window, 'load', handler);
  */
-export function addEvent(target, type, handler, useCapture = false) {
+function addEvent(target, type, handler, useCapture = false) {
   // 参数规范化：事件名截去首尾空白，' click ' 与 'click' 等价
   const evtType = typeof type === 'string' ? type.trim() : type;
   if (!isValidEventArgs(target, evtType, handler)) {
@@ -81,7 +83,7 @@ export function addEvent(target, type, handler, useCapture = false) {
  * };
  * removeEvent(window, 'load', handler);
  */
-export function removeEvent(target, type, handler, useCapture = false) {
+function removeEvent(target, type, handler, useCapture = false) {
   // 参数规范化：事件名截去首尾空白，' click ' 与 'click' 等价
   const evtType = typeof type === 'string' ? type.trim() : type;
   if (!isValidEventArgs(target, evtType, handler)) {
@@ -99,3 +101,45 @@ export function removeEvent(target, type, handler, useCapture = false) {
   }
   return true;
 }
+
+/**
+ * 阻止事件冒泡
+ *
+ * @param {Object} evt - event
+ * @example
+ *
+ * addEvent(button, 'click', (evt) => {
+ *   stopPropagation(evt); // 只响应本层，不再冒泡到父级
+ * });
+ */
+function stopPropagation(evt) {
+  if (!evt) return;
+  if (evt.stopPropagation) {
+    evt.stopPropagation();
+  } else {
+  // IE
+    window.event.cancelBubble = true;
+  }
+}
+
+/**
+ * 阻止事件默认行为
+ *
+ * @param {Object} evt - event
+ * @example
+ *
+ * addEvent(form, 'submit', (evt) => {
+ *   preventDefault(evt); // 拦截默认提交，改走自定义逻辑
+ * });
+ */
+function preventDefault(evt) {
+  if (!evt) return;
+  if (evt.preventDefault) {
+    evt.preventDefault();
+  } else {
+  // IE
+    window.event.returnValue = false;
+  }
+}
+
+export default { addEvent, removeEvent, stopPropagation, preventDefault };
