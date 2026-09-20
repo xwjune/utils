@@ -68,16 +68,14 @@ function hasInvalidIdentityAttrs(options) {
 function getCookie(name) {
   // name 校验：名字里含结构分隔符的 cookie 写不进来，也就没必要去读
   if (!canUseDOM || !isValidCookieName(name)) return null;
-  // name 中的正则元字符需转义，否则 a.b 这类名字会误匹配到 axb
+  // name 中的正则元字符需转义，否则 a.b 会误匹配到 axb
   const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const matched = document.cookie.match(new RegExp(`(?:^|;\\s*)${escaped}=([^;]*)`));
   if (!matched) return null;
-  // 值不保证是编码产物（RFC 6265 不强制编码，服务端/第三方可能直写裸值），
-  // 其中的 % 序列不合法（如 '50%off' 的 %of）时 decodeURIComponent 会抛 URIError，需兜底而非让读取方崩掉
+  // 值不保证是编码产物（RFC 6265 不强制编码），非法 % 序列（如 '50%off'）会让 decodeURIComponent 抛 URIError，兜底原样返回
   try {
     return decodeURIComponent(matched[1]);
   } catch {
-    // 解码失败时原样返回
     return matched[1];
   }
 }
