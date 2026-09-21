@@ -50,7 +50,15 @@
 import expandNumber from './expandNumber';
 import numberToCn from './numberToCn';
 
-export default function currencyToCn(value, format = '零元整') {
+// 字表与「零元整」提为模块级常量：默认参数在函数体作用域之外求值，取不到函数体内的声明
+const digits = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖']; // 中文数字
+const cnYuan = '元'; // 元位单位
+const cnJiao = '角'; // 角位单位
+const cnFen = '分'; // 分位单位
+const cnZheng = '整'; // 无角无分时的收尾字
+const cnZero = digits[0] + cnYuan + cnZheng; // 零元整
+
+export default function currencyToCn(value, format = cnZero) {
   if (
     value === undefined
     || value === null
@@ -69,12 +77,9 @@ export default function currencyToCn(value, format = '零元整') {
     integral, // 金额整数部分
     fullDecimal = '', // 完整小数部分
   ] = str.split('.');
-  // 边界值校验
-  // 不用 Number(value) > 999999999999.99 判断：双精度浮点只有约 15~16 位十进制有效数字，
-  // 上限附近的最小精度间隔约 0.000122，字符串转 Number 会发生舍入——
-  // 如 '999999999999.990001' 实际大于上限，舍入后却与上限相等，'>' 不成立而被漏放。
-  // 入参字符串本身就是精确值，按位数比较无精度问题：
-  // 整数达 13 位即超限；整数恰为 999999999999 时，小数前两位为 99 且第三位起还有非零数字即超限
+  // 边界值校验：不用 Number(value) > 上限判断——双精度有效数字仅约 15~16 位，上限附近转 Number 会舍入，
+  // 如 '999999999999.990001' 实际超限，舍入后却与上限相等，'>' 不成立而漏放；按字符串位数比较则精确无舍入：
+  // 整数达 13 位即超限；整数恰为 999999999999 时，小数前两位为 99 且其后仍有非零数字即超限
   if (
     integral.length > 12
     || (
@@ -86,17 +91,11 @@ export default function currencyToCn(value, format = '零元整') {
     return '超大金额';
   }
 
-  const digits = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖']; // 中文数字
-  const cnYuan = '元'; // 元位单位
-  const cnJiao = '角'; // 角位单位
-  const cnFen = '分'; // 分位单位
-  const cnZheng = '整'; // 无角无分时的收尾字
   let chineseStr = ''; // 返回的中文金额字符串
-
   // 截去第二位之后的多余小数位，金额只精确到分【直接截断丢弃，不四舍五入】
   const decimal = fullDecimal.slice(0, 2); // 金额小数部分【两位】
 
-  // 整数部分大于 0 时才处理：
+  // 处理整数部分：非零才读并缀「元」，为零不输出——不足一元无元位
   if (Number(integral) > 0) {
     chineseStr += numberToCn(integral);
     chineseStr += cnYuan;
@@ -117,8 +116,8 @@ export default function currencyToCn(value, format = '零元整') {
   }
 
   if (chineseStr === '') {
-    // 整数、角、分皆零（0、0.0、0.00），三段拼接全空，显式拼出零元整
-    chineseStr += digits[0] + cnYuan + cnZheng;
+    // 整数、角、分皆零（0、0.0、0.00），三段拼接全空，取零元整
+    chineseStr = cnZero;
   } else if (
     decimal === ''
     || decimal === '0'
