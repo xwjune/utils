@@ -193,4 +193,13 @@ describe('动态加载js', () => {
     // 失败节点按契约移出 DOM
     expect(document.querySelector('script[src="https://example.com/404.js"]')).toBeNull();
   });
+  test('不传 onError 时 onerror 不抛错', () => {
+    const cb = jest.fn();
+    common.loadScript('https://example.com/404nocb.js', cb);
+    const script = document.querySelector('script[src="https://example.com/404nocb.js"]');
+    expect(() => script.onerror()).not.toThrow();
+    expect(cb).not.toHaveBeenCalled();
+    // 失败节点按契约移出 DOM
+    expect(document.querySelector('script[src="https://example.com/404nocb.js"]')).toBeNull();
+  });
 });
