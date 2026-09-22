@@ -1,7 +1,7 @@
 /**
  * 数字转十进制字符串，展开科学计数法
  *
- * @param {number} num - 数字
+ * @param {number|string} value - 数字或数字字面量字符串
  * @returns {string} 十进制字符串
  * @example
  *
@@ -25,9 +25,15 @@
  *
  * expandNumber('0.123e2'); // 前导零规范化
  * // => 12.3
+ *
+ * expandNumber(Symbol('x')); // 非数字/字符串直接抛 TypeError
  */
-export default function expandNumber(num) {
-  const str = String(num);
+export default function expandNumber(value) {
+  // String() 对任何类型都来者不拒【[1e-7] 会隐式转成 '1e-7' 照样展开】，其余类型是调用方 bug，直接抛错
+  if (typeof value !== 'number' && typeof value !== 'string') {
+    throw new TypeError('expandNumber 的参数必须是数字或字符串');
+  }
+  const str = String(value);
   if (!/e/i.test(str)) {
     return str;
   }

@@ -1,9 +1,7 @@
 /**
  * 元->分
  *
- * 为防止浮点数运算精度丢失，故采用字符串形式解析
- *
- * @param {number} value - 元
+ * @param {number|string} value - 元
  * @param {string} [format='0'] - 空数据格式化
  * @returns {string} 分
  * @example
@@ -31,20 +29,22 @@
  *
  * yuanToFen('num'); // 错误数据
  * // => ''
+ *
+ * yuanToFen([20]); // 隐式转换字符串的类数组不纳入
+ * // => ''
  */
+import isNull from '../check/isNull';
 import { isDecimalNumber } from '../check/number';
 import expandNumber from './expandNumber';
 
+// 全程按字符串解析，防止浮点数运算精度丢失【如 0.1 * 100 => 10.000000000000002】
 export default function yuanToFen(value, format = '0') {
-  if (
-    value === undefined
-    || value === null
-    || value === ''
-  ) {
+  if (isNull(value)) {
     return format;
   }
   // Number 先展开为十进制字符串，避免科学计数法【如 String(1e-7) === '1e-7'】被误判为数据错误
-  const str = typeof value === 'number' ? expandNumber(value) : value.toString();
+  const str = typeof value === 'number' ? expandNumber(value) : value;
+  // 仅接受数字与十进制数字字面量字符串
   if (!isDecimalNumber(str)) {
     return '';
   }
@@ -65,7 +65,7 @@ export default function yuanToFen(value, format = '0') {
       default:
         // 只保留两位小数
         // 特殊数据：0.000 => 000、 0.001 => 000、 0.010 => 001、 0.101 => 010
-        result = `${strArr[0]}${strArr[1].substr(0, 2)}`;
+        result = `${strArr[0]}${strArr[1].slice(0, 2)}`;
     }
   } else {
     result = `${str}00`;

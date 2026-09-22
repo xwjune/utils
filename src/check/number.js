@@ -64,7 +64,7 @@ export function isNumber(value) {
 /**
  * 十进制数字校验
  *
- * 仅接受数字及十进制字面量，不兼容科学计数法数字【如 '1e+21'、1e+21、[20] 均视为非法】
+ * 仅接受数字与十进制数字字面量字符串，不兼容科学计数法数字【如 '1e+21'、1e+21、[20] 均视为非法】
  * 超出双精度表示范围的字面量视为非法【Number('1' + '0'.repeat(400)) => Infinity】
  *
  * @param {*} value - The value to check.
@@ -110,7 +110,7 @@ export function isDecimalNumber(value) {
 /**
  * 整数校验
  *
- * 仅接受数字及十进制整数字面量，不兼容科学计数法数字【如 '1e+21'、1e+21、[20] 均视为非法】
+ * 仅接受数字与十进制整数字面量字符串，不兼容科学计数法数字【如 '1e+21'、1e+21、[20] 均视为非法】
  * 超出双精度表示范围的字面量视为非法【Number('1' + '0'.repeat(400)) => Infinity】
  *
  * @param {*} value - The value to check.
@@ -153,7 +153,7 @@ export function isInteger(value) {
 /**
  * 小数校验
  *
- * 仅接受数字及十进制小数字面量，不兼容科学计数法数字【如 '1e-7'、1e-7、[20] 均视为非法】
+ * 仅接受数字与十进制小数字面量字符串，不兼容科学计数法数字【如 '1e-7'、1e-7、[20] 均视为非法】
  * 超出双精度表示范围的字面量视为非法【Number('1' + '0'.repeat(400) + '.5') => Infinity】
  *
  * @param {*} value - The value to check.

@@ -6,7 +6,8 @@
  * - 读「零」：数位中间的 0 读一个「零」（连续 0 合并）
  * - 省「零」：数级末尾的 0 不读；万级全为 0 时连级名「万」一并省略
  *
- * @param {number} value - 阿拉伯数字
+ * @param {number|string} value - 阿拉伯数字
+ * @param {string} [format='零'] - 空数据格式化
  * @returns {string} 中文数字
  * @example
  *
@@ -31,35 +32,51 @@
  * numberToCn('12x');
  * // => 数据错误
  *
+ * numberToCn([1008]); // 隐式转换字符串的类数组不纳入
+ * // => 数据错误
+ *
  * numberToCn(1000000000000); // 达到壹万亿
  * // => 超大数字
+ *
+ * numberToCn(); // 空数据按零展示
+ * // => 零
+ *
+ * numberToCn(undefined, '--'); // 空数据格式化
+ * // => --
  */
+import isNull from '../check/isNull';
 import expandNumber from './expandNumber';
 
-export default function numberToCn(value) {
+export const digits = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖']; // 中文数字
+const radices = ['', '拾', '佰', '仟']; // 基本单位
+const bigRadices = ['', '万', '亿']; // 数级单位
+const point = '点'; // 小数点
+
+export default function numberToCn(value, format = digits[0]) {
+  if (isNull(value)) {
+    return format;
+  }
+  // 仅接受数字与字符串
+  if (typeof value !== 'number' && typeof value !== 'string') {
+    return '数据错误';
+  }
   // Number 先展开为十进制字符串，避免科学计数法【如 String(1e-7) === '1e-7'】被误判为数据错误
   const str = typeof value === 'number' ? expandNumber(value) : value;
   if (!/^(0|[1-9][0-9]*)(\.[0-9]+)?$/.test(str)) {
     return '数据错误';
   }
 
+  let result = ''; // 返回值
   const [
     integral, // 整数部分
     decimal, // 小数部分
   ] = str.split('.');
-  // 边界值校验【整数部分超过 12 位即大于等于壹万亿】
-  // 不用 Number(value) >= 1000000000000 判断：字符串转双精度浮点会舍入，
-  // 如 '999999999999.9999999999999999999' 实际小于壹万亿，却进位到 1000000000000 而被误判超大；
-  // 按整数位数判断则完全精确
+
+  // 边界值校验【整数超 12 位即达壹万亿】：不用 Number(value) >= 壹万亿判断——字符串转双精度会舍入，
+  // 如 '999999999999.9999999999999999999' 实际小于壹万亿，却进位到上限而被误判超大；按整数位数比较则精确
   if (integral.length > 12) {
     return '超大数字';
   }
-
-  const digits = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖']; // 中文数字
-  const radices = ['', '拾', '佰', '仟']; // 基本单位
-  const bigRadices = ['', '万', '亿']; // 数级单位
-  const point = '点';
-  let result = ''; // 返回值
 
   // Process integral part:
   if (Number(integral) > 0) {
@@ -117,3 +134,4 @@ export default function numberToCn(value) {
 // 0.0000001 零点零零零零零零壹
 // 1000000000000 超大数字
 // -12 数据错误
+// undefined 零【空数据格式化】

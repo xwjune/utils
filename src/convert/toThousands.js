@@ -1,7 +1,8 @@
 /**
  * 数字千位符分隔
  *
- * @param {number} value - 数字
+ * @param {number|string} value - 数字
+ * @param {string} [format=''] - 空数据格式化
  * @returns {string}
  * @example
  *
@@ -20,13 +21,24 @@
  * toThousands('0.5e5'); // 前导零规范化
  * // => 50,000
  *
- * toThousands(); // 非法输入返回空串
+ * toThousands(); // 空数据返回空串
+ * // => ''
+ *
+ * toThousands(undefined, '--'); // 空数据格式化
+ * // => --
+ *
+ * toThousands('x12'); // 错误数据返回空串
  * // => ''
  */
+import isNull from '../check/isNull';
 import { isNumber } from '../check/number';
 import expandNumber from './expandNumber';
 
-export default function toThousands(value) {
+export default function toThousands(value, format = '') {
+  if (isNull(value)) {
+    return format;
+  }
+  // 错误数据
   if (!isNumber(value)) {
     return '';
   }

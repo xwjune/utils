@@ -23,8 +23,14 @@
  *   ['白色', '128G', '国行', '全网通'],
  *   ['白色', '128G', '港行', '全网通'],
  * ]
+ *
+ * combination('x12'); // 非数组直接抛 TypeError
  */
 export default function combination(arr) {
+  // 非法入参直接抛错——返回 [] 会把调用方错误伪装成「无组合」
+  if (!Array.isArray(arr) || !arr.every(Array.isArray)) {
+    throw new TypeError('combination 参数须为数组的数组');
+  }
   // 初始值 [[]] 代表"一个空组合"，之后逐组把选项并入
   return arr.reduce(
     // 每个已有组合 × 当前组每个选项，各自生成一个扩展后的新组合

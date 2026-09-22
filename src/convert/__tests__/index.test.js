@@ -10,38 +10,14 @@ import toFixed from '../toFixed';
 
 describe('数据容量单位换算', () => {
   const testMap = [{
-    input: '',
-    output: '0B',
+    input: '1023', // 字符串整数正常转换
+    output: '1023.0B',
   }, {
-    input: '32g',
-    output: '0B',
+    input: '1e3', // 字符串科学计数法整数同样转换
+    output: '1000.0B',
   }, {
-    input: -10,
-    output: '0B',
-  }, {
-    input: 0,
-    output: '0B',
-  }, {
-    input: 0.3,
-    output: '0.3B',
-  }, {
-    input: 1e-7, // Number 科学计数法先展开再转换
-    output: '0.0000001B',
-  }, {
-    input: '1e-7', // 字符串科学计数法同样展开
-    output: '0.0000001B',
-  }, {
-    input: NaN, // 非有限数字
-    output: '0B',
-  }, {
-    input: Infinity,
-    output: '0B',
-  }, {
-    input: 'Infinity', // Number('Infinity') === Infinity
-    output: '0B',
-  }, {
-    input: '1e999', // Number('1e999') === Infinity
-    output: '0B',
+    input: 1024 * 1023, // 未达 1MB 仍用 KB 计
+    output: '1023.0KB',
   }, {
     input: 10000,
     output: '9.8KB',
@@ -94,70 +70,69 @@ describe('数据容量单位换算', () => {
     });
   });
   test('保留两位有效数：10240 => 10.00KB', () => {
-    expect(bytesToSize(10240, 2)).toBe('10.00KB');
+    expect(bytesToSize(10240, { fractionDigits: 2 })).toBe('10.00KB');
   });
-  test('非有限数字返回 format', () => {
-    expect(bytesToSize(NaN, 1, '--')).toBe('--');
-    expect(bytesToSize(Infinity, 1, '--')).toBe('--');
-    expect(bytesToSize('Infinity', 1, '--')).toBe('--');
+  test('单位按精确阈值切换：1024 ** 5 - 2 未达 1PB 仍用 TB 计', () => {
+    // 13 位小数让显示值留在 1024 以内——低精度会舍入成 1024.0TB，看着像该进位没进位
+    expect(bytesToSize((1024 ** 5) - 2, { fractionDigits: 13 })).toBe('1023.9999999999982TB');
+  });
+  test('非有限数字是错误数据', () => {
+    expect(bytesToSize(NaN, { format: '--' })).toBe('数据错误');
+    expect(bytesToSize(Infinity, { format: '--' })).toBe('数据错误');
+    expect(bytesToSize('Infinity', { format: '--' })).toBe('数据错误'); // Number('Infinity') === Infinity
+    expect(bytesToSize('1e999', { format: '--' })).toBe('数据错误'); // Number('1e999') === Infinity
+  });
+  test('布尔与 Symbol 是错误数据', () => {
+    expect(bytesToSize(true)).toBe('数据错误'); // Number(true) === 1，但过不了 isNumber
+    expect(bytesToSize(false)).toBe('数据错误');
+    expect(bytesToSize(Symbol('x'))).toBe('数据错误'); // 归一化排在类型门后，不会因 Number(Symbol()) 抛错
+  });
+  test('非数字字面量字符串是错误数据', () => {
+    expect(bytesToSize('32g')).toBe('数据错误'); // 过不了 isNumber 的字面量白名单
+  });
+  test('小数是错误数据，容量按字节计数必为整数', () => {
+    expect(bytesToSize(0.5)).toBe('数据错误');
+    expect(bytesToSize('1.5')).toBe('数据错误'); // 字符串小数同样不纳入
+  });
+  test('负数是错误数据，0 是有效容量正常渲染', () => {
+    expect(bytesToSize(-10, { format: '--' })).toBe('数据错误');
+    expect(bytesToSize(0)).toBe('0.0B'); // 0 与其他有效值同样保留小数位
+    expect(bytesToSize(0, { format: '--' })).toBe('0.0B');
+  });
+  test('空数据返回 format 占位符', () => {
+    expect(bytesToSize(undefined, { format: '--' })).toBe('--');
+    expect(bytesToSize(null, { format: '--' })).toBe('--');
+    expect(bytesToSize('', { format: '--' })).toBe('--');
+  });
+  test('空数据缺省占位随保留位数渲染零值', () => {
+    expect(bytesToSize()).toBe('0.0B');
+    expect(bytesToSize('')).toBe('0.0B'); // 空串同 undefined 走缺省占位
+    expect(bytesToSize(undefined, { fractionDigits: 2 })).toBe('0.00B');
+    expect(bytesToSize(undefined, { fractionDigits: 0 })).toBe('0B');
+    expect(bytesToSize(undefined, { fractionDigits: 'x' })).toBe('0.0B'); // 非法保留位数回退默认 1
+  });
+  test('options 显式传 null 兜底为默认配置', () => {
+    expect(bytesToSize(10240, null)).toBe('10.0KB');
   });
   test('fractionDigits 非法值回退默认 1，不抛 RangeError', () => {
-    expect(bytesToSize(10000, -1)).toBe('9.8KB');
-    expect(bytesToSize(10000, 101)).toBe('9.8KB');
-    expect(bytesToSize(10000, 3.5)).toBe('9.8KB'); // 非整数
-    expect(bytesToSize(10000, '2')).toBe('9.8KB'); // 字符串数字不纳入
-    expect(bytesToSize(10000, 'x')).toBe('9.8KB');
-    expect(bytesToSize(10000, null)).toBe('9.8KB');
-    expect(bytesToSize(10000, true)).toBe('9.8KB');
+    expect(bytesToSize(10000, { fractionDigits: -1 })).toBe('9.8KB');
+    expect(bytesToSize(10000, { fractionDigits: 101 })).toBe('9.8KB');
+    expect(bytesToSize(10000, { fractionDigits: 3.5 })).toBe('9.8KB'); // 非整数
+    expect(bytesToSize(10000, { fractionDigits: '2' })).toBe('9.8KB'); // 字符串数字不纳入
+    expect(bytesToSize(10000, { fractionDigits: 'x' })).toBe('9.8KB');
+    expect(bytesToSize(10000, { fractionDigits: null })).toBe('9.8KB');
+    expect(bytesToSize(10000, { fractionDigits: true })).toBe('9.8KB');
   });
   test('fractionDigits 0 同样接受', () => {
-    expect(bytesToSize(10240, 0)).toBe('10KB'); // 0 是合法保留位数
+    expect(bytesToSize(10240, { fractionDigits: 0 })).toBe('10KB'); // 0 是合法保留位数
+    expect(bytesToSize(0, { fractionDigits: 0 })).toBe('0B');
   });
 });
 
 describe('分转化成元', () => {
   const testMap = [{
-    input: undefined,
-    output: '0.00',
-  }, {
-    input: null,
-    output: '0.00',
-  }, {
-    input: '',
-    output: '0.00',
-  }, {
-    input: 0.2,
-    output: '0.00',
-  }, {
-    input: 0,
-    output: '0.00',
-  }, {
-    input: '0',
-    output: '0.00',
-  }, {
-    input: -0,
-    output: '0.00',
-  }, {
-    input: '-0',
-    output: '0.00',
-  }, {
-    input: -0.4, // 舍去小数部分后为负零
-    output: '0.00',
-  }, {
-    input: 1e-7, // Number 科学计数法先展开再转换
-    output: '0.00',
-  }, {
     input: 1e21, // Number 科学计数法先展开再转换
     output: '10000000000000000000.00',
-  }, {
-    input: .2, // eslint-disable-line no-floating-decimal
-    output: '0.00',
-  }, {
-    input: '0.2',
-    output: '0.00',
-  }, {
-    input: '-0.2', // 舍去小数部分后为负零
-    output: '0.00',
   }, {
     input: '2.0',
     output: '0.02',
@@ -179,11 +154,24 @@ describe('分转化成元', () => {
   }, {
     input: '-2000',
     output: '-20.00',
+  }, {
+    input: '9007199254740993', // 超出 2^53 安全整数，字符串管线精确保留
+    output: '90071992547409.93',
   }];
   testMap.forEach((el) => {
     test(`${el.input} => ${el.output}`, () => {
       expect(fenToYuan(el.input)).toBe(el.output);
     });
+  });
+  test('零值与不足一分渲染 0.00', () => {
+    expect(fenToYuan(0)).toBe('0.00');
+    expect(fenToYuan('0')).toBe('0.00');
+    expect(fenToYuan('-0')).toBe('0.00'); // 负零归一化
+    expect(fenToYuan(0.2)).toBe('0.00'); // 不足一分舍去小数部分
+    expect(fenToYuan('0.2')).toBe('0.00');
+    expect(fenToYuan(-0.4)).toBe('0.00'); // 舍去小数部分后为负零
+    expect(fenToYuan('-0.2')).toBe('0.00');
+    expect(fenToYuan(1e-7)).toBe('0.00'); // Number 科学计数法先展开再转换
   });
   test('去掉小数末尾多余的零', () => {
     expect(fenToYuan(2000, { trimZeros: true })).toBe('20');
@@ -199,13 +187,20 @@ describe('分转化成元', () => {
     expect(fenToYuan('1e+21')).toBe('');
     expect(fenToYuan('null')).toBe('');
     expect(fenToYuan('num')).toBe('');
+    // 隐式转换字符串的类数组与包装 Number 对象不纳入
+    expect(fenToYuan([2000])).toBe('');
+    expect(fenToYuan(new Number(2000))).toBe(''); // eslint-disable-line no-new-wrappers
   });
   test('空数据', () => {
-    expect(fenToYuan()).toBe('0.00');
-    expect(fenToYuan(undefined)).toBe('0.00');
+    expect(fenToYuan()).toBe('0.00'); // 不传参即 undefined
     expect(fenToYuan(null)).toBe('0.00');
     expect(fenToYuan('')).toBe('0.00');
     expect(fenToYuan(undefined, { format: '--' })).toBe('--');
+  });
+  test('空数据缺省占位随配置渲染零值', () => {
+    expect(fenToYuan(undefined, { trimZeros: true })).toBe('0');
+    expect(fenToYuan(undefined, { toThousands: true })).toBe('0.00');
+    expect(fenToYuan(undefined, { trimZeros: true, toThousands: true })).toBe('0');
   });
   test('options 显式传 null 兜底为默认配置', () => {
     expect(fenToYuan(2000, null)).toBe('20.00');
@@ -214,29 +209,11 @@ describe('分转化成元', () => {
 
 describe('元转化为分', () => {
   const testMap = [{
-    input: undefined,
-    output: '0',
-  }, {
-    input: null,
-    output: '0',
-  }, {
-    input: '',
-    output: '0',
-  }, {
-    input: '0.000',
-    output: '0',
-  }, {
-    input: '0.001',
-    output: '0',
-  }, {
     input: '0.010',
     output: '1',
   }, {
     input: '0.101',
     output: '10',
-  }, {
-    input: '0.00',
-    output: '0',
   }, {
     input: '0.01',
     output: '1',
@@ -244,26 +221,8 @@ describe('元转化为分', () => {
     input: '0.10',
     output: '10',
   }, {
-    input: '0.0',
-    output: '0',
-  }, {
     input: '0.1',
     output: '10',
-  }, {
-    input: 0,
-    output: '0',
-  }, {
-    input: -0,
-    output: '0',
-  }, {
-    input: '-0',
-    output: '0',
-  }, {
-    input: -0.001, // 只保留两位小数后为负零
-    output: '0',
-  }, {
-    input: 1e-7, // Number 科学计数法先展开再转换
-    output: '0',
   }, {
     input: 1e21, // Number 科学计数法先展开再转换
     output: '100000000000000000000000',
@@ -288,17 +247,31 @@ describe('元转化为分', () => {
       expect(yuanToFen(el.input)).toBe(el.output);
     });
   });
+  test('零值与不足一分渲染 0', () => {
+    expect(yuanToFen(0)).toBe('0');
+    expect(yuanToFen('0.0')).toBe('0');
+    expect(yuanToFen('0.00')).toBe('0');
+    expect(yuanToFen('0.000')).toBe('0');
+    expect(yuanToFen('-0')).toBe('0'); // 负零归一化
+    expect(yuanToFen('0.001')).toBe('0'); // 不足一分舍去
+    expect(yuanToFen(-0.001)).toBe('0'); // 只保留两位小数后为负零
+    expect(yuanToFen(1e-7)).toBe('0'); // Number 科学计数法先展开再转换
+  });
+  test('空值格式化', () => {
+    expect(yuanToFen()).toBe('0'); // 不传参即 undefined，缺省占位 '0'
+    expect(yuanToFen(null)).toBe('0');
+    expect(yuanToFen('')).toBe('0');
+    expect(yuanToFen(undefined, '--')).toBe('--');
+  });
   test('error', () => {
     expect(yuanToFen('.2')).toBe('');
     expect(yuanToFen('-.2')).toBe('');
     expect(yuanToFen('null')).toBe('');
     expect(yuanToFen('1e2')).toBe(''); // 字符串科学计数法不展开，视为错误数据
     expect(yuanToFen('1e+21')).toBe('');
-  });
-  test('空值格式化', () => {
-    expect(yuanToFen(null, '--')).toBe('--');
-    expect(yuanToFen('', '--')).toBe('--');
-    expect(yuanToFen(undefined, '--')).toBe('--');
+    // 隐式转换字符串的类数组与包装 Number 对象不纳入
+    expect(yuanToFen([20])).toBe('');
+    expect(yuanToFen(new Number(20))).toBe(''); // eslint-disable-line no-new-wrappers
   });
 });
 
@@ -392,16 +365,24 @@ describe('阿拉伯数字转中文', () => {
     });
   });
   test('数据错误', () => {
-    expect(numberToCn()).toBe('数据错误');
-    expect(numberToCn(null)).toBe('数据错误');
-    expect(numberToCn('')).toBe('数据错误');
-    expect(numberToCn(undefined)).toBe('数据错误');
     expect(numberToCn('-12')).toBe('数据错误');
     expect(numberToCn('12x')).toBe('数据错误');
     expect(numberToCn('.2')).toBe('数据错误');
     expect(numberToCn('-.2')).toBe('数据错误');
     expect(numberToCn('1e+21')).toBe('数据错误');
     expect(numberToCn(-1e-7)).toBe('数据错误'); // 展开为 '-0.0000001'，负数不合法
+    // 隐式转换字符串的类数组与包装 Number 对象不纳入
+    expect(numberToCn([1008])).toBe('数据错误');
+    expect(numberToCn(new Number(12))).toBe('数据错误'); // eslint-disable-line no-new-wrappers
+  });
+  test('空数据', () => {
+    expect(numberToCn()).toBe('零');
+    expect(numberToCn(undefined)).toBe('零');
+    expect(numberToCn(null)).toBe('零');
+    expect(numberToCn('')).toBe('零');
+  });
+  test('空值格式化', () => {
+    expect(numberToCn(undefined, '--')).toBe('--');
   });
   test('边界值', () => {
     expect(numberToCn(1000000000000)).toBe('超大数字');
@@ -411,24 +392,6 @@ describe('阿拉伯数字转中文', () => {
 
 describe('数字金额转换为中文人民币大写', () => {
   const testMap = [{
-    input: undefined,
-    output: '零元整',
-  }, {
-    input: null,
-    output: '零元整',
-  }, {
-    input: '',
-    output: '零元整',
-  }, {
-    input: '0',
-    output: '零元整',
-  }, {
-    input: '0.0',
-    output: '零元整',
-  }, {
-    input: '0.00',
-    output: '零元整',
-  }, {
     input: '0.01',
     output: '零壹分',
   }, {
@@ -494,11 +457,19 @@ describe('数字金额转换为中文人民币大写', () => {
       expect(currencyToCn(el.input)).toBe(el.output);
     });
   });
+  test('零值渲染零元整', () => {
+    expect(currencyToCn('0')).toBe('零元整');
+    expect(currencyToCn('0.0')).toBe('零元整');
+    expect(currencyToCn('0.00')).toBe('零元整'); // 小数位宽不限，全零同归零元整
+  });
   test('错误输入', () => {
     expect(currencyToCn('1x')).toBe('数据错误');
     expect(currencyToCn('-12')).toBe('数据错误');
     expect(currencyToCn('.2')).toBe('数据错误');
     expect(currencyToCn('1e+21')).toBe('数据错误');
+    // 隐式转换字符串的类数组与包装 Number 对象不纳入
+    expect(currencyToCn([1.1])).toBe('数据错误');
+    expect(currencyToCn(new Number(1.1))).toBe('数据错误'); // eslint-disable-line no-new-wrappers
   });
   test('空值输入', () => {
     expect(currencyToCn()).toBe('零元整');
@@ -546,6 +517,14 @@ describe('列出n个数组所有组合', () => {
   ];
   test('combination', () => {
     expect(combination(source)).toEqual(result);
+  });
+  test('非数组或元素非数组直接抛 TypeError', () => {
+    expect(() => combination()).toThrow(TypeError);
+    expect(() => combination('x12')).toThrow(TypeError);
+    expect(() => combination(['黑色', '64G'])).toThrow(TypeError); // 元素须为数组
+  });
+  test('空数组是合法输入', () => {
+    expect(combination([])).toEqual([[]]); // 零个组只有唯一的空组合
   });
 });
 
@@ -610,11 +589,13 @@ describe('数字千位符分隔', () => {
       expect(toThousands(el.input)).toBe(el.output);
     });
   });
-  test('error', () => {
+  test('空数据返回 format 占位符', () => {
     expect(toThousands()).toBe('');
-    expect(toThousands(undefined)).toBe('');
-    expect(toThousands(null)).toBe('');
-    expect(toThousands('')).toBe('');
+    expect(toThousands(undefined, '--')).toBe('--');
+    expect(toThousands(null, '--')).toBe('--');
+    expect(toThousands('', '--')).toBe('--');
+  });
+  test('错误数据返回空串', () => {
     expect(toThousands('.2')).toBe('');
     expect(toThousands('-.2')).toBe('');
     expect(toThousands('x12')).toBe('');
@@ -631,9 +612,6 @@ describe('科学计数法展开', () => {
   }, {
     input: 1e-7,
     output: '0.0000001', // 小数点前移到数字串开头之前
-  }, {
-    input: -1e-7,
-    output: '-0.0000001',
   }, {
     input: -1e-7,
     output: '-0.0000001',
@@ -663,6 +641,11 @@ describe('科学计数法展开', () => {
     // 中间分支只能直接传入科学计数法字面量覆盖
     expect(expandNumber('12.34e1')).toBe('123.4');
     expect(expandNumber('-12.34e-1')).toBe('-1.234');
+  });
+  test('非数字/字符串直接抛 TypeError', () => {
+    expect(() => expandNumber(Symbol('x'))).toThrow(TypeError);
+    expect(() => expandNumber([1e-7])).toThrow(TypeError); // 隐式转换字符串的类数组拦下
+    expect(() => expandNumber({})).toThrow(TypeError);
   });
 });
 
@@ -773,18 +756,17 @@ describe('格式化数字保留N位小数', () => {
     expect(toFixed(3.14159, null)).toBe('3.14');
   });
   test('错误数据返回空字符串', () => {
-    expect(toFixed()).toBe('');
-    expect(toFixed(null)).toBe('');
-    expect(toFixed('')).toBe('');
     expect(toFixed('num')).toBe('');
     expect(toFixed(NaN)).toBe('');
     expect(toFixed(Infinity)).toBe('');
     expect(toFixed([20])).toBe(''); // 隐式转换字符串的类数组不纳入
+    expect(toFixed('num', { format: '--' })).toBe(''); // 错误数据不走 format
   });
-  test('错误数据返回 format 占位符', () => {
-    expect(toFixed('num', { format: '--' })).toBe('--');
+  test('空数据返回 format 占位符', () => {
+    expect(toFixed()).toBe('');
     expect(toFixed(null, { format: '--' })).toBe('--');
     expect(toFixed(undefined, { format: '--' })).toBe('--');
+    expect(toFixed('', { format: '--' })).toBe('--');
   });
   test('超大数与精度边界', () => {
     // 超出双精度表示范围【Number => Infinity】视为错误数据

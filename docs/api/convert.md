@@ -6,37 +6,61 @@
 import { convert } from 'jun-utils';
 ```
 
-## bytesToSize(bytes, [fractionDigits=1], [format='0B'])
+## bytesToSize(bytes, options)
 **数据容量单位换算**
+
+### API
+| Property | Description | Type | Default |
+| :------- | :---------- | :--- | :------ |
+| bytes | 数据容量 | number \| string | - |
+| options | 配置参数 | Object | - |
+| options.fractionDigits | 保留小数位数 | number | 1 |
+| options.format | 空数据格式化，缺省按保留位数渲染零值 | string | - |
 
 ```JavaScript
 convert.bytesToSize(10240);
 // => 10.0KB
 
-convert.bytesToSize(1024 * 1024, 2);
+convert.bytesToSize(1024 * 1024, { fractionDigits: 2 });
 // => 1.00MB
 
-convert.bytesToSize('32g');
-// => 0B
+convert.bytesToSize(1024 * 1023); // 未达 1MB 仍用 KB 计
+// => 1023.0KB
 
-convert.bytesToSize(1e-7); // Number 科学计数法先展开再转换
-// => 0.0000001B
+convert.bytesToSize(''); // 空数据缺省占位，按保留位数渲染零值
+// => 0.0B
+
+convert.bytesToSize('', { fractionDigits: 2 }); // 占位随保留位数
+// => 0.00B
+
+convert.bytesToSize(null, { format: '--' }); // 空数据显式占位
+// => --
+
+convert.bytesToSize('32g');
+// => 数据错误
+
+convert.bytesToSize(-10); // 负数是错误数据
+// => 数据错误
+
+convert.bytesToSize(0); // 0 是有效容量，不取占位
+// => 0.0B
+
+convert.bytesToSize(0.5); // 小数是错误数据【容量按字节计数必为整数】
+// => 数据错误
 
 convert.bytesToSize(NaN); // 非有限数字
-// => 0B
+// => 数据错误
 ```
 
 ## fenToYuan(value, options)
 **分->元**
 
-为防止浮点数运算精度丢失，故采用字符串形式解析
-
 ### API
 | Property | Description | Type | Default |
 | :------- | :---------- | :--- | :------ |
-| value | 分 | number | - |
+| value | 分 | number \| string | - |
 | options | 配置参数 | Object | - |
-| options.format | 空数据格式化 | string | '0.00' |
+| options.format | 空数据格式化，缺省按其余配置渲染零值 | string | - |
 | options.trimZeros | 是否去掉小数末尾多余的零 | boolean | false |
 | options.toThousands | 是否使用千位分隔符 | boolean | false |
 
@@ -62,17 +86,21 @@ convert.fenToYuan();
 convert.fenToYuan(undefined, { format: '--' }); // 空数据格式化
 // => --
 
+convert.fenToYuan(undefined, { trimZeros: true }); // 缺省占位随 trimZeros 去零
+// => 0
+
 convert.fenToYuan(300000, { toThousands: true }); // 数字千位符分隔
 // => 3,000
 
 convert.fenToYuan('num'); // 错误数据
 // => ''
+
+convert.fenToYuan([2000]); // 隐式转换字符串的类数组不纳入
+// => ''
 ```
 
 ## yuanToFen(value, [format='0'])
 **元->分**
-
-为防止浮点数运算精度丢失，故采用字符串形式解析
 
 ```JavaScript
 convert.yuanToFen(20);
@@ -98,9 +126,12 @@ convert.yuanToFen(undefined, '--'); // 空数据格式化
 
 convert.yuanToFen('num'); // 错误数据
 // => ''
+
+convert.yuanToFen([20]); // 隐式转换字符串的类数组不纳入
+// => ''
 ```
 
-## numberToCn(value)
+## numberToCn(value, [format='零'])
 **阿拉伯数字转中文**
 
 处理数字小于 1000000000000【壹万亿】；小数「点」后逐位读，末尾 0 原样保留。读法规则：
@@ -131,8 +162,17 @@ convert.numberToCn(100008000); // 个级开头的零要读
 convert.numberToCn('12x');
 // => 数据错误
 
+convert.numberToCn([1008]); // 隐式转换字符串的类数组不纳入
+// => 数据错误
+
 convert.numberToCn(1000000000000); // 达到壹万亿
 // => 超大数字
+
+convert.numberToCn(); // 空数据按零展示
+// => 零
+
+convert.numberToCn(undefined, '--'); // 空数据格式化
+// => --
 ```
 
 ## currencyToCn(value, [format='零元整'])
@@ -155,6 +195,9 @@ convert.currencyToCn('', '--');
 // => --
 
 convert.currencyToCn('1x');
+// => 数据错误
+
+convert.currencyToCn([1.1]); // 隐式转换字符串的类数组不纳入
 // => 数据错误
 
 convert.currencyToCn(1.00);
@@ -204,9 +247,11 @@ convert.combination(arr);
   ['白色', '128G', '国行', '全网通'],
   ['白色', '128G', '港行', '全网通'],
 ]
+
+convert.combination('x12'); // 非数组直接抛 TypeError
 ```
 
-## toThousands(value)
+## toThousands(value, [format=''])
 **数字千位符分隔**
 
 ```JavaScript
@@ -225,11 +270,17 @@ convert.toThousands('+2000'); // 前导 + 号规范化
 convert.toThousands('0.5e5'); // 前导零规范化
 // => 50,000
 
-convert.toThousands(); // 非法输入返回空串
+convert.toThousands(); // 空数据返回空串
+// => ''
+
+convert.toThousands(undefined, '--'); // 空数据格式化
+// => --
+
+convert.toThousands('x12'); // 错误数据返回空串
 // => ''
 ```
 
-## expandNumber(num)
+## expandNumber(value)
 **数字转十进制字符串，展开科学计数法**
 
 ```JavaScript
@@ -253,6 +304,8 @@ convert.expandNumber('12.34e1'); // 字符串科学计数法同样支持
 
 convert.expandNumber('0.123e2'); // 前导零规范化
 // => 12.3
+
+convert.expandNumber(Symbol('x')); // 非数字/字符串直接抛 TypeError
 ```
 
 ## toFixed(value, options)
@@ -268,7 +321,7 @@ convert.expandNumber('0.123e2'); // 前导零规范化
 | options.fractionDigits | 保留小数位数 | number | 2 |
 | options.trimZeros | 是否去掉小数末尾多余的零 | boolean | false |
 | options.toThousands | 是否使用千位分隔符 | boolean | false |
-| options.format | 数据错误时返回的占位符 | string | '' |
+| options.format | 空数据格式化 | string | '' |
 
 ```JavaScript
 convert.toFixed(3.14159);
@@ -307,7 +360,7 @@ convert.toFixed('-0.004'); // 负数按绝对值四舍五入，负零归一化�
 convert.toFixed('num'); // 错误数据
 // => ''
 
-convert.toFixed('num', { format: '--' }); // 错误数据返回占位符
+convert.toFixed(undefined, { format: '--' }); // 空数据格式化
 // => '--'
 ```
 

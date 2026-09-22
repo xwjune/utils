@@ -8,7 +8,7 @@
  * @param {number} [options.fractionDigits=2] - 保留小数位数
  * @param {boolean} [options.trimZeros=false] - 是否去掉小数末尾多余的零
  * @param {boolean} [options.toThousands=false] - 是否使用千位分隔符
- * @param {string} [options.format=''] - 数据错误时返回的占位符
+ * @param {string} [options.format=''] - 空数据格式化
  * @returns {string}
  * @example
  *
@@ -48,14 +48,15 @@
  * toFixed('num'); // 错误数据
  * // => ''
  *
- * toFixed('num', { format: '--' }); // 错误数据返回占位符
+ * toFixed(undefined, { format: '--' }); // 空数据格式化
  * // => '--'
  */
+import isNull from '../check/isNull';
 import { isNumber } from '../check/number';
 import expandNumber from './expandNumber';
 
 // 整体思路：全程十进制字符串运算，不整体转 Number，规避二进制近似误差
-// 1. isNumber 白名单校验，非法值返回 format 占位符
+// 1. 空数据（''/null/undefined）返回 format 占位符；其余过不了 isNumber 校验的错误数据恒返回空串
 // 2. 展开科学计数法、去前导 + 号、摘出负号，按绝对值四舍五入
 // 3. 字符串逐位进位完成四舍五入，保留位数不足则补零
 // 4. 依次去尾零【trimZeros】、补回负号【归零不补，避免 -0.00】、千位分隔【toThousands】
@@ -64,15 +65,20 @@ export default function toFixed(value, options = {}) {
     fractionDigits = 2, // 保留小数位数
     trimZeros = false, // 是否去掉小数末尾多余的零
     toThousands = false, // 是否使用千位分隔符
-    format = '', // 数据错误时返回的占位符
+    format = '', // 空数据格式化
   } = options || {}; // options 显式传 null 时解构会抛 TypeError，兜底为空对象
-  if (!isNumber(value)) {
+
+  if (isNull(value)) {
     return format;
   }
+  // 错误数据
+  if (!isNumber(value)) {
+    return '';
+  }
+
   // 保留位数仅接受 0-100 的整数【同原生 toFixed 合法区间，越界其抛 RangeError】，非法值回退默认 2
   const decimal = Number.isInteger(fractionDigits)
     && fractionDigits >= 0 && fractionDigits <= 100 ? fractionDigits : 2;
-
   // 先展开科学计数法【如 String(1e-7) => '1e-7'，展开后 => '0.0000001'】，再规范化前导 + 号【如 '+2000' => '2000'】
   let str = expandNumber(value).replace(/^\+/, '');
   // 负号先摘出，按绝对值四舍五入后再补回
