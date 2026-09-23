@@ -1,3 +1,4 @@
+/* eslint-disable no-bitwise */
 /**
  * 加密解密【用于暴露在 url 中的重要参数】
  *
@@ -5,11 +6,7 @@
  * 特殊处理的用意：字符顺序相对标准表整体重排、+/ 替换为 url 安全的 -_，标准 atob/base64 解本模块密文只会得到乱码，
  * 避免 url 中的重要参数被轻易识别、解码【字符表混淆而非加密：索引表明文在源码中，防的是随手解码，不防有心人】
  * 代理对（emoji 等）按 CESU-8 式拆分编码，自编自解 round-trip 无损
- *
- * encode - 加密
- * decode - 解密
  */
-/* eslint-disable no-bitwise */
 
 // 索引表（62 个有效字符 + 末位 = 作填充符），全部为 URL 安全字符
 // 标准 base64 索引表：ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/

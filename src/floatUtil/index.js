@@ -2,11 +2,6 @@
 /**
  * 浮点数运算【解决精度问题】
  *
- * add - 加法
- * subtract - 减法
- * multiply - 乘法
- * divide - 除法
- *
  * 仅接受十进制字面量【1e-7、1e+21 等以科学计数法表示的数字除外】；
  * 运算中间值超出 Number.MAX_SAFE_INTEGER 时无法保证精度，与非法输入一样返回 format 兜底
  */

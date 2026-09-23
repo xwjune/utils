@@ -311,13 +311,6 @@ function parseJSDoc(raw) {
   return { descriptionLines, params, returns, example };
 }
 
-/** 模块头 JSDoc 中的 "fnName - 一句话" 函数索引行不属于模块描述 */
-function moduleDescriptionLines(moduleDoc) {
-  if (!moduleDoc) return [];
-  const parsed = parseJSDoc(moduleDoc);
-  return parsed.descriptionLines.filter((line) => line && !/^\S+\s+- /.test(line));
-}
-
 function resolveModules() {
   const code = fs.readFileSync(SRC_INDEX, 'utf8');
   const ast = parser.parse(code, PARSER_OPTIONS);
@@ -376,7 +369,9 @@ function buildModule(spec) {
 
   // 模块描述：ws 这类单函数模块的文件头兼任函数 doclet，回退取函数描述首行；
   // 详细描述只在函数块渲染，整段回退会与函数块重复
-  let descLines = moduleDescriptionLines(entry.moduleDoc);
+  let descLines = entry.moduleDoc
+    ? parseJSDoc(entry.moduleDoc).descriptionLines.filter(Boolean)
+    : [];
   if (descLines.length === 0 && callable && fns[0] && fns[0].doclet) {
     descLines = fns[0].doclet.descriptionLines.filter((line) => line).slice(0, 1);
   }

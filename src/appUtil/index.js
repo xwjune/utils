@@ -1,16 +1,5 @@
 /**
  * app 交互
- *
- * isIos - IOS 环境判断
- * isAndroid - Android 环境判断
- * isMobile - 移动端【手机、平板设备】环境判断
- * isWeChat - 微信客户端判断
- * isAliPay - 支付宝客户端判断
- * isTaobao - 淘宝客户端判断
- * alipayJSBridgeReady - 监听 alipay 容器初始化
- * alipayTitle - 支付宝设置标题
- * alipayPopWindow - 支付宝关闭当前页面
- * alipayExitApp - 支付宝退出当前应用
  */
 
 // iPadOS 13+ Safari 默认请求桌面 UA（Macintosh; Intel Mac OS X），不含 CPU/iPad 字样；

@@ -1,9 +1,5 @@
 /**
  * cookie 操作
- *
- * getCookie - 读取 cookie
- * setCookie - 创建 cookie
- * delCookie - 删除 cookie
  */
 
 // SSR/Node 等非浏览器环境没有 window/document，模块加载时探测一次，避免函数内裸访问抛 ReferenceError

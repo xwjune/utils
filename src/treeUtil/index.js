@@ -1,9 +1,5 @@
 /**
  * 树结构数据操作
- *
- * dataConvert - 数据转换
- * dataPick - 数据提取
- * dataFind - 数据查找
  */
 
 /**

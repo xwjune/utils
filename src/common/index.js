@@ -1,9 +1,6 @@
+/* eslint-disable no-bitwise */
 /**
  * 通用方法
- *
- * generateUUID - 生成 uuid
- * getParameter - 获取 url 中的参数
- * loadScript - 动态加载 js
  */
 
 /**
@@ -31,9 +28,7 @@ function generateUUID() {
     const bytes = new Uint8Array(16);
     crypto.getRandomValues(bytes);
     // 钉死版本位 4 与变体位 10xx（位布局见函数头注释），其余位保持随机
-    // eslint-disable-next-line no-bitwise
     bytes[6] = (bytes[6] & 0x0f) | 0x40;
-    // eslint-disable-next-line no-bitwise
     bytes[8] = (bytes[8] & 0x3f) | 0x80;
     const hex = Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('');
     return [
@@ -47,9 +42,8 @@ function generateUUID() {
   // 兜底 Math.random：非密码学安全，仅可用作去重 key、trace id 等，不能当 token 或密钥
   // 模板沿用网络流传的经典写法：x 是随机位，y 即函数头注释里的 N 位
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-    // eslint-disable-next-line no-bitwise
     const r = Math.random() * 16 | 0; // 0-15 对应16进制 0-f
-    // eslint-disable-next-line no-bitwise, no-mixed-operators
+    // eslint-disable-next-line no-mixed-operators
     return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
   });
 }

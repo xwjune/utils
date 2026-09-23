@@ -1,25 +1,5 @@
 /**
  * 校验库
- *
- * cellphone - 手机校验
- * telphone - 固定电话校验
- * phone - 电话【手机和固定电话】校验
- * email - 邮箱校验
- * postcode - 邮编校验
- * isNull - 空校验
- * isNumber - 数字校验
- * isDecimalNumber - 十进制数字校验【不兼容科学计数法】
- * isInteger - 整数校验
- * isDecimal - 小数校验
- * money - 金额【元】判断
- * hasChinese - 中文判断
- * idCard - 身份证校验
- * ip - ip 地址校验
- * alipay - 支付宝账号校验
- * pwdIntensity - 弱密码校验
- * illegalChar - 非法字符校验
- * date - 日期校验
- * commonDate - 常用日期校验【年 1000-9999】
  */
 import {
   cellphone,

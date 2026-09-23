@@ -1,10 +1,5 @@
 /**
  * 事件操作
- *
- * addEvent - 添加事件监听
- * removeEvent - 移除事件监听
- * stopPropagation - 阻止事件冒泡
- * preventDefault - 阻止事件默认行为
  */
 
 /**

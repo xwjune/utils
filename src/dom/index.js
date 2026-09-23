@@ -3,16 +3,6 @@
  *
  * 【环境】视口测量（getWin 系列/getElementOffset）依赖浏览器 window/document，SSR/Node 中调用会抛错【引入不受影响】
  * 【兼容】滚动偏移优先 pageYOffset、内容尺寸优先 documentElement，取不到再逐级兜底到 body
- *
- * getWinHeight - 获取窗口可视区的高度
- * getWinWidth - 获取窗口可视区的宽度
- * getWinScrollHeight - 获取窗口可视区内容的总高度
- * getWinScrollWidth - 获取窗口可视区内容的总宽度
- * getWinScrollTop - 获取窗口可视区滚动条垂直偏移
- * getWinScrollLeft - 获取窗口可视区滚动条水平偏移
- * getElementOffset - 获取元素相对于文档的位置
- * getStyle - 获取元素样式
- * selectText - 选中文本
  */
 
 /**
