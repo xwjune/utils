@@ -20,10 +20,18 @@ describe('固定电话校验', () => {
   [
     '0571-85735888',
     '057185735888',
+    '010-12345678', // 3 位区号
     '85735888',
   ].forEach((el) => {
     test(el, () => {
       expect(check.telphone(el)).toBeTruthy();
+    });
+  });
+  [
+    '999-9999999', // 区号非 0 开头，不是国内固话
+  ].forEach((el) => {
+    test(el, () => {
+      expect(check.telphone(el)).toBeFalsy();
     });
   });
   test('非字符串【单元素数组隐式转换】', () => {
@@ -41,6 +49,9 @@ describe('电话【手机和固定电话】校验', () => {
     test(el, () => {
       expect(check.phone(el)).toBeTruthy();
     });
+  });
+  test('1234567890【10 位数字串，非手机亦非固话】', () => {
+    expect(check.phone('1234567890')).toBeFalsy();
   });
   test('非字符串【单元素数组隐式转换】', () => {
     expect(check.phone([13456789012])).toBeFalsy();
@@ -302,6 +313,15 @@ describe('中文判断', () => {
       expect(check.hasChinese(el)).toBeFalsy();
     });
   });
+  test('扩展 G/H/J 生僻字【U+30000 起第三平面，代理对】', () => {
+    // 用码点构造，避免源码里混入字体不可见的生僻字；依次为 G 首末、H 首末、J 首末
+    [0x30000, 0x3134a, 0x31350, 0x323af, 0x323b0, 0x3347f].forEach((cp) => {
+      expect(check.hasChinese(String.fromCodePoint(cp))).toBeTruthy();
+    });
+  });
+  test('扩展 J 后的未分配区不误收【U+33800 在高码元上界 D88D 之外】', () => {
+    expect(check.hasChinese(String.fromCodePoint(0x33800))).toBeFalsy();
+  });
   test('零宽空格 U+200B', () => {
     // 用码点构造，避免源码里混入不可见字符
     expect(check.hasChinese(String.fromCharCode(0x200b))).toBeFalsy();
@@ -456,35 +476,35 @@ describe('弱密码校验', () => {
       expect(check.pwdIntensity(el)).toBe(3);
     });
   });
+});
 
-  describe('非法字符校验', () => {
-    [
-      '123\n123',
-      '123\\123',
-      '123\t123',
-      '123\v123',
-      '123\r123',
-      '123\f123',
-      // \x00 即 \0：裸 \0 后跟数字在严格模式是语法错误、sloppy 模式成八进制转义，故用 \x00
-      '123\x00123',
-      '123\x01123',
-      '123\x7f123',
-      '123"123',
-    ].forEach((el) => {
-      test(el, () => {
-        expect(check.illegalChar(el)).toBeTruthy();
-      });
+describe('非法字符校验', () => {
+  [
+    '123\n123',
+    '123\\123',
+    '123\t123',
+    '123\v123',
+    '123\r123',
+    '123\f123',
+    // \x00 即 \0：裸 \0 后跟数字在严格模式是语法错误、sloppy 模式成八进制转义，故用 \x00
+    '123\x00123',
+    '123\x01123',
+    '123\x7f123',
+    '123"123',
+  ].forEach((el) => {
+    test(el, () => {
+      expect(check.illegalChar(el)).toBeTruthy();
     });
-    test('123', () => {
-      expect(check.illegalChar('123')).toBeFalsy();
-    });
-    test('123 123【空格合法，0x20 不在控制字符区间】', () => {
-      expect(check.illegalChar('123 123')).toBeFalsy();
-    });
-    test('非字符串【单元素数组隐式转换】', () => {
-      expect(check.illegalChar(['123"123'])).toBeFalsy();
-      expect(check.illegalChar(null)).toBeFalsy();
-    });
+  });
+  test('123', () => {
+    expect(check.illegalChar('123')).toBeFalsy();
+  });
+  test('123 123【空格合法，0x20 不在控制字符区间】', () => {
+    expect(check.illegalChar('123 123')).toBeFalsy();
+  });
+  test('非字符串【单元素数组隐式转换】', () => {
+    expect(check.illegalChar(['123"123'])).toBeFalsy();
+    expect(check.illegalChar(null)).toBeFalsy();
   });
 });
 

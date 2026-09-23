@@ -25,7 +25,7 @@ check.cellphone(['13456789012']); // 数组非字符串
 ## telphone(value)
 **固定电话校验**
 
-规则：3-4 位区号，7-8 位直拨号码
+规则：3-4 位 0 开头区号【国内区号均 0 起，如 010、0571】，7-8 位直拨号码；区号可省
 
 ```JavaScript
 check.telphone('0571-85735888'); // 区号带连字符
@@ -34,8 +34,14 @@ check.telphone('0571-85735888'); // 区号带连字符
 check.telphone('057185735888'); // 区号不带连字符
 // => true
 
+check.telphone('010-12345678'); // 3 位区号
+// => true
+
 check.telphone('85735888'); // 省略区号
 // => true
+
+check.telphone('999-9999999'); // 区号非 0 开头，不是国内固话
+// => false
 
 check.telphone(['0571-85735888']); // 数组非字符串
 // => false
@@ -141,7 +147,7 @@ check.isNumber('.2'); // 字符串缺整数位
 check.isNumber(.2); // 数字类型
 // => true
 
-check.isNumber(1e+21); // 科学计数法字符串 1000000000000000000000
+check.isNumber(1e+21); // 科学计数法数字 1000000000000000000000
 // => true
 
 check.isNumber('1e3'); // 科学计数法字符串 1000
@@ -182,7 +188,7 @@ check.isDecimalNumber(20.5); // 数字类型
 check.isDecimalNumber('1e3'); // 科学计数法字符串 1000
 // => false
 
-check.isDecimalNumber(1e+21); // 科学计数法字符串 1000000000000000000000
+check.isDecimalNumber(1e+21); // 科学计数法数字 1000000000000000000000
 // => false
 
 check.isDecimalNumber('020'); // 前导零
@@ -275,7 +281,7 @@ check.money('20.002'); // 三位小数
 check.money('002'); // 前导零
 // => false
 
-check.money(1e-7); // 科学计数法字符串
+check.money(1e-7); // 科学计数法数字 0.0000001
 // => false
 
 check.money(['20']); // 数组非字符串/数字
@@ -377,7 +383,7 @@ check.alipay('13456789012'); // 手机号账号
   - ① 数字
   - ② 大写字母
   - ③ 小写字母
-  - ④ 符号【键盘上可以打出来的符号】
+  - ④ 符号【ASCII 键盘符号】
 
 ```JavaScript
 check.pwdIntensity('123456'); // 纯数字，1 种元素

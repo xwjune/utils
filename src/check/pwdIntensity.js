@@ -8,7 +8,7 @@
  *   - ① 数字
  *   - ② 大写字母
  *   - ③ 小写字母
- *   - ④ 符号【键盘上可以打出来的符号】
+ *   - ④ 符号【ASCII 键盘符号】
  *
  * @param {string} value - 密码
  * @return {number} intensity - 密码强度 1-弱 | 2-中 | 3-强
@@ -49,19 +49,19 @@ export default function pwdIntensity(value) {
   if (/[A-Z]/.test(value)) rule += 1;
   // 小写字母
   if (/[a-z]/.test(value)) rule += 1;
-  // 包含以下特殊符号
+  // 符号：可打印 ASCII 标点全集【£、￥ 等非 ASCII 键盘符号不计入元素计数】
   if (/[`~!@#$%^&*()\-_=+[{\]}\\|;:'",<.>/?]/.test(value)) rule += 1;
 
   switch (rule) {
     case 0:
     case 1:
-      // 弱：非有效密码，即没有同时满足规则一和规则二
+      // 弱：规则一、二已在前置 return 中通过，仅命中不足两种元素
       return 1;
     case 2:
-      // 中：有效密码，即满足了规则一，以及规则三中的任意两种组合
+      // 中：规则一、二已通过，恰命中两种元素
       return 2;
     default:
-      // 强：有效密码，即满足了规则一，以及规则三中的任意三种组合或所有
+      // 强：规则一、二已通过，命中三种及以上元素
       return 3;
   }
 }

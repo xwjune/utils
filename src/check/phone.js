@@ -29,7 +29,7 @@ export function cellphone(value) {
 /**
  * 固定电话校验
  *
- * 规则：3-4 位区号，7-8 位直拨号码
+ * 规则：3-4 位 0 开头区号【国内区号均 0 起，如 010、0571】，7-8 位直拨号码；区号可省
  *
  * @param {*} value - The value to check.
  * @return {boolean} Return `true` if validated, else `false`.
@@ -41,15 +41,21 @@ export function cellphone(value) {
  * telphone('057185735888'); // 区号不带连字符
  * // => true
  *
+ * telphone('010-12345678'); // 3 位区号
+ * // => true
+ *
  * telphone('85735888'); // 省略区号
  * // => true
+ *
+ * telphone('999-9999999'); // 区号非 0 开头，不是国内固话
+ * // => false
  *
  * telphone(['0571-85735888']); // 数组非字符串
  * // => false
  */
 
-// 固定电话：区号 3-4 位，可带一个连字符；区号整体可省，直拨号码 7-8 位
-const TELPHONE_REGEXP = /^(\d{3,4}-?)?\d{7,8}$/;
+// 固定电话：区号 3-4 位且 0 开头【国内区号均 0 起】，可带一个连字符，区号整体可省；直拨号码 7-8 位
+const TELPHONE_REGEXP = /^(0\d{2,3}-?)?\d{7,8}$/;
 
 export function telphone(value) {
   // 正则 test 会将参数隐式转成字符串【数字、单元素数组能误中，Symbol 直接抛错】，故仅接受字符串

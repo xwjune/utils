@@ -40,7 +40,7 @@ export function date(value) {
   if (!match) return false;
   // 正则只保结构，月日联合规则另验；不借 Date 回读：
   // 构造函数对 0-99 年隐加 1900【new Date(4,1,29) 回读成 1904】，手算最稳
-  const year = +match[1]; // 一元运算符，+x等价于Number(x)
+  const year = +match[1]; // 一元运算符，+x 等价于 Number(x)
   const month = +match[3];
   const day = +match[4];
   // 闰年：四年一闰、百年不闰、四百年再闰
@@ -86,7 +86,7 @@ export function commonDate(value) {
   if (!match) return false;
   // 正则只保结构，月日联合规则另验；此处用 new Date 回读是安全的：
   // 年已限 1000 起，避开了 0-99 年隐加 1900 的坑【new Date(4,1,29) 回读成 1904】
-  const year = +match[1]; // 一元运算符，+x等价于Number(x)
+  const year = +match[1]; // 一元运算符，+x 等价于 Number(x)
   const month = +match[3];
   const day = +match[4];
   // 月份 0 起算故 -1；构造对超上限的日会滚入下月【'2023-02-30' 成 3 月 2 日】

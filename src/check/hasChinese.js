@@ -50,10 +50,10 @@ const RANGES = [
 ];
 
 // 扩展 B 起的生僻字【如 𠮷 U+20BB7 即 D842+DFB7】为 UTF-16 代理对，占两个码元，单字符类无法匹配，
-// 只能整对匹配：D840-D87E 是每对的前半（高码元），DC00-DFFF 是后半（低码元），
-// 一前一后拼起来覆盖 U+20000-U+2FA1F【扩展 B-I 与兼容表意补充】
+// 只能整对匹配：D840-D88D 是每对的前半（高码元），DC00-DFFF 是后半（低码元），
+// 拼起来覆盖 U+20000-U+337FF【扩展 B-J 与兼容表意补充；扩展区块间的间隙为未分配码点，真实文本不可能包含，无需逐区块精确切分】
 // 注意：严禁添加 'u' 标志，加了不报错，但代理对写法会静默失配【生僻字全部漏判】
-const REGEXP = new RegExp(`(?:[${RANGES.join('')}]|[\uD840-\uD87E][\uDC00-\uDFFF])`);
+const REGEXP = new RegExp(`(?:[${RANGES.join('')}]|[\uD840-\uD88D][\uDC00-\uDFFF])`);
 
 export default function hasChinese(value) {
   // 正则 test 会将参数隐式转成字符串【非锚定匹配，数组、对象能误中，Symbol 直接抛错】，故仅接受字符串

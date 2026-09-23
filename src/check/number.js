@@ -23,7 +23,7 @@
  * isNumber(.2); // 数字类型
  * // => true
  *
- * isNumber(1e+21); // 科学计数法字符串 1000000000000000000000
+ * isNumber(1e+21); // 科学计数法数字 1000000000000000000000
  * // => true
  *
  * isNumber('1e3'); // 科学计数法字符串 1000
@@ -83,7 +83,7 @@ export function isNumber(value) {
  * isDecimalNumber('1e3'); // 科学计数法字符串 1000
  * // => false
  *
- * isDecimalNumber(1e+21); // 科学计数法字符串 1000000000000000000000
+ * isDecimalNumber(1e+21); // 科学计数法数字 1000000000000000000000
  * // => false
  *
  * isDecimalNumber('020'); // 前导零
