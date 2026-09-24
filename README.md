@@ -57,17 +57,17 @@ Script:
 <!-- gen-docs:start -->
 | 模块 | 说明 | 函数 |
 | :--- | :--- | :--- |
-| [check](docs/api/check.md) | 校验库 | 19 |
-| [stringUtil](docs/api/stringUtil.md) | 字符串处理 | 1 |
-| [floatUtil](docs/api/floatUtil.md) | 浮点数运算【解决精度问题】 | 4 |
-| [treeUtil](docs/api/treeUtil.md) | 树结构数据操作 | 3 |
 | [appUtil](docs/api/appUtil.md) | app 交互 | 10 |
-| [convert](docs/api/convert.md) | 数据转换 | 9 |
+| [check](docs/api/check.md) | 校验库 | 19 |
 | [common](docs/api/common.md) | 通用方法 | 3 |
+| [convert](docs/api/convert.md) | 数据转换 | 9 |
 | [cookie](docs/api/cookie.md) | cookie 操作 | 3 |
+| [crypt](docs/api/crypt.md) | 加密解密【用于暴露在 url 中的重要参数】 | 2 |
 | [dom](docs/api/dom.md) | DOM 视口与元素操作 | 9 |
 | [event](docs/api/event.md) | 事件操作 | 4 |
-| [crypt](docs/api/crypt.md) | 加密解密【用于暴露在 url 中的重要参数】 | 2 |
+| [floatUtil](docs/api/floatUtil.md) | 浮点数运算【解决精度问题】 | 4 |
+| [stringUtil](docs/api/stringUtil.md) | 字符串处理 | 1 |
+| [treeUtil](docs/api/treeUtil.md) | 树结构数据操作 | 3 |
 | [ws](docs/api/ws.md) | webSocket【断线重连】 | 1 |
 <!-- gen-docs:end -->
 
