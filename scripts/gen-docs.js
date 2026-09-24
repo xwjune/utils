@@ -59,7 +59,31 @@ function walk(node, visit) {
 
 function isFunctionLike(node) {
   return node
-    && (node.type === 'ArrowFunctionExpression' || node.type === 'FunctionExpression');
+    && (node.type === 'FunctionDeclaration' || node.type === 'ArrowFunctionExpression' || node.type === 'FunctionExpression');
+}
+
+/** 函数是否返回值：表达式体箭头函数隐式返回；块体查带值 return，嵌套函数的 return 属于其自身不计 */
+function hasReturnValue(fnNode) {
+  if (!fnNode) return false;
+  if (fnNode.type === 'ArrowFunctionExpression' && fnNode.body.type !== 'BlockStatement') return true;
+  let found = false;
+  // 不复用 walk：它全量下钻，而回调/内嵌函数里的 return 不代表外层有返回值，必须剪掉嵌套函数子树
+  const visit = (node) => {
+    if (!node || typeof node.type !== 'string' || found) return;
+    if (isFunctionLike(node)) return;
+    if (node.type === 'ReturnStatement' && node.argument) {
+      found = true;
+      return;
+    }
+    Object.keys(node).forEach((key) => {
+      if (SKIP_KEYS.has(key)) return;
+      const value = node[key];
+      if (Array.isArray(value)) value.forEach(visit);
+      else visit(value);
+    });
+  };
+  visit(fnNode.body);
+  return found;
 }
 
 function paramNames(fnNode) {
@@ -363,7 +387,8 @@ function buildModule(spec) {
     }
     const doclet = parseJSDoc(docletRaw);
     if (!doclet.example) warnings.push(`${spec.name}.${name} 缺 @example（${rel(sourceFile)}）`);
-    if (!doclet.returns) warnings.push(`${spec.name}.${name} 缺 @return（${rel(sourceFile)}）`);
+    // 只对真有返回值的函数要求 @return，void（纯副作用）函数不报
+    if (!doclet.returns && hasReturnValue(fnNode)) warnings.push(`${spec.name}.${name} 缺 @return（${rel(sourceFile)}）`);
     return { name, doclet, astParams, fnNode, sourceFile };
   });
 
