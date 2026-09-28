@@ -82,7 +82,7 @@ function utf8Decode(utftext) {
 /**
  * 加密
  *
- * 非字符串不做隐式转换，直接抛 TypeError
+ * 非字符串直接抛 TypeError
  *
  * @param {string} value - 需要加密的数据
  * @return {string} 已加密的数据（round-trip 无损，换行等控制字符原样保留）
@@ -95,7 +95,7 @@ function utf8Decode(utftext) {
  * // => throw Error（encode 只接受字符串）
  */
 function encode(value) {
-  // 非字符串（数字、null 等）没有可编码的字面量，不隐式转换，显式拦截
+  // 非字符串显式拦截，避免 utf8Encode 抛裸 TypeError 或静默编出空串
   if (typeof value !== 'string') {
     throw new TypeError('encode 只接受字符串');
   }
@@ -121,7 +121,7 @@ function encode(value) {
 /**
  * 解密
  *
- * 非字符串不做隐式转换，直接抛 TypeError。
+ * 非字符串直接抛 TypeError。
  * 非法字符（空白等）会被剔除，但剔除后须为合法密文，否则抛 Error【残缺密文静默解出乱码更危险】
  *
  * @param {string} value - 需要解密的数据；非字符串抛 TypeError。

@@ -7,7 +7,7 @@ describe('手机校验', () => {
   test('123456789', () => {
     expect(check.cellphone('123456789')).toBeFalsy();
   });
-  test('非字符串【单元素数组隐式转换】', () => {
+  test('非字符串', () => {
     expect(check.cellphone(13456789012)).toBeFalsy();
     expect(check.cellphone(['13456789012'])).toBeFalsy();
     expect(check.cellphone(null)).toBeFalsy();
@@ -34,7 +34,7 @@ describe('固定电话校验', () => {
       expect(check.telphone(el)).toBeFalsy();
     });
   });
-  test('非字符串【单元素数组隐式转换】', () => {
+  test('非字符串', () => {
     expect(check.telphone(85735888)).toBeFalsy();
     expect(check.telphone(['0571-85735888'])).toBeFalsy();
     expect(check.telphone(null)).toBeFalsy();
@@ -53,7 +53,7 @@ describe('电话【手机和固定电话】校验', () => {
   test('1234567890【10 位数字串，非手机亦非固话】', () => {
     expect(check.phone('1234567890')).toBeFalsy();
   });
-  test('非字符串【单元素数组隐式转换】', () => {
+  test('非字符串', () => {
     expect(check.phone([13456789012])).toBeFalsy();
     expect(check.phone(null)).toBeFalsy();
   });
@@ -85,7 +85,7 @@ describe('邮箱校验', () => {
       expect(check.email(el)).toBeFalsy();
     });
   });
-  test('非字符串【单元素数组隐式转换】', () => {
+  test('非字符串', () => {
     expect(check.email(['test@163.com'])).toBeFalsy();
     expect(check.email(null)).toBeFalsy();
   });
@@ -109,7 +109,7 @@ describe('邮编校验', () => {
       expect(check.postcode(el)).toBeFalsy();
     });
   });
-  test('非字符串【单元素数组隐式转换】', () => {
+  test('非字符串', () => {
     expect(check.postcode(['310000'])).toBeFalsy();
     expect(check.postcode(310000)).toBeFalsy();
     expect(check.postcode(null)).toBeFalsy();
@@ -192,7 +192,7 @@ describe('十进制数字校验', () => {
     // Number('1' + '0'.repeat(400)) => Infinity
     expect(check.isDecimalNumber(`1${'0'.repeat(400)}`)).toBeFalsy();
   });
-  test('非字符串/数字类型不做隐式转换', () => {
+  test('非字符串/数字类型', () => {
     // String([20]) => '20' 会误匹配正则，需显式拦截
     // eslint-disable-next-line no-new-wrappers
     [[20], [['20']], new Number(20), { toString: () => '20' }, true].forEach((el) => {
@@ -220,7 +220,7 @@ describe('整数校验', () => {
       expect(check.isInteger(el)).toBeFalsy();
     });
   });
-  test('非字符串/数字类型不做隐式转换', () => {
+  test('非字符串/数字类型', () => {
     // eslint-disable-next-line no-new-wrappers
     [[20], [['20']], new Number(20), { toString: () => '20' }, true].forEach((el) => {
       expect(check.isInteger(el)).toBeFalsy();
@@ -252,7 +252,7 @@ describe('小数校验', () => {
       expect(check.isDecimal(el)).toBeFalsy();
     });
   });
-  test('非字符串/数字类型不做隐式转换', () => {
+  test('非字符串/数字类型', () => {
     // eslint-disable-next-line no-new-wrappers
     [[0.2], [['0.2']], new Number(0.2), new String('0.2'), { toString: () => '0.2' }, true].forEach((el) => {
       expect(check.isDecimal(el)).toBeFalsy();
@@ -276,7 +276,7 @@ describe('金额【元】判断', () => {
       expect(check.money(el)).toBeFalsy();
     });
   });
-  test('非字符串/数字【单元素数组隐式转换】', () => {
+  test('非字符串/数字类型', () => {
     // Symbol 之前会直接抛 TypeError
     // eslint-disable-next-line no-new-wrappers
     [['20'], new String('20'), null, Symbol('s')].forEach((el) => {
@@ -391,7 +391,7 @@ describe('ip地址校验', () => {
       expect(check.ip(el)).toBeFalsy();
     });
   });
-  test('非字符串【单元素数组隐式转换】', () => {
+  test('非字符串', () => {
     expect(check.ip(['192.168.0.1'])).toBeFalsy();
     expect(check.ip(null)).toBeFalsy();
   });
@@ -415,7 +415,7 @@ describe('支付宝账号校验', () => {
       expect(check.alipay(el)).toBeFalsy();
     });
   });
-  test('非字符串【单元素数组隐式转换】', () => {
+  test('非字符串', () => {
     expect(check.alipay(13456789012)).toBeFalsy();
     expect(check.alipay(['13456789012'])).toBeFalsy();
     expect(check.alipay(null)).toBeFalsy();
@@ -502,7 +502,7 @@ describe('非法字符校验', () => {
   test('123 123【空格合法，0x20 不在控制字符区间】', () => {
     expect(check.illegalChar('123 123')).toBeFalsy();
   });
-  test('非字符串【单元素数组隐式转换】', () => {
+  test('非字符串', () => {
     expect(check.illegalChar(['123"123'])).toBeFalsy();
     expect(check.illegalChar(null)).toBeFalsy();
   });
@@ -543,7 +543,7 @@ describe('日期校验', () => {
       expect(check.date(el)).toBeFalsy();
     });
   });
-  test('非字符串【单元素数组隐式转换】', () => {
+  test('非字符串', () => {
     expect(check.date(20240229)).toBeFalsy();
     expect(check.date(['2024-02-29'])).toBeFalsy();
     expect(check.date(null)).toBeFalsy();
@@ -587,7 +587,7 @@ describe('常用日期校验【年 1000-9999】', () => {
       expect(check.commonDate(el)).toBeFalsy();
     });
   });
-  test('非字符串【单元素数组隐式转换】', () => {
+  test('非字符串', () => {
     expect(check.commonDate(20240229)).toBeFalsy();
     expect(check.commonDate(['2024-02-29'])).toBeFalsy();
     expect(check.commonDate(null)).toBeFalsy();

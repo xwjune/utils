@@ -95,7 +95,7 @@ convert.fenToYuan(300000, { toThousands: true }); // 数字千位符分隔
 convert.fenToYuan('num'); // 错误数据
 // => ''
 
-convert.fenToYuan([2000]); // 隐式转换字符串的类数组不纳入
+convert.fenToYuan([2000]); // 数组按错误数据处理
 // => ''
 ```
 
@@ -127,7 +127,7 @@ convert.yuanToFen(undefined, '--'); // 空数据格式化
 convert.yuanToFen('num'); // 错误数据
 // => ''
 
-convert.yuanToFen([20]); // 隐式转换字符串的类数组不纳入
+convert.yuanToFen([20]); // 数组按错误数据处理
 // => ''
 ```
 
@@ -162,7 +162,7 @@ convert.numberToCn(100008000); // 个级开头的零要读
 convert.numberToCn('12x');
 // => 数据错误
 
-convert.numberToCn([1008]); // 隐式转换字符串的类数组不纳入
+convert.numberToCn([1008]); // 数组按错误数据处理
 // => 数据错误
 
 convert.numberToCn(1000000000000); // 达到壹万亿
@@ -197,7 +197,7 @@ convert.currencyToCn('', '--');
 convert.currencyToCn('1x');
 // => 数据错误
 
-convert.currencyToCn([1.1]); // 隐式转换字符串的类数组不纳入
+convert.currencyToCn([1.1]); // 数组按错误数据处理
 // => 数据错误
 
 convert.currencyToCn(1.00);

@@ -23,7 +23,7 @@
  * currencyToCn('1x');
  * // => 数据错误
  *
- * currencyToCn([1.1]); // 隐式转换字符串的类数组不纳入
+ * currencyToCn([1.1]); // 数组按错误数据处理
  * // => 数据错误
  *
  * currencyToCn(1.00);

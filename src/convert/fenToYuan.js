@@ -39,7 +39,7 @@
  * fenToYuan('num'); // 错误数据
  * // => ''
  *
- * fenToYuan([2000]); // 隐式转换字符串的类数组不纳入
+ * fenToYuan([2000]); // 数组按错误数据处理
  * // => ''
  */
 import isNull from '../check/isNull';

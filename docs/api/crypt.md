@@ -13,7 +13,7 @@ import { crypt } from 'jun-utils';
 ## encode(value)
 **加密**
 
-非字符串不做隐式转换，直接抛 TypeError
+非字符串直接抛 TypeError
 
 ```JavaScript
 crypt.encode('123456');
@@ -26,7 +26,7 @@ crypt.encode(null); // 非字符串抛 TypeError
 ## decode(value)
 **解密**
 
-非字符串不做隐式转换，直接抛 TypeError。  
+非字符串直接抛 TypeError。  
 非法字符（空白等）会被剔除，但剔除后须为合法密文，否则抛 Error【残缺密文静默解出乱码更危险】
 
 ```JavaScript

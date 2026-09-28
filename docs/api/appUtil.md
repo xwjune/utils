@@ -102,7 +102,7 @@ appUtil.alipayJSBridgeReady(); // 非函数抛 TypeError
 ## alipayTitle(title, [subtitle])
 **支付宝设置标题**
 
-title 非字符串不做隐式转换，直接抛 TypeError；subtitle 未传时不携带该键
+title 非字符串直接抛 TypeError；subtitle 未传时不携带该键
 
 ```JavaScript
 appUtil.alipayTitle('标题', '副标题');

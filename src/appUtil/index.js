@@ -137,7 +137,7 @@ class App {
   /**
    * 支付宝设置标题
    *
-   * title 非字符串不做隐式转换，直接抛 TypeError；subtitle 未传时不携带该键
+   * title 非字符串直接抛 TypeError；subtitle 未传时不携带该键
    *
    * @param {string} title - 标题；非字符串抛 TypeError
    * @param {string} [subtitle] - 副标题；未传时不发送该字段
@@ -149,7 +149,7 @@ class App {
    * // => throw Error（alipayTitle 的 title 必须是字符串）
    */
   alipayTitle = (title, subtitle) => {
-    // 非字符串（数字、null 等）没有可设置的标题，不隐式转换，显式拦截
+    // 非字符串（数字、null 等）没有可设置的标题，显式拦截
     if (typeof title !== 'string') {
       throw new TypeError('alipayTitle 的 title 必须是字符串');
     }
