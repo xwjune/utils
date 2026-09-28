@@ -164,6 +164,28 @@ describe('数据转换', () => {
     expect(warnSpy).toHaveBeenCalledTimes(1);
     warnSpy.mockRestore();
   });
+  test('dataConvert-7【输出顺序：数字型主键按数值升序在前，其余按源顺序在后】', () => {
+    expect(treeUtil.dataConvert([
+      { id: 'a', value: 'A', parentId: '0' },
+      { id: '10', value: 'B', parentId: '0' },
+      { id: '9', value: 'C', parentId: '0' },
+    ], {
+      rootId: '0',
+      pId: 'parentId',
+      name: 'value',
+    })).toEqual([
+      { id: '9', name: 'C' },
+      { id: '10', name: 'B' },
+      { id: 'a', name: 'A' },
+    ]);
+  });
+  test('dataConvert-8【pId 缺失或非法抛 TypeError】', () => {
+    expect(() => treeUtil.dataConvert()).toThrow(TypeError);
+    expect(() => treeUtil.dataConvert(source)).toThrow(TypeError);
+    expect(() => treeUtil.dataConvert(source, { rootId: '100000', name: 'value' })).toThrow(TypeError);
+    expect(() => treeUtil.dataConvert(source, { pId: '', name: 'value' })).toThrow(TypeError);
+    expect(() => treeUtil.dataConvert(source, { pId: 123, name: 'value' })).toThrow(TypeError);
+  });
   test('其他属性提取', () => {
     expect(treeUtil.dataConvert(source, {
       rootId: '100000',
@@ -200,11 +222,37 @@ describe('数据转换', () => {
       otherKeys: ['py'],
     })).toEqual(result3);
   });
-  test('空值输入', () => {
-    expect(treeUtil.dataConvert()).toEqual([]);
+  test('其他属性提取-5【raw 时 tId/tName 映射优先于同名原始属性】', () => {
+    expect(treeUtil.dataConvert([
+      { id: '1', key: 'K1', value: '映射值', label: '原始值', parentId: '0' },
+    ], {
+      rootId: '0',
+      pId: 'parentId',
+      tId: 'key',
+      name: 'value',
+      tName: 'label',
+      raw: true,
+    })).toEqual([{ id: '1', key: '1', label: '映射值', value: '映射值', parentId: '0' }]);
   });
-  test('options 显式传 null 不抛错', () => {
-    expect(() => treeUtil.dataConvert(source, null)).not.toThrow();
+  test('其他属性提取-6【otherKeys 与 tId/tName 同名时不透传，映射优先】', () => {
+    expect(treeUtil.dataConvert([
+      { id: '1', key: 'K1', value: '映射值', label: '原始值', parentId: '0' },
+    ], {
+      rootId: '0',
+      pId: 'parentId',
+      tId: 'key',
+      name: 'value',
+      tName: 'label',
+      otherKeys: ['key', 'label'],
+    })).toEqual([{ key: '1', label: '映射值' }]);
+  });
+  test('空值输入', () => {
+    expect(treeUtil.dataConvert([], { pId: 'parentId' })).toEqual([]);
+  });
+  test('options 显式传 null 兜底为空对象', () => {
+    // null 已被 || {} 兜住，抛的是 pId 必填校验错而非解构 TypeError（后者消息为 Cannot destructure...）
+    expect(() => treeUtil.dataConvert(source, null)).toThrow(TypeError);
+    expect(() => treeUtil.dataConvert(source, null)).toThrow('dataConvert 的 options.pId');
   });
 });
 

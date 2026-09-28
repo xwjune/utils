@@ -7,6 +7,13 @@
  *
  * 将具有层级关系的数组转化为树结构数组
  *
+ * 注意：
+ * - 输出顺序不保证跟随源数据顺序：主键为非负整数或其字符串形式（如 '330000'）
+ *   的节点按数值升序在前，其余按源数据出现顺序在后，顶层与子集合均遵循此规则
+ * - 非顶层数据的父主键值在源数据中无对应主键时，该数据将被丢弃
+ * - 源数据存在重复主键时后者覆盖前者，并 console.warn 告警
+ * - tId/tName 的值始终取映射结果，与之同名的透传属性（raw 或 otherKeys）会被映射值覆盖
+ *
  * @param {Object[]} source - 源数据【有层级关系】
  * @param {Object} options - 配置参数
  * @param {string} options.pId - 源数据父主键 key
@@ -20,6 +27,7 @@
  * @param {boolean} [options.raw=false] - 是否保留所有属性
  * @param {string[]} [options.otherKeys=[]] - 其他需要保留的属性【raw=true 时无效】
  * @return {Object[]} 树结构数据
+ * @throws {TypeError} options.pId 缺失或不是非空字符串
  * @example
  *
  * const source = [
@@ -61,25 +69,25 @@ function dataConvert(source = [], options = {}) {
     raw = false, // 是否保留所有属性
     otherKeys = [], // 其他需要保留的属性
   } = options || {}; // options 显式传 null 时解构会抛 TypeError，兜底为空对象
+  // 缺 pId 时 item[undefined] 恒为 undefined，全部数据会命中「父主键为 undefined 即顶层」
+  // 分支被静默拍平，层级关系无声丢失，属调用方 bug
+  if (typeof pId !== 'string' || !pId) {
+    throw new TypeError('dataConvert 的 options.pId 必须是非空字符串');
+  }
   const dataObj = Object.create(null); // 缓存数据（无原型链，避免主键为 'constructor' 等时误命中原型属性）
   const delPid = !raw && !otherKeys.includes(pId); // 是否删除数据父主键key
 
   // 缓存数据
   source.forEach((item) => {
-    const obj = {
+    const mapped = {
       [tId]: item[id],
       [tName]: item[name],
       [pId]: item[pId],
     };
-    if (raw) {
-      Object.assign(obj, { ...item });
-    } else {
-      otherKeys.forEach((key) => {
-        Object.assign(obj, {
-          [key]: item[key],
-        });
-      });
-    }
+    // 结构字段（mapped）最后回写：与 tId/tName 同名的属性无论来自 raw 透传还是 otherKeys，都盖不住映射值
+    const obj = raw
+      ? Object.assign({}, item, mapped)
+      : Object.assign({}, ...otherKeys.map((key) => ({ [key]: item[key] })), mapped);
     if (dataObj[item[id]] !== undefined) {
       // eslint-disable-next-line no-console
       console.warn(`treeUtil.dataConvert: 源数据存在重复主键「${String(item[id])}」，后者将覆盖前者`);
@@ -93,6 +101,8 @@ function dataConvert(source = [], options = {}) {
     ? (item) => item[pId] === undefined || item[pId] === null
     : (item) => String(item[pId]) === String(rootId);
 
+  // 顶层数组与子集合的顺序都源于本次遍历序：JS 对象先按数值升序枚举非负整数主键，
+  // 再按插入序枚举其余主键，故输出顺序不必跟随源数据顺序
   return Object.values(dataObj).filter((item) => {
     if (!isRootNode(item)) {
       // 非根节点子节点集合

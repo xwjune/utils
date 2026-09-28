@@ -11,6 +11,14 @@ import { treeUtil } from 'jun-utils';
 
 将具有层级关系的数组转化为树结构数组
 
+注意：
+
+- 输出顺序不保证跟随源数据顺序：主键为非负整数或其字符串形式（如 '330000'）
+  的节点按数值升序在前，其余按源数据出现顺序在后，顶层与子集合均遵循此规则
+- 非顶层数据的父主键值在源数据中无对应主键时，该数据将被丢弃
+- 源数据存在重复主键时后者覆盖前者，并 console.warn 告警
+- tId/tName 的值始终取映射结果，与之同名的透传属性（raw 或 otherKeys）会被映射值覆盖
+
 ### API
 | Property | Description | Type | Default |
 | :------- | :---------- | :--- | :------ |
@@ -25,6 +33,10 @@ import { treeUtil } from 'jun-utils';
 | options.children | 树节点子集合 key | string | 'children' |
 | options.raw | 是否保留所有属性 | boolean | false |
 | options.otherKeys | 其他需要保留的属性【raw=true 时无效】 | string[] | [] |
+
+**Throws**
+
+- `TypeError` — options.pId 缺失或不是非空字符串
 
 ```JavaScript
 const source = [
