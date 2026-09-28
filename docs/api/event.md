@@ -35,8 +35,11 @@ event.removeEvent(window, 'load', handler);
 ## stopPropagation(evt)
 **阻止事件冒泡**
 
-IE8- 下 attachEvent 挂载的回调不接收 event 参数，可不传，未传时自动取 window.event；  
-两者均取不到时抛 TypeError（如非事件分发期调用），不静默吞掉
+IE8- 下 attachEvent 挂载的回调不接收 event 参数，可不传，未传时自动取 window.event
+
+**Throws**
+
+- `TypeError` — evt 与 window.event 均取不到（如非事件分发期或 SSR 环境）
 
 ```JavaScript
 event.addEvent(button, 'click', (evt) => {
@@ -47,10 +50,13 @@ event.addEvent(button, 'click', (evt) => {
 ## preventDefault(evt)
 **阻止事件默认行为**
 
-IE8- 下 attachEvent 挂载的回调不接收 event 参数，可不传，未传时自动取 window.event；  
-两者均取不到时抛 TypeError（如非事件分发期调用），不静默吞掉
+IE8- 下 attachEvent 挂载的回调不接收 event 参数，可不传，未传时自动取 window.event
 
 Chrome 等对 window/document 上的 touchstart/touchmove/wheel 默认按 passive 处理：此函数无法取消其滚动等默认行为，仅 console 出现一条警告
+
+**Throws**
+
+- `TypeError` — evt 与 window.event 均取不到（如非事件分发期或 SSR 环境）
 
 ```JavaScript
 event.addEvent(form, 'submit', (evt) => {

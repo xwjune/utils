@@ -100,10 +100,10 @@ function removeEvent(target, type, handler, useCapture = false) {
 /**
  * 阻止事件冒泡
  *
- * IE8- 下 attachEvent 挂载的回调不接收 event 参数，可不传，未传时自动取 window.event；
- * 两者均取不到时抛 TypeError（如非事件分发期调用），不静默吞掉
+ * IE8- 下 attachEvent 挂载的回调不接收 event 参数，可不传，未传时自动取 window.event
  *
  * @param {Event} evt - 事件对象
+ * @throws {TypeError} evt 与 window.event 均取不到（如非事件分发期或 SSR 环境）
  * @example
  *
  * addEvent(button, 'click', (evt) => {
@@ -111,8 +111,12 @@ function removeEvent(target, type, handler, useCapture = false) {
  * });
  */
 function stopPropagation(evt) {
-  // 参数归一化：IE8- attachEvent 回调无参，事件对象挂在 window.event 上
-  const e = evt || window.event;
+  // 参数归一化：IE8- attachEvent 回调无参，事件对象挂在 window.event 上；
+  // SSR/Node 无 window 全局，typeof 探测防裸引用抛 ReferenceError
+  const e = evt || (typeof window !== 'undefined' ? window.event : undefined);
+  if (!e) {
+    throw new TypeError('stopPropagation 取不到事件对象');
+  }
   if (e.stopPropagation) {
     e.stopPropagation();
   } else {
@@ -124,13 +128,13 @@ function stopPropagation(evt) {
 /**
  * 阻止事件默认行为
  *
- * IE8- 下 attachEvent 挂载的回调不接收 event 参数，可不传，未传时自动取 window.event；
- * 两者均取不到时抛 TypeError（如非事件分发期调用），不静默吞掉
+ * IE8- 下 attachEvent 挂载的回调不接收 event 参数，可不传，未传时自动取 window.event
  *
  * Chrome 等对 window/document 上的 touchstart/touchmove/wheel 默认按 passive
  * 处理：此函数无法取消其滚动等默认行为，仅 console 出现一条警告
  *
  * @param {Event} evt - 事件对象
+ * @throws {TypeError} evt 与 window.event 均取不到（如非事件分发期或 SSR 环境）
  * @example
  *
  * addEvent(form, 'submit', (evt) => {
@@ -143,8 +147,12 @@ function stopPropagation(evt) {
  * });
  */
 function preventDefault(evt) {
-  // 参数归一化：IE8- attachEvent 回调无参，事件对象挂在 window.event 上
-  const e = evt || window.event;
+  // 参数归一化：IE8- attachEvent 回调无参，事件对象挂在 window.event 上；
+  // SSR/Node 无 window 全局，typeof 探测防裸引用抛 ReferenceError
+  const e = evt || (typeof window !== 'undefined' ? window.event : undefined);
+  if (!e) {
+    throw new TypeError('preventDefault 取不到事件对象');
+  }
   if (e.preventDefault) {
     e.preventDefault();
   } else {

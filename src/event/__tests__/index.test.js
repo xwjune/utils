@@ -10,6 +10,18 @@ describe('阻止事件冒泡/默认行为', () => {
     delete window.event;
     expect(() => event.stopPropagation()).toThrow(TypeError);
   });
+  test('无 window 全局（SSR/Node）时抛 TypeError 而非 ReferenceError', () => {
+    const originalWindow = global.window;
+    delete global.window;
+    try {
+      // 裸引用 window 的实现会在此抛 ReferenceError，违背 JSDoc 承诺的 TypeError
+      expect(() => event.stopPropagation()).toThrow(TypeError);
+      expect(() => event.preventDefault()).toThrow(TypeError);
+      expect(() => event.stopPropagation()).toThrow('stopPropagation 取不到事件对象');
+    } finally {
+      global.window = originalWindow;
+    }
+  });
   test('stopPropagation 无参调用回退 window.event 置 cancelBubble（IE8- attachEvent 回调无参）', () => {
     window.event = {};
     event.stopPropagation();
