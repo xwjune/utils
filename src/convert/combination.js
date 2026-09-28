@@ -3,6 +3,7 @@
  *
  * @param {Array[]} arr - 原始数组
  * @returns {Array[]}
+ * @throws {TypeError} arr 不是数组的数组
  * @example
  *
  * const arr = [

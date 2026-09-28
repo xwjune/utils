@@ -54,7 +54,7 @@
     "src/**/*.js": [
       "eslint --fix",
       "node scripts/gen-docs.js",
-      "git add ."
+      "git add docs/api README.md"
     ]
   },
   "devDependencies": {

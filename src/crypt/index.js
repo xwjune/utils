@@ -82,10 +82,9 @@ function utf8Decode(utftext) {
 /**
  * 加密
  *
- * 非字符串直接抛 TypeError
- *
  * @param {string} value - 需要加密的数据
  * @return {string} 已加密的数据（round-trip 无损，换行等控制字符原样保留）
+ * @throws {TypeError} value 不是字符串
  * @example
  *
  * encode('123456');
@@ -121,13 +120,13 @@ function encode(value) {
 /**
  * 解密
  *
- * 非字符串直接抛 TypeError。
- * 非法字符（空白等）会被剔除，但剔除后须为合法密文，否则抛 Error【残缺密文静默解出乱码更危险】
+ * 非法字符（空白等）会被剔除，但剔除后须为合法密文：
+ * 长度为 4 的倍数、= 仅作末尾 1-2 位填充【残缺密文静默解出乱码更危险】
  *
- * @param {string} value - 需要解密的数据；非字符串抛 TypeError。
- *  非法字符（空白等）会被剔除，但剔除后须为合法密文：
- *  长度为 4 的倍数、= 仅作末尾 1-2 位填充，否则抛 Error【残缺密文静默解出乱码更危险】
+ * @param {string} value - 需要解密的数据
  * @return {string} 已解密的数据【密文结构合法但字节流畸形时，坏序列以 U+FFFD 替换，不抛错】
+ * @throws {TypeError} value 不是字符串
+ * @throws {Error} 剔除非法字符后非合法密文
  * @example
  *
  * decode('CJ8pD3Ks');

@@ -312,6 +312,7 @@ function parseJSDoc(raw) {
 
   const params = [];
   let returns = null;
+  const throws = [];
   rawTags.forEach(({ line, continuation }) => {
     const paramMatch = line.match(/^@param\s+\{([^}]*)\}\s+(\S+)(?:\s+-\s*(.*))?$/);
     if (paramMatch) {
@@ -329,10 +330,18 @@ function parseJSDoc(raw) {
         : { type: '', text: [returnMatch[1]].concat(continuation).join(' ').trim() };
       return;
     }
+    const throwMatch = line.match(/^@throws\s+(.*)$/);
+    if (throwMatch) {
+      const typeMatch = throwMatch[1].match(/^\{([^}]*)\}\s*(.*)$/);
+      throws.push(typeMatch
+        ? { type: typeMatch[1], text: [typeMatch[2]].concat(continuation).join(' ').trim() }
+        : { type: '', text: [throwMatch[1]].concat(continuation).join(' ').trim() });
+      return;
+    }
     warnings.push(`未知 tag：${line.split(/\s+/)[0]}`);
   });
 
-  return { descriptionLines, params, returns, example };
+  return { descriptionLines, params, returns, throws, example };
 }
 
 function resolveModules() {
@@ -579,7 +588,15 @@ function renderFunction(fn, module) {
     out.push('| :------- | :---------- | :--- | :------ |');
     fn.doclet.params.forEach((param) => {
       const def = param.defaultText !== undefined ? param.defaultText : '-';
-      out.push(`| ${param.path} | ${escapeCell(param.description)} | ${normalizeType(param.type)} | ${def} |`);
+      // 单元格内容一律转义：字面量默认值（如 [x='|']）与参数描述同样会把表格拆列
+      out.push(`| ${escapeCell(param.path)} | ${escapeCell(param.description)} | ${normalizeType(param.type)} | ${escapeCell(def)} |`);
+    });
+    out.push('');
+  }
+  if (fn.doclet.throws.length > 0) {
+    out.push('**Throws**', '');
+    fn.doclet.throws.forEach(({ type, text }) => {
+      out.push(`- \`${type}\`${text ? ` — ${text}` : ''}`);
     });
     out.push('');
   }
@@ -620,8 +637,9 @@ function renderModuleDoc(module) {
 }
 
 function renderReadmeSection(modules) {
+  // 概述行同样是单元格：含 | 时不转义会把索引表拆列，且生成与比对同源，docs:check 察觉不到
   const rows = modules.map((module) => (
-    `| [${module.name}](docs/api/${module.name}.md) | ${module.descriptionFirstLine} | ${module.fns.length} |`
+    `| [${module.name}](docs/api/${module.name}.md) | ${escapeCell(module.descriptionFirstLine)} | ${module.fns.length} |`
   ));
   return [
     README_START,

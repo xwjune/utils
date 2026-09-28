@@ -88,7 +88,11 @@ appUtil.isTaobao(); // 系统浏览器
 **监听 alipay 容器初始化**
 
 容器已注入时同步触发回调，否则监听 AlipayJSBridgeReady 事件后触发，两条路径均不传参，监听为 once 触发一次后自动移除。  
-非支付宝容器中该事件不会触发，回调永不执行；callback 非函数抛 TypeError
+非支付宝容器中该事件不会触发，回调永不执行
+
+**Throws**
+
+- `TypeError` — callback 不是函数
 
 ```JavaScript
 appUtil.alipayJSBridgeReady(() => {
@@ -102,7 +106,11 @@ appUtil.alipayJSBridgeReady(); // 非函数抛 TypeError
 ## alipayTitle(title, [subtitle])
 **支付宝设置标题**
 
-title 非字符串直接抛 TypeError；subtitle 未传时不携带该键
+subtitle 未传时不携带该键
+
+**Throws**
+
+- `TypeError` — title 不是字符串
 
 ```JavaScript
 appUtil.alipayTitle('标题', '副标题');

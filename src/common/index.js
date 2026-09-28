@@ -54,11 +54,14 @@ function generateUUID() {
  * 在完整链接里取第一个命中的参数（同名取先出现的），hash 段里的 query 同样能取到。
  * 参数名区分大小写、按字面匹配不解码（?arr%5B%5D=1 需传编码名查询）；无等号的裸参数视为不存在。
  * 值按 decodeURIComponent 解码：'+' 不转空格；非法 % 序列原样返回、不抛错。
- * 非浏览器环境（SSR）无 window，不传 url 时抛 ReferenceError，须显式传入。
+ * 非浏览器环境（SSR）无 window，url 须显式传入。
  *
- * @param {string} name - 参数名；非字符串、空串或含 & = # 时抛 TypeError
- * @param {string} [url=window.location.search] - 链接；非字符串时抛 TypeError
+ * @param {string} name - 参数名
+ * @param {string} [url=window.location.search] - 链接
  * @return {string|null} 解码后的参数值；参数存在但值为空返回 ''；未命中返回 null
+ * @throws {TypeError} name 非字符串、空串或含 & = #
+ * @throws {TypeError} url 非字符串
+ * @throws {ReferenceError} 非浏览器环境（SSR 无 window）未传 url
  * @example
  *
  * // 基础取值
@@ -154,14 +157,16 @@ function assertOptionalCallback(name, fn) {
  * 动态加载 js
  *
  * 成功加载并执行完后触发 onSuccess，失败（404、网络错误）触发 onError，均不传参；失败节点移出 DOM，成功的保留。
- * onSuccess/onError 可选：null/undefined 视为不传，其余非函数抛 TypeError。
+ * onSuccess/onError 可选：null/undefined 视为不传。
  * 不查重：同 url 重复调用会重复执行；动态插入的 script 默认 async，并发调用不保证顺序，有顺序依赖时在上一个的 onSuccess 里再发起。
  * 老 IE 分支区分不了失败：出错也照样当成功触发 onSuccess，onError 与失败移除节点不生效；个别版本回调可能早于脚本执行。
- * 非浏览器环境（SSR/Node）无 document，调用即抛 ReferenceError。
  *
- * @param {string} url - js 链接地址；非字符串或空串抛 TypeError
+ * @param {string} url - js 链接地址
  * @param {Function} [onSuccess] - 加载成功回调
  * @param {Function} [onError] - 加载失败回调（老 IE 分支不生效）
+ * @throws {TypeError} url 非字符串或空串
+ * @throws {TypeError} onSuccess/onError 传非函数值（null/undefined 视为不传）
+ * @throws {ReferenceError} 非浏览器环境（无 document）
  * @example
  *
  * loadScript('https://xxx.js', () => {

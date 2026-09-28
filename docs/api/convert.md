@@ -228,6 +228,10 @@ convert.currencyToCn(1000000000000); // 超出上限
 ## combination(arr)
 **列出 N 个数组所有组合**
 
+**Throws**
+
+- `TypeError` — arr 不是数组的数组
+
 ```JavaScript
 const arr = [
   ['黑色', '白色'],
@@ -282,6 +286,10 @@ convert.toThousands('x12'); // 错误数据返回空串
 
 ## expandNumber(value)
 **数字转十进制字符串，展开科学计数法**
+
+**Throws**
+
+- `TypeError` — value 不是数字或字符串
 
 ```JavaScript
 convert.expandNumber(1.5e-7);

@@ -3,6 +3,7 @@
  *
  * @param {number|string} value - 数字或数字字面量字符串
  * @returns {string} 十进制字符串
+ * @throws {TypeError} value 不是数字或字符串
  * @example
  *
  * expandNumber(1.5e-7);
