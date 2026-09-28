@@ -301,6 +301,9 @@ check.hasChinese('中文'); // 常用汉字
 check.hasChinese('。'); // 中文标点
 // => true
 
+check.hasChinese('｡'); // 中文标点的半角形式
+// => true
+
 check.hasChinese('𠮷'); // 扩展 B 生僻字
 // => true
 

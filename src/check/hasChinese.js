@@ -14,6 +14,9 @@
  * hasChinese('。'); // 中文标点
  * // => true
  *
+ * hasChinese('｡'); // 中文标点的半角形式
+ * // => true
+ *
  * hasChinese('𠮷'); // 扩展 B 生僻字
  * // => true
  *
@@ -45,8 +48,9 @@ const RANGES = [
   '\u4E00-\u9FFF', // CJK 统一表意文字
   '\uF900-\uFAFF', // CJK 兼容表意文字
   '\uFE30-\uFE4F', // CJK 兼容形式【﹁﹏ 等竖排标点】
-  // 全角标点【挖去全角数字、全角字母、半角片假名与 ￠￡￢￤ 等全角西文符号；FFE0-FFE6 只留 FFE5 ￥】
-  '\uFF01-\uFF0F\uFF1A-\uFF20\uFF3B-\uFF40\uFF5B-\uFF60\uFFE5',
+  // 全角与半角 CJK 标点【挖去全角数字、全角字母、半角片假名与 ￠￡￢￤ 等全角西文符号；FFE0-FFE6 只留 FFE5 ￥；
+  // FF61-FF64 ｡｢｣､ 是句号、直角引号、顿号的半角形式，与全角形式同属 CJK 专属标点，一并收下】
+  '\uFF01-\uFF0F\uFF1A-\uFF20\uFF3B-\uFF40\uFF5B-\uFF64\uFFE5',
 ];
 
 // 扩展 B 起的生僻字【如 𠮷 U+20BB7 即 D842+DFB7】为 UTF-16 代理对，占两个码元，单字符类无法匹配，
