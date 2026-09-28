@@ -15,7 +15,7 @@
  * @param {string} [options.heartbeatMessage='{"type":"ping"}'] - 心跳消息内容
  * @param {string | string[]} [options.protocols] - WebSocket 子协议（如 'v10.stomp'）
  * @param {Function} [options.onopen] - 连接建立回调【重连成功时若未提供 reconnect 则同样触发】
- * @param {Function} [options.onclose] - 连接终止回调【主动 destroy 不触发】，参数为
+ * @param {Function} [options.onclose] - 连接终止回调【主动 destroy 不触发，至多触发一次】，参数为
  * 'exhausted'（重连次数耗尽）或 'normal'（服务端正常关闭 code 1000）
  * @param {Function} [options.onmessage] - 接收数据回调
  * @param {Function} [options.reconnect] - 重连成功回调【未提供时回退触发 onopen】
@@ -149,7 +149,15 @@ const createWebSocket = (url, options = {}) => {
       console.warn(url, `\nWebSocket Closed. Code: ${event.code}`, event);
       clearHeartbeat();
       // 正常关闭（如服务端主动断开、登出踢出）不重连，但与耗尽一样进入终态，让调用方可感知
+      // close 事件迟到时心跳已先兜底走 reconnect()：有次数则排好重连定时器，无次数则已宣告
+      // 耗尽终态；本分支须为终态收尾——清残余定时器，已宣告过不重复触发
       if (event.code === 1000) {
+        // 排队中的重连不随终态取消，到期仍会照常重连；稳定期定时器一并清，终态零残余
+        clearTimeout(reconnectTimer);
+        reconnectTimer = null;
+        clearTimeout(stableTimer);
+        stableTimer = null;
+        if (reconnectExhausted) return;
         if (onclose) {
           onclose('normal'); // 连接终止回调
         }

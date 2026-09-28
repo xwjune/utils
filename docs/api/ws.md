@@ -22,7 +22,7 @@ import { ws } from 'jun-utils';
 | options.heartbeatMessage | 心跳消息内容 | string | '{"type":"ping"}' |
 | options.protocols | WebSocket 子协议（如 'v10.stomp'） | string \| string[] | - |
 | options.onopen | 连接建立回调【重连成功时若未提供 reconnect 则同样触发】 | Function | - |
-| options.onclose | 连接终止回调【主动 destroy 不触发】，参数为 'exhausted'（重连次数耗尽）或 'normal'（服务端正常关闭 code 1000） | Function | - |
+| options.onclose | 连接终止回调【主动 destroy 不触发，至多触发一次】，参数为 'exhausted'（重连次数耗尽）或 'normal'（服务端正常关闭 code 1000） | Function | - |
 | options.onmessage | 接收数据回调 | Function | - |
 | options.reconnect | 重连成功回调【未提供时回退触发 onopen】 | Function | - |
 | options.onHeartbeat | 心跳回调，参数为 { ok: boolean, reason?: string }；ok 仅代表本端发送成功，无 pong 应答校验；发送失败会自动重连 | Function | - |

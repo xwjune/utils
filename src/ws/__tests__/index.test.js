@@ -235,6 +235,31 @@ describe('断线重连', () => {
     expect(onclose).toHaveBeenCalledWith('normal');
   });
 
+  test('心跳已排队重连后迟到的 1000 关闭取消排队，终态后不再重连', () => {
+    const onclose = jest.fn();
+    const handle = ws('wss://example.com/socket', {
+      timeout: 100,
+      heartbeat: true,
+      heartbeatInterval: 50,
+      onclose,
+    });
+
+    emitOpen(handle.ws);
+    jest.advanceTimersByTime(50); // 先完成一次正常心跳
+
+    // close 事件延迟到达：心跳先发现死连接并排好重连定时器
+    handle.ws.readyState = MockWebSocket.CLOSED;
+    jest.advanceTimersByTime(50);
+
+    // 迟到的 close 事件为正常关闭，已排队的重连须随终态取消
+    handle.ws.onclose({ code: 1000 });
+    expect(onclose).toHaveBeenCalledTimes(1);
+    expect(onclose).toHaveBeenCalledWith('normal');
+
+    jest.advanceTimersByTime(1000);
+    expect(MockWebSocket.instances).toHaveLength(1);
+  });
+
   test('重连次数耗尽且未提供 onclose 时静默停止', () => {
     const handle = ws('wss://example.com/socket', { timeout: 100, limitConnect: 1 });
 
@@ -270,6 +295,35 @@ describe('断线重连', () => {
     // 迟到的 close 事件不再重复触发终态回调
     handle.ws.onclose({ code: 1006 });
     expect(onclose).toHaveBeenCalledTimes(1);
+    jest.advanceTimersByTime(1000);
+    expect(MockWebSocket.instances).toHaveLength(2);
+  });
+
+  test('心跳兜底耗尽后迟到的 1000 关闭同样不重复触发 onclose', () => {
+    const onclose = jest.fn();
+    const handle = ws('wss://example.com/socket', {
+      timeout: 100,
+      limitConnect: 1,
+      heartbeat: true,
+      heartbeatInterval: 50,
+      onclose,
+    });
+
+    emitOpen(handle.ws);
+    emitClose(handle.ws); // 剩余次数 1 → 0，排队重连
+    jest.advanceTimersByTime(100);
+    emitOpen(handle.ws); // 重连成功，心跳重启，但剩余次数已耗尽
+
+    // close 事件丢失，心跳发现死连接，剩余次数耗尽走终态
+    handle.ws.readyState = MockWebSocket.CLOSED;
+    jest.advanceTimersByTime(50);
+    expect(onclose).toHaveBeenCalledTimes(1);
+    expect(onclose).toHaveBeenCalledWith('exhausted');
+
+    // 迟到的正常关闭不改写终态原因、不重复触发（1000 分支同样受闩锁约束）
+    handle.ws.onclose({ code: 1000 });
+    expect(onclose).toHaveBeenCalledTimes(1);
+    expect(onclose).toHaveBeenCalledWith('exhausted');
     jest.advanceTimersByTime(1000);
     expect(MockWebSocket.instances).toHaveLength(2);
   });
