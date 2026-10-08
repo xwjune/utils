@@ -34,17 +34,17 @@
  */
 const createWebSocket = (url, options = {}) => {
   const {
-    timeout = 3000, // 重连频率【毫秒】
-    limitConnect = 3, // 断线重连次数
-    heartbeat = false, // 是否启用心跳
-    heartbeatInterval = 60000, // 心跳间隔【毫秒】
-    heartbeatMessage = JSON.stringify({ type: 'ping' }), // 心跳消息内容
-    protocols, // WebSocket 子协议
-    onopen, // 连接建立回调
-    onclose, // 连接终止回调
-    onmessage, // 接收数据回调
-    reconnect: onReconnect, // 重连成功回调
-    onHeartbeat, // 心跳回调
+    timeout = 3000,
+    limitConnect = 3,
+    heartbeat = false,
+    heartbeatInterval = 60000,
+    heartbeatMessage = JSON.stringify({ type: 'ping' }),
+    protocols,
+    onopen,
+    onclose,
+    onmessage,
+    reconnect: onReconnect,
+    onHeartbeat,
   } = options || {}; // options 显式传 null 时解构会抛 TypeError，兜底为空对象
   let ws = null;
   let connectTimes = limitConnect; // 剩余重连次数
@@ -64,7 +64,7 @@ const createWebSocket = (url, options = {}) => {
   }
 
   function startHeartbeat() {
-    if (!heartbeat) return; // 未启用心跳
+    if (!heartbeat) return;
     clearHeartbeat();
     heartbeatTimer = setInterval(() => {
       if (ws.readyState === WebSocket.OPEN) {
@@ -94,7 +94,7 @@ const createWebSocket = (url, options = {}) => {
     }, heartbeatInterval);
   }
 
-  // 解绑旧连接的事件并在未关闭时主动关闭，防止旧实例的残余事件再次触发重连
+  // 防止旧实例残余事件再次触发重连
   function cleanupWs() {
     if (!ws) return;
     ws.onopen = null;
@@ -106,7 +106,6 @@ const createWebSocket = (url, options = {}) => {
     }
   }
 
-  // 连接
   function connect(retry) {
     cleanupWs();
     ws = new WebSocket(url, protocols);
@@ -125,18 +124,18 @@ const createWebSocket = (url, options = {}) => {
           }
         }, timeout);
         if (onReconnect) {
-          onReconnect(ws); // 重连成功回调
+          onReconnect(ws);
         } else if (onopen) {
-          onopen(ws); // 未提供重连回调时回退到 onopen
+          onopen(ws);
         }
       } else if (onopen) {
-        onopen(ws); // 首次连接回调
+        onopen(ws);
       }
     };
 
     ws.onmessage = (event) => {
       if (onmessage) {
-        onmessage(event.data); // 接收数据回调
+        onmessage(event.data);
       }
     };
 
@@ -149,17 +148,15 @@ const createWebSocket = (url, options = {}) => {
       console.warn(url, `\nWebSocket Closed. Code: ${event.code}`, event);
       clearHeartbeat();
       // 正常关闭（如服务端主动断开、登出踢出）不重连，但与耗尽一样进入终态，让调用方可感知
-      // close 事件迟到时心跳已先兜底走 reconnect()：有次数则排好重连定时器，无次数则已宣告
-      // 耗尽终态；本分支须为终态收尾——清残余定时器，已宣告过不重复触发
       if (event.code === 1000) {
-        // 排队中的重连不随终态取消，到期仍会照常重连；稳定期定时器一并清，终态零残余
+        // 终态零残余：取消心跳先兜底排好的重连与稳定期定时器；已宣告耗尽则不重复触发
         clearTimeout(reconnectTimer);
         reconnectTimer = null;
         clearTimeout(stableTimer);
         stableTimer = null;
         if (reconnectExhausted) return;
         if (onclose) {
-          onclose('normal'); // 连接终止回调
+          onclose('normal');
         }
         return;
       }
@@ -167,9 +164,8 @@ const createWebSocket = (url, options = {}) => {
     };
   }
 
-  // 重连
   function reconnect() {
-    // close 事件与心跳兜底并发抵达时去重；次数耗尽置位后为终态，迟到的 close 事件不再重入
+    // 心跳兜底与 close 事件并发抵达时只排一次重连；耗尽终态不再重入
     if (reconnectTimer || reconnectExhausted) return;
     if (connectTimes > 0) {
       connectTimes--;
@@ -179,21 +175,20 @@ const createWebSocket = (url, options = {}) => {
         connect(true);
       }, timeout);
     } else {
-      // 次数耗尽即终态：先置闩锁再通知，防心跳兜底与随后迟到的 close 事件重复触发 onclose；
-      // 终态下不再排重连、不会再有 onopen，闩锁永不重置
+      // 先置闩锁再通知，防二者重复触发 onclose
       reconnectExhausted = true;
       if (onclose) {
-        onclose('exhausted'); // 连接终止回调
+        onclose('exhausted');
       }
     }
   }
 
-  // 销毁连接：清理心跳与重连相关定时器、解绑事件并关闭连接，阻止后续重连
+  // 销毁连接，阻止后续重连
   function destroy() {
     clearHeartbeat();
     clearTimeout(reconnectTimer);
     reconnectTimer = null;
-    clearTimeout(stableTimer); // 稳定期定时器一并清理，销毁后零残余定时器
+    clearTimeout(stableTimer);
     stableTimer = null;
     cleanupWs();
     ws = null;
